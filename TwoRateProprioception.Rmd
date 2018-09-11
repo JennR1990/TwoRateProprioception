@@ -1,0 +1,8 @@
+---
+title: "Two-Rate Proprioception - How Quickly Does Proprioception Recalibrate And Is It Related To The Two-Rate Model Of Motor Learning"
+author:
+- Jennifer E. Ruttle
+- Bernard Marius 't Hart
+- Denise Y.P. Henriques
+output: html_notebook
+---
