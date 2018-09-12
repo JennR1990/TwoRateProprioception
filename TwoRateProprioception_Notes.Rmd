@@ -7,8 +7,8 @@ author:
 - Denise Y.P. Henriques
 csl: lit/plos-one.csl
 output:
-  word_document: default
   html_notebook: default
+  word_document: default
   pdf_document: default
   html_document: null
 link-citations: yes
