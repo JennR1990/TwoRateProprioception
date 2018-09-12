@@ -1,5 +1,5 @@
 
-downloadOSFdata <- function(redownload=FALSE) {
+downloadOSFdata <- function(update=FALSE) {
   
   files <- c('active_localization.csv'  = 'https://osf.io/vys7e/?action=download',
              'active_reaches.csv'       = 'https://osf.io/nhcmb/?action=download',
@@ -13,7 +13,7 @@ downloadOSFdata <- function(redownload=FALSE) {
     
     filepath <- sprintf('data/%s',filename)
     
-    if (!file.exists(filepath) | redownload) {
+    if (!file.exists(filepath) | update) {
       
       df <- read.csv(url(files[filename]), stringsAsFactors=F)
       write.csv(df, filepath, quote=FALSE, row.names=FALSE)
