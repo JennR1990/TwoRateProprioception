@@ -4,6 +4,9 @@ lit/*.pdf
 doc/
 data/*
 
+*.doc
+*.docx
+
 
 # History files
 .Rhistory

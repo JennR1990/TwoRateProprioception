@@ -5,13 +5,14 @@ author:
 - Jennifer E. Ruttle
 - Bernard Marius 't Hart
 - Denise Y.P. Henriques
-output:
-  html_notebook: default
-  html_document:
-  pdf_document: default
-bibliography: lit/bibliography.bib
-link-citations: true
 csl: lit/plos-one.csl
+output:
+  word_document: default
+  html_notebook: default
+  pdf_document: default
+  html_document: null
+link-citations: yes
+bibliography: lit/bibliography.bib
 ---
 
 # Overview
