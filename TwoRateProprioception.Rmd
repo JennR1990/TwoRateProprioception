@@ -1,13 +1,47 @@
 ---
-title: "Two-Rate Proprioception - How Quickly Does Proprioception Recalibrate And Is It Related To The Two-Rate Model Of Motor Learning"
+title: Two-Rate Proprioception - How Quickly Does Proprioception Recalibrate And Is
+  It Related To The Two-Rate Model Of Motor Learning
 author:
 - Jennifer E. Ruttle
 - Bernard Marius 't Hart
 - Denise Y.P. Henriques
-output: html_notebook
+output:
+  html_notebook: default
+  pdf_document: default
 bibliography: lit/bibliography.bib
 ---
 
-In this project we set out to investigate 1) how quickly proprioception recalibrates, and 2) to disentangle it from the updating of predicted sensory consequences. Furthermore, it has been suggested that proprioceptive recalibration could be the result of implicit learning. Since implicit learning has been shown to be reated to the "slow" process [@McDougle2015] in the two-rate model [@Smith2006], we will test if the slow process as fitted to the reach data relates to our measure of proprioceptive recalibration.
+# Overview
 
-To do all this we use a trial-by-trial approach, that is: one reach-training trial is followed by one of various "measurement" trials 
+We have previously found that proprioception recalibrates within 6 trials, whereas visuomotor adaptation takes longer to saturate [@Ruttle2016; @Ruttle2018].
+
+In this project we set out to investigate 1) exactly how quickly proprioception recalibrates, 2) to disentangle it from the updating of predicted sensory consequences, and 3) to see if it matches implicit learning that should follow the slow process [@McDougle2015] in the two-rate model [@Smith2006].
+
+## Trial types
+
+To do all this we use a trial-by-trial approach, that is: one reach-training trial is followed by one of various "measurement" trials: passive localization, active localization or no-cursor reaches (all of them explained below). As a control we also had people pause for a short bit instead. There wer four groups of participants and each did one of the four "measurement" trials exclusively. With one exception, the pause and no-cursor group also did a set of localization trials before and after the regular paradigm also done by the other groups.
+
+- reach training
+- passive localization (only proprioception)
+- active localization (proprioception + prediction)
+- no-cursor reach (classic measure of motor learning)
+- pause (control)
+- error-clamp
+
+By comparing the trial-by-trial changes in the four paradigms, we can investigate the time-course of all these processes in more depth than we previously have.
+
+## Figures
+
+Here is a list of planned figures with their intended meaning:
+
+- Fig 1: A) setup, B) reach training + targets, C) localization + points, D) no-cursor + targets (illustrate the hardware and trial types)
+- Fig 2: paradigm, four phases (aligned, rotated, reversed, error-clamped), plus extra localization phases (illustrate the main paradigm... add expected model fit?)
+- Fig 3: A,B,C,D) one subplot for each group showing reach deviations in the four main phases: individual traces, 95% confidence intervals, median (show quality of the data)
+- Fig 4: A,B,C,D) one subplot for each group showing the median reach deviations in the four main phases, plus the two-rate model fit and it's fast and slow process (show quality of the fits)
+- Fig 5: comparing reach deviations over time, (show differences between the groups, or should this go in a previous figure? seems it would get cluttered)
+- Fig 6: A) localization throughout for the two localization groups, B) localization shift in the pause and no-cursor group, C) speed of localization shift, D/E) localization shift with the two processes for each group (show the incredible speed of localization shifts and how non-matching the slow but also the fast process are)
+- Fig 7: alternative models of localization? (20% model works reasonably well... even better than giving localization it's own two- or one-rate model)
+- Fig 8: A) time course of no-cursor changes (no-cursor could reflect a watered down version of the slow process?)
+
+
+# References
