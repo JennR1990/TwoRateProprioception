@@ -6,13 +6,9 @@ author:
 - Bernard Marius 't Hart
 - Denise Y.P. Henriques
 output:
-<<<<<<< HEAD
-  html_document:
-    df_print: paged
-=======
   html_notebook: default
+  html_document:
   pdf_document: default
->>>>>>> cf4cf220e2b3efb0283aaba0d17aef7ff1411b5e
 bibliography: lit/bibliography.bib
 link-citations: true
 csl: lit/plos-one.csl
