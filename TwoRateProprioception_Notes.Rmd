@@ -7,8 +7,8 @@ author:
 - Denise Y.P. Henriques
 csl: lit/plos-one.csl
 output:
-  word_document: default
   html_notebook: default
+  word_document: default
   pdf_document: default
   html_document: null
 link-citations: yes
@@ -51,26 +51,17 @@ Here is a list of planned figures with their intended meaning:
 
 In the two-rate model, the motor output X at trial t, $X_t$ is simply the added output of the slow and fast process at trial t:
 
-\begin{equation}
-\label{tworate-slow}
-X_t = X^s_t + X^f_t
-\end{equation}
+[1] $X_t = S_t + F_t$ \label{tworate-total}
 
 The output of the slow process on the next trial (t+1) is determined by the error on the previous trial multiplied by a learning rate L, and the output on the previous trial multiplied by a retention rate R:
 
-\begin{equation}
-\label{tworate-fast}
-X^s_{t+1} = (L^s \cdot E_t) + (R^s \cdot X^s_t)
-\end{equation}
+[2] $S_{t+1} = L^s \cdot E_t + R^s \cdot S_t$ \label{tworate-slow}
 
 Similarly, the fast process has it's own learning rate and retention rate:
 
-\begin{equation}
-\label{tworate-total}
-X^f_{t+1} = (L^f \cdot E_t) + (R^f \cdot X^s_t)
-\end{equation}
+[3] $F_{t+1} = L^f \cdot E_t + R^f \cdot F_t$ \label{tworate-fast}
 
-The four parameters $L^s$, $R^s$, $L^f$ and $R^f$ will be fit to match the data optimally according to a least-squared error algorithm. They should each fall within the range [0,1]. To ensure that the fast process learns faster than the slow process but also forgets faster than the slow process the model is further constrained by requiring that $L^s < L^f$ and $R^s > R^f$.
+The four parameters $L^s$, $R^s$, $L^f$ and $R^f$ will be fit so that $X_t$ matches the recorded reach deviations optimally according to a least-squared error algorithm. They should each fall within the range [0,1]. To ensure that the fast process learns faster than the slow process but also forgets faster than the slow process the model is further constrained by requiring that $L^s < L^f$ and $R^s > R^f$.
 
 
 # References
