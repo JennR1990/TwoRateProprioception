@@ -25,20 +25,25 @@ In this project we set out to investigate 1) exactly how quickly proprioception 
 
 To do all this we use a trial-by-trial approach, that is: one reach-training trial is followed by one of various "measurement" trials: passive localization, active localization or no-cursor reaches (all of them explained below). As a control we also had people pause for a short bit instead. There wer four groups of participants and each did one of the four "measurement" trials exclusively. With one exception, the pause and no-cursor group also did a set of localization trials before and after the regular paradigm also done by the other groups.
 
+The first of each pair of trials is always one of these, both appear for every participant:
 - reach training
+- error-clamp
+
+The second of each pair of trials is then one of these:
 - passive localization (only proprioception)
 - active localization (proprioception + prediction)
 - no-cursor reach (classic measure of motor learning)
 - pause (control)
-- error-clamp
 
-By comparing the trial-by-trial changes in the four paradigms, we can investigate the time-course of all these processes in more depth than we previously have.
+These four trial types define the four paradigms, that is, each of the participants in the four groups only get 1 of these trial types throughout. However, the no-cursor group and pause group do get some passive localization before training, and after completion of the whole paradigm.
+
+By comparing the trial-by-trial changes in the four paradigms, we can investigate the time-course of all these processes in more detail than we previously have.
 
 ## Figures
 
-Here is a list of planned figures with their intended meaning:
+Here is a list of planned figures with their potential message:
 
-- Fig 1: A) setup, B) reach training + targets, C) localization + points, D) no-cursor + targets (illustrate the hardware and trial types)
+- Fig 1: A) setup, B) reach training + targets, C) localization + points, D) no-cursor + targets (illustrate the hardware and trial types, not done in R)
 - Fig 2: paradigm, four phases (aligned, rotated, reversed, error-clamped), plus extra localization phases (illustrate the main paradigm... add expected model fit?)
 - Fig 3: A,B,C,D) one subplot for each group showing reach deviations in the four main phases: individual traces, 95% confidence intervals, median (show quality of the data)
 - Fig 4: A,B,C,D) one subplot for each group showing the median reach deviations in the four main phases, plus the two-rate model fit and it's fast and slow process (show quality of the fits)
