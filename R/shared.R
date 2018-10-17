@@ -1,14 +1,22 @@
 
 downloadOSFdata <- function(update=FALSE) {
   
-  files <- c('active_localization.csv'  = 'https://osf.io/vys7e/?action=download',
-             'active_reaches.csv'       = 'https://osf.io/nhcmb/?action=download',
-             'nocursor_nocursors.csv'   = 'https://osf.io/b9fc8/?action=download',
-             'nocursor_reaches.csv'     = 'https://osf.io/7x6b8/?action=download',
-             'passive_localization.csv' = 'https://osf.io/27v54/?action=download',
-             'passive_reaches.csv'      = 'https://osf.io/mq5av/?action=download',
-             'pause_reaches.csv'        = 'https://osf.io/q59b3/?action=download')
+  # this pulls data from the OSF repo:
+  files <- c('active_localization.csv'  = 'https://osf.io/mc523/?action=download',
+             'active_reaches.csv'       = 'https://osf.io/ejxy9/download',
+             'nocursor_nocursors.csv'   = 'https://osf.io/5b8s9/download',
+             'nocursor_reaches.csv'     = 'https://osf.io/vmnx7/download',
+             'passive_localization.csv' = 'https://osf.io/27v54/download',
+             'passive_reaches.csv'      = 'https://osf.io/mq5av/download',
+             'pause_reaches.csv'        = 'https://osf.io/q59b3/download')
   
+  # check if data directory exists and create if necessary:
+  # (data should come from OSF, so is not on github)
+  if (!dir.exists('data')) {
+    dir.create('data')
+  }
+  
+  # check if each file exists and copy it if necessary: 
   for (filename in names(files)) {
     
     filepath <- sprintf('data/%s',filename)
@@ -23,3 +31,4 @@ downloadOSFdata <- function(update=FALSE) {
   }
   
 }
+
