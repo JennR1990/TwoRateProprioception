@@ -29,7 +29,7 @@ In this project we set out to investigate 1) exactly how quickly proprioception 
 
 ## Trial types
 
-To do all this we use a trial-by-trial approach, that is: one reach-training trial is followed by one of various "measurement" trials: passive localization, active localization or no-cursor reaches (all of them explained below). As a control we also had people pause for a short bit instead. There wer four groups of participants and each did one of the four "measurement" trials exclusively. With one exception, the pause and no-cursor group also did a set of localization trials before and after the regular paradigm also done by the other groups.
+To do all this we use a trial-by-trial approach, that is: one reach-training trial is followed by one of various "measurement" trials: passive localization, active localization or no-cursor reaches (all of them explained below). As a control we also had people pause for a short bit instead. There were four groups of participants and each did one of the four "measurement" trials exclusively. With one exception, the pause and no-cursor group also did a set of localization trials before and after the regular paradigm also done by the other groups.
 
 - reach training
 - passive localization (only proprioception)
