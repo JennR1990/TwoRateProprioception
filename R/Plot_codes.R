@@ -1,3 +1,13 @@
+countdeletedtrials<- function (data) {
+  R <- nrow(data)
+  C <- ncol(data)
+  deleted<- sum(is.na(data[,2:C]))
+  C-1
+  total<- R*C
+  percentdeleted<- deleted/total*100
+  return(percentdeleted)
+}
+
 ##Figures we want to make often##
 # color1       <- rgb(0.7,0.0,0.7)         # purple
 # color1_trans <- rgb(0.7,0.0,0.7,0.2)     # transparent purple
@@ -15,7 +25,7 @@ PauseR<- pause_reaches[33:320,]*-1
 participants <- 2:33
 for (pn in participants) {
   
- lines(PauseR[,pn], col = rgb(0.0,0.7,0.0,0.2))
+ lines(PauseR[,pn], col = rgb(0.0,0.7,0.0,0.06))
 }
 PlotPauseLineReachesCI(pause_reaches)
 }
