@@ -1,11 +1,5 @@
-countdeletedtrials<- function (data) {
-  R <- nrow(data)
-  C <- ncol(data)
-  deleted<- sum(is.na(data[,2:C]))
-  C-1
-  total<- R*C
-  percentdeleted<- deleted/total*100
-  return(percentdeleted)
+percentNAs <- function (df) {
+  return((sum(is.na(df))/prod(dim(df)))*100)
 }
 
 ##Figures we want to make often##
