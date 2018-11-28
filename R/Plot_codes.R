@@ -8,12 +8,23 @@
 # color5       <- rgb(1.0,0.4,0.0)         # orange
 # color5_trans <- rgb(1.0,0.4,0.0,0.2)     # transparent orange
 
+PlotPausedata<- function (data) {
+PlotoutLineforReachesCI(pause_reaches)
+PlotPauseLineReachesCI(pause_reaches)
+PauseR<- pause_reaches[33:320,]*-1
+participants <- 2:33
+for (pn in participants) {
+  
+ lines(PauseR[,pn], col = rgb(0.0,0.7,0.0,0.2))
+}
+PlotPauseLineReachesCI(pause_reaches)
+}
 #reaches overlayed with confidence intervals
-#PlotallreachesCI(active_reaches,passive_reaches, pause_reaches,nocursor_reaches)
+PlotallreachesCI(active_reaches,passive_reaches, pause_reaches,nocursor_reaches)
 
 
 #localizations overlayed with confidence intervals
-#PlotallTapCI(passive_localizations, active_localizations)
+PlotallTapCI(passive_localization, active_localizations)
 
 #reach data avergaed for similar training and their model output
 #Reachmodel(pp_reaches)
@@ -28,21 +39,21 @@
 
 #Codes for actual Plots
 PlotallreachesCI <- function (acd=dataset1, pad=dataset2, nld=dataset3, ncd=dataset4){
-  svglite(file='all_reaches_CI.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
+  #svglite(file='all_reaches_CI.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
   PlotoutLineforReachesCI(acd)
   PlotActiveLineReachesCI(acd)
   PlotpassiveLineReachesCI(pad)
   PlotPauseLineReachesCI(nld)
   PlotnocursorLineReachesCI(ncd)
   
-  dev.off()
+  #dev.off()
 }
 PlotallTapCI <- function (pl=dataset1, al=dataset2){
-  svglite(file='all_localizations_CI.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
+  #svglite(file='all_localizations_CI.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
   PlotoutlineTapCI(pl)
   PlotactiveLineTapCI(al)
   PlotpassiveLineTapCI(pl)
-  dev.off()
+  #dev.off()
 }
 #  PlotallreachesCI <- function (dataset1, dataset2, dataset3, dataset4){
 #    datasets<- c(dataset1, dataset2, dataset3, dataset4)
