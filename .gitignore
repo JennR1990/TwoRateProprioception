@@ -6,6 +6,7 @@ data/*
 
 *.doc
 *.docx
+*.tex
 
 
 # History files
