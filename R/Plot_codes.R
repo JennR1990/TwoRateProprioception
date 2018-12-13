@@ -8,17 +8,13 @@
 # color5       <- rgb(1.0,0.4,0.0)         # orange
 # color5_trans <- rgb(1.0,0.4,0.0,0.2)     # transparent orange
 
-PlotPausedata<- function (data) {
-PlotoutLineforReachesCI(pause_reaches)
-PlotPauseLineReachesCI(pause_reaches)
-PauseR<- pause_reaches[33:320,]*-1
-participants <- 2:33
-for (pn in participants) {
-  
- lines(PauseR[,pn], col = rgb(0.0,0.7,0.0,0.06))
-}
-PlotPauseLineReachesCI(pause_reaches)
-}
+
+
+#individual traces with the average over that
+# PlotPausedata(pause_reaches)
+# PlotActivedata(active_reaches)
+# PlotPassivedata(passive_reaches)
+# Plotnocursordata(nocursor_reaches)
 #reaches overlayed with confidence intervals
 PlotallreachesCI(active_reaches,passive_reaches, pause_reaches,nocursor_reaches)
 
@@ -94,6 +90,69 @@ PlotoutLineforReachesCI<- function(dataset){
   axis(1, at=c(1,64,224,240,288), cex.axis=0.75)
 }
 
+PlotoutLineforPassiveReaches<- function(dataset){
+  color1       <- rgb(0.7,0.0,0.7)      # purple
+  color1_trans <- rgb(0.7,0.0,0.7,0.2)
+  color2       <- rgb(0.0,0.7,0.0)      # green
+  color2_trans <- rgb(0.0,0.7,0.0,0.2)  # transparent green
+  dataCIs<- trialCI(data = dataset)
+  dataset["distortion"][is.na(dataset["distortion"])] <- 0
+  dataset$Mean <- rowMeans(dataset[,2:length(dataset)], na.rm = TRUE)
+  plot(dataset$Mean, ylim = c(-35, 35), xlab = "Trial", ylab = "Hand Direction [°]",axes=F, main = "Learning Curves", type = 'l', col= 'white')
+  lines(c(1,64,64,224,224,240,240),c(0,0,30,30,-30,-30,0),col=rgb(0.,0.,0.))
+  lines(c(240,288),c(0,0),lty=2,col=rgb(0.,0.,0.))
+  legend(-5,-15,legend=c('Passive Localization Group (N=32)'),col=c(rgb(0.7,0.0,0.7)),lty=c(1),lwd=c(2),bty='n')
+  axis(2, at=c(-30,-15,0,15,30), cex.axis=0.75)
+  axis(1, at=c(1,64,224,240,288), cex.axis=0.75)
+}
+
+PlotoutLineforactiveReaches<- function(dataset){
+  color1       <- rgb(0.7,0.0,0.7)      # purple
+  color1_trans <- rgb(0.7,0.0,0.7,0.2)
+  color2       <- rgb(0.0,0.7,0.0)      # green
+  color2_trans <- rgb(0.0,0.7,0.0,0.2)  # transparent green
+  dataCIs<- trialCI(data = dataset)
+  dataset["distortion"][is.na(dataset["distortion"])] <- 0
+  dataset$Mean <- rowMeans(dataset[,2:length(dataset)], na.rm = TRUE)
+  plot(dataset$Mean, ylim = c(-35, 35), xlab = "Trial", ylab = "Hand Direction [°]",axes=F, main = "Learning Curves", type = 'l', col= 'white')
+  lines(c(1,64,64,224,224,240,240),c(0,0,30,30,-30,-30,0),col=rgb(0.,0.,0.))
+  lines(c(240,288),c(0,0),lty=2,col=rgb(0.,0.,0.))
+  legend(-5,-15,legend=c('Active Localization Group (N=32)'),col=c(rgb(1.0,0.4,0.0)),lty=c(1),lwd=c(2),bty='n')
+  axis(2, at=c(-30,-15,0,15,30), cex.axis=0.75)
+  axis(1, at=c(1,64,224,240,288), cex.axis=0.75)
+}
+
+PlotoutLinefornocursorReaches<- function(dataset){
+  color1       <- rgb(0.7,0.0,0.7)      # purple
+  color1_trans <- rgb(0.7,0.0,0.7,0.2)
+  color2       <- rgb(0.0,0.7,0.0)      # green
+  color2_trans <- rgb(0.0,0.7,0.0,0.2)  # transparent green
+  dataCIs<- trialCI(data = dataset)
+  dataset["distortion"][is.na(dataset["distortion"])] <- 0
+  dataset$Mean <- rowMeans(dataset[,2:length(dataset)], na.rm = TRUE)
+  plot(dataset$Mean, ylim = c(-35, 35), xlab = "Trial", ylab = "Hand Direction [°]",axes=F, main = "Learning Curves", type = 'l', col= 'white')
+  lines(c(1,64,64,224,224,240,240),c(0,0,30,30,-30,-30,0),col=rgb(0.,0.,0.))
+  lines(c(240,288),c(0,0),lty=2,col=rgb(0.,0.,0.))
+  legend(-5,-15,legend=c('No-Cursor Group (N=32)'),col=c(rgb(0.0,0.7,0.0)),lty=c(1),lwd=c(2),bty='n')
+  axis(2, at=c(-30,-15,0,15,30), cex.axis=0.75)
+  axis(1, at=c(1,64,224,240,288), cex.axis=0.75)
+}
+
+PlotoutLineforPauseReaches<- function(dataset){
+  color1       <- rgb(0.7,0.0,0.7)      # purple
+  color1_trans <- rgb(0.7,0.0,0.7,0.2)
+  color2       <- rgb(0.0,0.7,0.0)      # green
+  color2_trans <- rgb(0.0,0.7,0.0,0.2)  # transparent green
+  dataCIs<- trialCI(data = dataset)
+  dataset["distortion"][is.na(dataset["distortion"])] <- 0
+  dataset$Mean <- rowMeans(dataset[,2:length(dataset)], na.rm = TRUE)
+  plot(dataset$Mean, ylim = c(-35, 35), xlab = "Trial", ylab = "Hand Direction [°]",axes=F, main = "Learning Curves", type = 'l', col= 'white')
+  lines(c(1,64,64,224,224,240,240),c(0,0,30,30,-30,-30,0),col=rgb(0.,0.,0.))
+  lines(c(240,288),c(0,0),lty=2,col=rgb(0.,0.,0.))
+  legend(-5,-15,legend=c('No Localization Group (N=32)'),col=c(rgb(0.63,0.71,0.81)),lty=c(1),lwd=c(2),bty='n')
+  axis(2, at=c(-30,-15,0,15,30), cex.axis=0.75)
+  axis(1, at=c(1,64,224,240,288), cex.axis=0.75)
+}
 PlotPauseLineReachesCI<- function(dataset){
   color2       <- rgb(0.63,0.71,0.81)      # blue-gray
   color2_trans <- rgb(0.63,0.71,0.81,0.2)  # transparent blue-gray
@@ -157,6 +216,49 @@ PlotpassiveLineReachesCI<- function(dataset){
   lines(dataset$Mean*-1, col = color1, lwd = 1.5)
   
 }
+
+
+PlotPausedata<- function (data) {
+  PlotoutLineforPauseReaches(pause_reaches)
+  PlotPauseLineReachesCI(pause_reaches)
+  PauseR<- pause_reaches[33:320,]*-1
+  participants <- 2:33
+  for (pn in participants) {
+    lines(PauseR[,pn], col = rgb(0.0,0.7,0.0,0.06))
+  }
+  PlotPauseLineReachesCI(pause_reaches)
+}
+PlotActivedata<- function (data) {
+  PlotoutLineforactiveReaches(active_reaches)
+  PlotActiveLineReachesCI(active_reaches)
+  activeR<- active_reaches*-1
+  participants <- 2:33
+  for (pn in participants) {
+    lines(activeR[,pn], col = rgb(0.0,0.7,0.0,0.06))
+  }
+  PlotActiveLineReachesCI(active_reaches)
+}
+PlotPassivedata<- function (data) {
+  PlotoutLineforPassiveReaches(passive_reaches)
+  PlotpassiveLineReachesCI(passive_reaches)
+  PassiveR<- passive_reaches*-1
+  participants <- 2:33
+  for (pn in participants) {
+    lines(PassiveR[,pn], col = rgb(0.0,0.7,0.0,0.06))
+  }
+  PlotpassiveLineReachesCI(passive_reaches)
+}
+Plotnocursordata<- function (data) {
+  PlotoutLinefornocursorReaches(nocursor_reaches)
+  PlotnocursorLineReachesCI(nocursor_reaches)
+  nocursorR<- nocursor_reaches[33:320,]*-1
+  participants <- 2:33
+  for (pn in participants) {
+    lines(nocursorR[,pn], col = rgb(0.0,0.7,0.0,0.06))
+  }
+  PlotnocursorLineReachesCI(nocursor_reaches)
+}
+
 
 trialCI<- function(data) {
   
@@ -222,8 +324,8 @@ PlotactiveLineTapCI<- function(dataset){
 }
 
 Reachmodelnc<- function(data, ncdata) {
-  svglite(file='reach_models_ncdata.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
-  layout(matrix(c(1,1,1,1,2,3,4,5), nrow=2, byrow=TRUE), heights=c(3,1))
+  #svglite(file='reach_models_ncdata.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
+  #layout(matrix(c(1,1,1,1,2,3,4,5), nrow=2, byrow=TRUE), heights=c(3,1))
   data$distortion<- data$distortion*-1
   reaches<- getreachesformodel(data)
   reach_par<- fittworatemodel(reaches = reaches$meanreaches, reaches$distortion)
@@ -238,8 +340,8 @@ Reachmodelnc<- function(data, ncdata) {
   return(reach_par)
 }
 Reachmodel<- function(data) {
-  svglite(file='reach_models_passive_pause.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
-  layout(matrix(c(1,1,1,1,2,3,4,5), nrow=2, byrow=TRUE), heights=c(3,1))
+  #svglite(file='reach_models_passive_pause.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
+  #layout(matrix(c(1,1,1,1,2,3,4,5), nrow=2, byrow=TRUE), heights=c(3,1))
   data$distortion<- data$distortion*-1
   reaches<- getreachesformodel(data)
   reach_par<- fittworatemodel(reaches = reaches$meanreaches, reaches$distortion)
@@ -258,7 +360,7 @@ Plotmodel<- function(dataset){
   plot(dataset$Mean*-1, ylim = c(-35, 35), xlab = "Trial",lwd= 2, ylab = "Hand Direction [deg]",col = c(rgb(0.8,0.8,0.8)), axes = FALSE, main = "Two-Rate Model Applied to Reaches", type = 'l')
   lines(c(1,64,64,224,224,240,240),c(0,0,30,30,-30,-30,0),col=rgb(0.,0.,0.))
   lines(c(240,288),c(0,0),lty=2,col=rgb(0.,0.,0.))
-  legend(-5, -3,legend=c('Reach data','No-Cursors', 'model','fast','slow'),col=c(rgb(0.44,0.51,0.57),col ='black', rgb(.5,0.,.5),rgb(0.0,0.7,0.0),rgb(0.,.5,1.)),lty=c(1,1,1,1,1),lwd=c(2,2,2,2,2),bty='n')
+  legend(-5, -3,legend=c('Reach data', 'model','fast','slow'),col=c(rgb(0.44,0.51,0.57), rgb(.5,0.,.5),rgb(0.0,0.7,0.0),rgb(0.,.5,1.)),lty=c(1,1,1,1),lwd=c(2,2,2,2),bty='n')
   axis(1, at=c(1,64,224,240,288), cex.axis=0.75)
   axis(2, at=c(-30,-15,0,15,30), cex.axis=0.75)
   lines(dataset$Mean*-1,col = c(rgb(0.44,0.51,0.57)))
