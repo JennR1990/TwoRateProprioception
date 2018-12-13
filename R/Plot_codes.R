@@ -1,7 +1,3 @@
-percentNAs <- function (df) {
-  return((sum(is.na(df))/prod(dim(df)))*100)
-}
-
 ##Figures we want to make often##
 # color1       <- rgb(0.7,0.0,0.7)         # purple
 # color1_trans <- rgb(0.7,0.0,0.7,0.2)     # transparent purple

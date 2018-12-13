@@ -32,3 +32,7 @@ downloadOSFdata <- function(update=FALSE) {
   
 }
 
+
+percentNAs <- function (df) {
+  return((sum(is.na(df))/prod(dim(df)))*100)
+}

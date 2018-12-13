@@ -54,7 +54,9 @@ Here is a list of planned figures with their potential message:
 - Fig 3: A,B,C,D) one subplot for each group showing reach deviations in the four main phases: individual traces, 95% confidence intervals, median (show quality of the data)
 - Fig 4: A,B,C,D) one subplot for each group showing the median reach deviations in the four main phases, plus the two-rate model fit and it's fast and slow process (show quality of the fits)
 - Fig 5: comparing reach deviations over time, (show differences between the groups, or should this go in a previous figure? seems it would get cluttered)
+#PlotallreachesCI(active_reaches,passive_reaches, pause_reaches,nocursor_reaches)
 - Fig 6: A) localization throughout for the two localization groups, B) localization shift in the pause and no-cursor group, C) speed of localization shift, D/E) localization shift with the two processes for each group (show the incredible speed of localization shifts and how non-matching the slow but also the fast process are)
+#PlotallTapCI(passive_localization, active_localizations) has no model output
 - Fig 7: alternative models of localization? (20% model works reasonably well... even better than giving localization it's own two- or one-rate model)
 - Fig 8: A) time course of no-cursor changes (no-cursor could reflect a watered down version of the slow process?)
 
