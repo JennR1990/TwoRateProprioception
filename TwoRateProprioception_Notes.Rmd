@@ -72,7 +72,7 @@ library("svglite", lib.loc="~/R/win-library/3.4")
 ## Analysis of data
 
 We begin with some ANOVA's and T-tests to check for significance
-#analyzedata(active_reaches, passive_reaches, pause_reaches, nocursor_reaches)
+#tanalyzedata(active_reaches, passive_reaches, pause_reaches, nocursor_reaches)
 
 ## Two-Rate model
 
