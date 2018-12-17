@@ -10,19 +10,19 @@
 
 
 
-#individual traces with the average over that
+##individual traces with the average over that
 # PlotPausedata(pause_reaches)
 # PlotActivedata(active_reaches)
 # PlotPassivedata(passive_reaches)
 # Plotnocursordata(nocursor_reaches)
-#reaches overlayed with confidence intervals
-PlotallreachesCI(active_reaches,passive_reaches, pause_reaches,nocursor_reaches)
+##reaches overlayed with confidence intervals
+#PlotallreachesCI(active_reaches,passive_reaches, pause_reaches,nocursor_reaches)
 
 
-#localizations overlayed with confidence intervals
-PlotallTapCI(passive_localization, active_localizations)
+##localizations overlayed with confidence intervals
+#PlotallTapCI(passive_localization, active_localizations)
 
-#reach data avergaed for similar training and their model output
+##reach data avergaed for similar training and their model output
 #Reachmodel(pp_reaches)
 #Reachmodelnc(acnc_reaches,nocursor_nocursors)
 
@@ -339,6 +339,19 @@ Reachmodelnc<- function(data, ncdata) {
   lines(x= 33:288,y=ncreaches$meanreaches*-1)
   return(reach_par)
 }
+
+Allreachmodels<- function (data1, data2, data3, data4) {
+  svglite(file='All_reach_models.svg', width=10, height=7, system_fonts=list(sans = "Arial"))
+  layout(matrix(c(1,2,3,4),nrow=2, ncol = 2, byrow=TRUE), widths=c(1.5,1.5), heights=c(1,1))
+  data1_par<-Reachmodel(data1)
+ data2_par<-Reachmodel(data2)
+ data3_par<-Reachmodel(data3)
+ data4_par<-Reachmodel(data4)
+ pars<-rbind(data1_par, data2_par, data3_par, data4_par)
+ return(pars)
+ dev.off()
+}
+
 Reachmodel<- function(data) {
   #svglite(file='reach_models_passive_pause.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
   #layout(matrix(c(1,1,1,1,2,3,4,5), nrow=2, byrow=TRUE), heights=c(3,1))

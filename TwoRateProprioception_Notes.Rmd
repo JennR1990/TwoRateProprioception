@@ -48,15 +48,16 @@ By comparing the trial-by-trial changes in the four paradigms, we can investigat
 ## Figures
 
 Here is a list of planned figures with their potential message:
-
+library("svglite", lib.loc="~/R/win-library/3.4")
 - Fig 1: A) setup, B) reach training + targets, C) localization + points, D) no-cursor + targets (illustrate the hardware and trial types, not done in R)
 - Fig 2: paradigm, four phases (aligned, rotated, reversed, error-clamped), plus extra localization phases (illustrate the main paradigm... add expected model fit?)
 - Fig 3: A,B,C,D) one subplot for each group showing reach deviations in the four main phases: individual traces, 95% confidence intervals, median (show quality of the data)
 #PlotPausedata(pause_reaches) individual traces for pause data
-# PlotActivedata(active_reaches)
-# PlotPassivedata(passive_reaches)
-# Plotnocursordata(nocursor_reaches)
+#PlotActivedata(active_reaches)
+#PlotPassivedata(passive_reaches)
+#Plotnocursordata(nocursor_reaches)
 - Fig 4: A,B,C,D) one subplot for each group showing the median reach deviations in the four main phases, plus the two-rate model fit and it's fast and slow process (show quality of the fits)
+#Allpars<-Allreachmodels(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,])
 #Reachmodel(pause_reaches[33:320,])
 #Reachmodel(nocursor_reaches[33:320,])
 #Reachmodel(active_reaches)
@@ -67,6 +68,11 @@ Here is a list of planned figures with their potential message:
 #PlotallTapCI(passive_localization, active_localizations) has no model output
 - Fig 7: alternative models of localization? (20% model works reasonably well... even better than giving localization it's own two- or one-rate model)
 - Fig 8: A) time course of no-cursor changes (no-cursor could reflect a watered down version of the slow process?)
+
+## Analysis of data
+
+We begin with some ANOVA's and T-tests to check for significance
+#analyzedata(active_reaches, passive_reaches, pause_reaches, nocursor_reaches)
 
 ## Two-Rate model
 
