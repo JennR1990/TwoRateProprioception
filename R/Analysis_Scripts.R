@@ -1,26 +1,67 @@
 tanalyzedata<- function(adata, pasdata, paudata, ncdata){
-AllDataRM<- PrepdataforRM(adata, pasdata, paudata, ncdata)
-IndependentT(AllDataRM, 'Active', 'Passive')
-IndependentT(AllDataRM, 'Pause', 'No-Cursor')
-IndependentT(AllDataRM, 'Active', 'No-Cursor')
-IndependentT(AllDataRM, 'Passive', 'No-Cursor')
-IndependentT(AllDataRM, 'Active', 'Pause')
-IndependentT(AllDataRM, 'Passive', 'Pause')
+  AllDataRM<- PrepdataforT(adata, pasdata, paudata, ncdata)
+  IndependentT(AllDataRM, 'Active', 'Passive')
+  IndependentT(AllDataRM, 'Pause', 'No-Cursor')
+  IndependentT(AllDataRM, 'Active', 'No-Cursor')
+  IndependentT(AllDataRM, 'Passive', 'No-Cursor')
+  IndependentT(AllDataRM, 'Active', 'Pause')
+  IndependentT(AllDataRM, 'Passive', 'Pause')
+  PairedT(AllDataRM, 'Active')
+  PairedT(AllDataRM, 'Passive')
+  PairedT(AllDataRM, 'Pause')
+  PairedT(AllDataRM, 'No-Cursor')
+}
+
+ANOVAanalysis<- function(adata, pasdata, paudata, ncdata){
+  AllDataANOVA<- PrepdataforANOVA(adata, pasdata, paudata, ncdata)
+  AllDataANOVA$ID<- as.factor(AllDataANOVA$ID)
+  AllDataANOVA$Experiment<- as.factor(AllDataANOVA$Experiment)
+  fullmodel <- ezANOVA(data=AllDataANOVA,
+                       dv=Reaches,
+                       wid=ID,
+                       within=Time,
+                       between = Experiment,
+                       type=3,
+                       return_aov=TRUE)
+  return(fullmodel)
 }
 
 
-
-PrepdataforRM<- function(adata, pasdata, paudata, ncdata){
-  A_RM<-RepeatedMeasuresCombine1or5(adata)
+PrepdataforT<- function(adata, pasdata, paudata, ncdata){
+  A_RM<-TCombine1or5(adata)
   A_RM$Experiment <- rep('Active', nrow(A_RM))
-  Pas_RM<-RepeatedMeasuresCombine1or5(pasdata)
+  Pas_RM<-TCombine1or5(pasdata)
   Pas_RM$Experiment <- rep('Passive', nrow(Pas_RM))
-  Pau_RM<-RepeatedMeasuresCombine1or5(paudata)
+  Pau_RM<-TCombine1or5(paudata)
   Pau_RM$Experiment <- rep('Pause', nrow(Pau_RM))
-  nc_RM<-RepeatedMeasuresCombine1or5(ncdata)
+  nc_RM<-TCombine1or5(ncdata)
   nc_RM$Experiment <- rep('No-Cursor', nrow(nc_RM))
   AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM)
   return(AllDataRM)
+}
+
+PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata) {
+  
+  A_RM<-ANOVAcombine1or5(adata)
+  A_RM$ID <- sprintf('ActLoc.%s',A_RM$ID)
+  A_RM$Experiment <- rep('Active', nrow(A_RM))
+  
+  Pas_RM<-ANOVAcombine1or5(pasdata)
+  Pas_RM$ID <- sprintf('PasLoc.%s',Pas_RM$ID)
+  Pas_RM$Experiment <- rep('Passive', nrow(Pas_RM))
+  
+  Pau_RM<-ANOVAcombine1or5(paudata)
+  Pau_RM$ID <- sprintf('Pause.%s',Pau_RM$ID)
+  Pau_RM$Experiment <- rep('Pause', nrow(Pau_RM))
+  
+  nc_RM<-ANOVAcombine1or5(ncdata)
+  nc_RM$ID <- sprintf('NoCursor.%s',nc_RM$ID)
+  nc_RM$Experiment <- rep('No-Cursor', nrow(nc_RM))
+  
+  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM)
+  
+  return(AllDataRM)
+  
 }
 
 
@@ -47,20 +88,32 @@ PairedT<- function(data, exp1) {
   print(t.test(data$Aligned[data$Experiment == exp1],data$R1_Early[data$Experiment == exp1], paired = TRUE)) #not sig A vs. NC
   print('Did they return to baseline? (Should not)')
   print(t.test(data$Aligned[data$Experiment == exp1],data$R1_Late[data$Experiment == exp1], paired = TRUE))
-  print('Aligned')
+  print('Was there learning from beginning to end of 1st rotation?')
   print(t.test(data$R1_Early[data$Experiment == exp1],data$R1_Late[data$Experiment == exp1], paired = TRUE)) # p-value = 0.04535 A vs. NC
-  print('Aligned')
+  print('How much could they learn of the 60 degree change?')
   print(t.test(data$R1_Late[data$Experiment == exp1],data$R2[data$Experiment == exp1], paired = TRUE)) # not sig A vs. NC
-  print('Aligned')
+  print('Do their error clamp trials reflect the trajectories in 2nd rotation?')
   print(t.test(data$R2[data$Experiment == exp1],data$EC[data$Experiment == exp1], paired = TRUE)) # not sig  A vs. NC
-  print('Aligned')
+  print('Is there a change in error clamps across time? (Decay)')
   print(t.test(data$EC[data$Experiment == exp1],data$EC_Late[data$Experiment == exp1], paired = TRUE)) # p-value = 0.005945  A vs. NC
-  print('Aligned')
+  print('Did they just revert back to aligned behaviour when dealing with 2nd rotation?')
   print(t.test(data$Aligned[data$Experiment == exp1],data$R2[data$Experiment == exp1], paired = TRUE)) 
-  print('Aligned')
+  print('Are the 1st few error clamp trials the same as their aligned behaviour?')
   print(t.test(data$Aligned[data$Experiment == exp1],data$EC[data$Experiment == exp1], paired = TRUE))  #p-value = 1.36e-07  A vs. NC
-  print('Aligned')
+  print('Did they eventually decay back to baseline?')
   print(t.test(data$Aligned[data$Experiment == exp1],data$EC_Late[data$Experiment == exp1], paired = TRUE)) 
   
 }
+
+##ANOVAS
+AllDataRM$ID<- as.factor(AllDataRM$ID)
+AllDataRM$Experiment<- as.factor(AllDataRM$Experiment)
+fullmodel <- ezANOVA(data=AllDataRM,
+                     dv=Reaches,
+                     wid=ID,
+                     within=Time,
+                     between = Experiment,
+                     type=3,
+                     return_aov=TRUE)
+
 #cohensD(EC_Late[AllDataRM$Experiment == 'Active'],EC_Late[AllDataRM$Experiment == 'No-Cursor'], data = AllDataRM)

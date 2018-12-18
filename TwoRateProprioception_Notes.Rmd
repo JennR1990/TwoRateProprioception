@@ -74,6 +74,8 @@ library("svglite", lib.loc="~/R/win-library/3.4")
 We begin with some ANOVA's and T-tests to check for significance
 #tanalyzedata(active_reaches, passive_reaches, pause_reaches, nocursor_reaches)
 
+#FullANOVA<-ANOVAanalysis(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,])
+
 ## Two-Rate model
 
 In the two-rate model, the motor output X at trial t, $X_t$ is simply the added output of the slow and fast process at trial t:
