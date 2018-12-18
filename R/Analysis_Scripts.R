@@ -105,15 +105,29 @@ PairedT<- function(data, exp1) {
   
 }
 
-##ANOVAS
-AllDataRM$ID<- as.factor(AllDataRM$ID)
-AllDataRM$Experiment<- as.factor(AllDataRM$Experiment)
-fullmodel <- ezANOVA(data=AllDataRM,
-                     dv=Reaches,
-                     wid=ID,
-                     within=Time,
-                     between = Experiment,
-                     type=3,
-                     return_aov=TRUE)
 
+##Models
+
+ParticipantReachmodels<- function(adata, pasdata, paudata, ncdata) {
+  a_par<- prepdataformodel(adata)
+  a_par$Experiment<-'Active'
+  Pas_par<- prepdataformodel(pasdata)
+  a_par$Experiment<-'Passive'
+  Pau_par<- prepdataformodel(paudata)
+  a_par$Experiment<-'Pause'
+  nc_par<- prepdataformodel(ncdata)
+  a_par$Experiment<-'No-Cursor'
+  allpars<- rbind(a_par, Pas_par, Pau_par, nc_par)
+  return(allpars)
+}
+
+prepdataformodel<- function (data){
+  data$distortion<- data$distortion*-1
+  # modeldata<- getreachesformodel(data)
+  pars<- getParticipantFits(data)
+  return(pars)
+}
+
+# data$distortion<- data$distortion*-1
+# reach_model<-tworatemodel(par=reach_par, distortions = data$distortion)
 #cohensD(EC_Late[AllDataRM$Experiment == 'Active'],EC_Late[AllDataRM$Experiment == 'No-Cursor'], data = AllDataRM)
