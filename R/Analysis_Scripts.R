@@ -12,7 +12,7 @@ tanalyzedata<- function(AllDataRM){
 }
 
 #adata, pasdata, paudata, ncdata
-ANOVAanalysis<- function(AllDataANOVAadata){
+ANOVAanalysis<- function(AllDataANOVA){
   AllDataANOVA$ID<- as.factor(AllDataANOVA$ID)
   AllDataANOVA$Experiment<- as.factor(AllDataANOVA$Experiment)
   fullmodel <- ezANOVA(data=AllDataANOVA,
