@@ -47,6 +47,18 @@ By comparing the trial-by-trial changes in the four paradigms, we can investigat
 
 ## Figures
 
+Preparing Data for Figures and Analysis:
+#downloadOSFdata()
+#pause_reaches<- Loaddata(group='pause')
+#active_reaches<- Loaddata(group='active')
+#passive_reaches<- Loaddata()
+#nocursor_reaches<- Loaddata(group='nocursor')
+#passive_localization<- Loaddata(task = 'localization')
+#active_localization<- Loaddata(group='active', task = 'localization')
+#nocursor_nocursors<- Loaddata(group='nocursor', task = 'nocursors')
+#ANOVAdata<- PrepdataforANOVA(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors)
+#Ttestdata<- PrepdataforT(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors)
+
 Here is a list of planned figures with their potential message:
 library("svglite", lib.loc="~/R/win-library/3.4")
 - Fig 1: A) setup, B) reach training + targets, C) localization + points, D) no-cursor + targets (illustrate the hardware and trial types, not done in R)
@@ -72,8 +84,8 @@ library("svglite", lib.loc="~/R/win-library/3.4")
 ## Analysis of data
 
 We begin with some ANOVA's and T-tests to check for significance
-#tanalyzedata(active_reaches, passive_reaches, pause_reaches, nocursor_reaches)
-#FullANOVA<-ANOVAanalysis(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,])
+#tanalyzedata(Ttestdata)
+#FullANOVA<-ANOVAanalysis(ANOVAdata)
 
 
 

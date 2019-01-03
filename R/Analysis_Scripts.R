@@ -1,5 +1,4 @@
-tanalyzedata<- function(adata, pasdata, paudata, ncdata){
-  AllDataRM<- PrepdataforT(adata, pasdata, paudata, ncdata)
+tanalyzedata<- function(AllDataRM){
   IndependentT(AllDataRM, 'Active', 'Passive')
   IndependentT(AllDataRM, 'Pause', 'No-Cursor')
   IndependentT(AllDataRM, 'Active', 'No-Cursor')
@@ -12,8 +11,8 @@ tanalyzedata<- function(adata, pasdata, paudata, ncdata){
   PairedT(AllDataRM, 'No-Cursor')
 }
 
-ANOVAanalysis<- function(adata, pasdata, paudata, ncdata){
-  AllDataANOVA<- PrepdataforANOVA(adata, pasdata, paudata, ncdata)
+#adata, pasdata, paudata, ncdata
+ANOVAanalysis<- function(AllDataANOVAadata){
   AllDataANOVA$ID<- as.factor(AllDataANOVA$ID)
   AllDataANOVA$Experiment<- as.factor(AllDataANOVA$Experiment)
   fullmodel <- ezANOVA(data=AllDataANOVA,
@@ -27,38 +26,44 @@ ANOVAanalysis<- function(adata, pasdata, paudata, ncdata){
 }
 
 
-PrepdataforT<- function(adata, pasdata, paudata, ncdata){
-  A_RM<-TCombine1or5(adata)
+PrepdataforT<- function(adata, pasdata, paudata, ncdata, ncncdata){
+  A_RM<-TCombine(adata)
   A_RM$Experiment <- rep('Active', nrow(A_RM))
-  Pas_RM<-TCombine1or5(pasdata)
+  Pas_RM<-TCombine(pasdata)
   Pas_RM$Experiment <- rep('Passive', nrow(Pas_RM))
-  Pau_RM<-TCombine1or5(paudata)
+  Pau_RM<-TCombine(paudata)
   Pau_RM$Experiment <- rep('Pause', nrow(Pau_RM))
-  nc_RM<-TCombine1or5(ncdata)
+  nc_RM<-TCombine(ncdata)
   nc_RM$Experiment <- rep('No-Cursor', nrow(nc_RM))
-  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM)
+  ncnc_RM<-NoCursorsTCombine(ncncdata)
+  ncnc_RM$Experiment <- rep('No-Cursor_No-Cursors', nrow(ncnc_RM))
+  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM)
   return(AllDataRM)
 }
 
-PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata) {
+PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata) {
   
-  A_RM<-ANOVAcombine1or5(adata)
+  A_RM<-ANOVAcombine(adata)
   A_RM$ID <- sprintf('ActLoc.%s',A_RM$ID)
   A_RM$Experiment <- rep('Active', nrow(A_RM))
   
-  Pas_RM<-ANOVAcombine1or5(pasdata)
+  Pas_RM<-ANOVAcombine(pasdata)
   Pas_RM$ID <- sprintf('PasLoc.%s',Pas_RM$ID)
   Pas_RM$Experiment <- rep('Passive', nrow(Pas_RM))
   
-  Pau_RM<-ANOVAcombine1or5(paudata)
+  Pau_RM<-ANOVAcombine(paudata)
   Pau_RM$ID <- sprintf('Pause.%s',Pau_RM$ID)
   Pau_RM$Experiment <- rep('Pause', nrow(Pau_RM))
   
-  nc_RM<-ANOVAcombine1or5(ncdata)
+  nc_RM<-ANOVAcombine(ncdata)
   nc_RM$ID <- sprintf('NoCursor.%s',nc_RM$ID)
   nc_RM$Experiment <- rep('No-Cursor', nrow(nc_RM))
   
-  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM)
+  ncnc_RM<-NoCursorACombine(ncncdata)
+  ncnc_RM$ID <- sprintf('NoCursor_No-Cursors.%s',ncnc_RM$ID)
+  ncnc_RM$Experiment <- rep('No-Cursor_No-Cursors', nrow(ncnc_RM))
+  
+  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM)
   
   return(AllDataRM)
   

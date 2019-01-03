@@ -1,6 +1,6 @@
 ##repeated Measures Combine function for T-Tests
 
-TCombine1or5<- function(data) {
+TCombine<- function(data) {
   ParticipantRM<- data.frame()
   participants <- c(2:ncol(data))
   for (participant in participants){
