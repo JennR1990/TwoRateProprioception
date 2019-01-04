@@ -126,10 +126,17 @@ ParticipantReachmodels<- function(adata, pasdata, paudata, ncdata) {
   return(allpars)
 }
 
-prepdataformodel<- function (data){
+prepdatagetfits<- function (data){
   data$distortion<- data$distortion*-1
   # modeldata<- getreachesformodel(data)
   pars<- getParticipantFits(data)
+  return(pars)
+}
+
+prepdatagetonefits<- function (data){
+  data$distortion<- data$distortion*-1
+  # modeldata<- getreachesformodel(data)
+  pars<- getoneParticipantFits(data)
   return(pars)
 }
 
@@ -174,7 +181,7 @@ randomcodes<- function () {
   
 }
 
-oneratevstworate<- function () {
+Goneratevstworate<- function () {
   
   ##Getting AICS for one-rate model vs. two-rate model
   #need to run one rate model
@@ -216,6 +223,38 @@ oneratevstworate<- function () {
   relativeLikelihoodsc
   
   
+}
+
+Poneratevstworate<- function (data) {
+  ##Getting AICS for one-rate model vs. two-rate model
+  #need to run one rate model
+  par1<- prepdatagetonefits(data)
+  #need to run two rate model
+  par2<- prepdatagetfits(data)
+
+  # #now run the model function to get the model output
+  # one_model<-oneratemodel(par=par1, distortions = data$distortion)
+  # two_model<-tworatemodel(par=par2, distortions = data$distortion)
+  # 
+  # 
+  # #Now we can do the comparison to get the AICS
+  # ModelData<- getreachesformodel(data)
+  # meanreaches<- ModelData$meanreaches
+  # 
+  
+  Data1MSE<- par1$MSE
+  Data2MSE<- par2$MSE
+  N<- 5
+  P1 <- 2
+  P2 <- 4
+  C <- N*(log(2*pi)+1)
+  Data1AIC <- 2*P1 + N*log(Data1MSE) + C
+  Data2AIC <- 2*P2 + N*log(Data2MSE) + C
+  count<-sum(Data1AIC<Data2AIC)
+  AICs<- c('One Rate Model'=Data1AIC,'Two Rate Model'=Data2AIC)
+  print(AICs)
+  #relativeLikelihoods <- exp((min(AICs) - AICs)/2)
+  return(sprintf('the number of participants with a higher AIC for two rates are %d',count))
 }
 # data$distortion<- data$distortion*-1
 # reach_model<-tworatemodel(par=reach_par, distortions = data$distortion)

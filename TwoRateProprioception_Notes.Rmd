@@ -79,12 +79,17 @@ library("svglite", lib.loc="~/R/win-library/3.4")
 - Fig 6: A) localization throughout for the two localization groups, B) localization shift in the pause and no-cursor group, C) speed of localization shift, D/E) localization shift with the two processes for each group (show the incredible speed of localization shifts and how non-matching the slow but also the fast process are)
 #PlotallTapCI(passive_localization, active_localizations) has no model output
 - Fig 7: alternative models of localization? (20% model works reasonably well... even better than giving localization it's own two- or one-rate model)
+#Poneratevstworate(active_reaches)
+#Poneratevstworate(passive_reaches)
+#Poneratevstworate(pause_reaches)
+#Poneratevstworate(nocursor_reaches)
 - Fig 8: A) time course of no-cursor changes (no-cursor could reflect a watered down version of the slow process?)
 
 ## Analysis of data
 
 We begin with some ANOVA's and T-tests to check for significance
 #tanalyzedata(Ttestdata)
+#library("ez")
 #FullANOVA<-ANOVAanalysis(ANOVAdata)
 
 
