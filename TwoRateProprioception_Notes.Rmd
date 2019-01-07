@@ -83,6 +83,10 @@ library("svglite", lib.loc="~/R/win-library/3.4")
 #Poneratevstworate(passive_reaches)
 #Poneratevstworate(pause_reaches)
 #Poneratevstworate(nocursor_reaches)
+#Active_AICS<- bootstrapAICS(active_reaches, 15)
+#Passive_AICS<- bootstrapAICS(passive_reaches, 15)
+#Pause_AICS<- bootstrapAICS(pause_reaches, 15)
+#NC_AICS<- bootstrapAICS(nocursor_reaches, 15)
 - Fig 8: A) time course of no-cursor changes (no-cursor could reflect a watered down version of the slow process?)
 
 ## Analysis of data

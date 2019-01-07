@@ -141,6 +141,74 @@ prepdatagetonefits<- function (data){
 }
 
 
+GroupAICS<- function(data, bootstraps) {
+  
+  reaches <- as.matrix(data[,2:33])
+  distortion<- data[,1]
+  
+  onerateAICs <- c()
+  tworateAICs <- c()
+  
+  for (boots in c(1:bootstraps)) {
+    LC <- apply(reaches[,sample(c(1:32),32,replace=TRUE)],1,median,na.rm=TRUE)
+    
+    distortion<- distortion*-1
+    onerate_par<- fitoneratemodel(reaches = LC, distortions = distortion)
+    tworate_par<- fittworatemodel(reaches = LC, distortions = distortion)
+    print(tworate_par)
+
+    distortion<- distortion*-1
+    onerate_model<- oneratemodel(par = onerate_par, distortions = distortion)
+    tworate_model<- tworatemodel(par = tworate_par, distortions = distortion)
+    
+    onerateMSE<- mean((LC - onerate_model$output)^2)
+    tworateMSE<- mean((LC - tworate_model$output)^2)
+    N<- 5
+    P1 <- 2
+    P2 <- 4
+    C <- N*(log(2*pi)+1)
+    onerateAIC <- 2*P1 + N*log(onerateMSE) + C
+    tworateAIC <- 2*P2 + N*log(tworateMSE) + C
+    print(tworateAIC)
+
+    onerateAICs <- c(onerateAICs, onerateAIC)
+    tworateAICs <- c(tworateAICs, tworateAIC)
+    
+    
+    # relativeLikelihoodsone <- exp((min(onerateAICs) - onerateAICs)/2)
+    # relativeLikelihoodstwo <- exp((min(tworateAICs) - tworateAICs)/2)
+    # print(relativeLikelihoodsone)
+    # print(relativeLikelihoodstwo)
+  }
+  
+  return(data.frame(onerateAICs,tworateAICs))
+  
+}
+
+
+Poneratevstworate<- function (data) {
+  ##Getting AICS for one-rate model vs. two-rate model
+  #need to run one rate model
+  par1<- prepdatagetonefits(data)
+  #need to run two rate model
+  par2<- prepdatagetfits(data)
+
+  Data1MSE<- par1$MSE
+  Data2MSE<- par2$MSE
+  N<- 5
+  P1 <- 2
+  P2 <- 4
+  C <- N*(log(2*pi)+1)
+  Data1AIC <- 2*P1 + N*log(Data1MSE) + C
+  Data2AIC <- 2*P2 + N*log(Data2MSE) + C
+  count<-sum(Data1AIC<Data2AIC)
+  AICs<- c('One Rate Model'=Data1AIC,'Two Rate Model'=Data2AIC)
+  print(AICs)
+  #relativeLikelihoods <- exp((min(AICs) - AICs)/2)
+  return(sprintf('the number of participants with a higher AIC for two rates are %d',count))
+}
+
+
 randomcodes<- function () {
   mmed <- function(x,n=5){runmed(x,n)}  #run this function to do the median smoothing
   Active_p<- mmed(ActiveP$meanreaches)
@@ -181,81 +249,8 @@ randomcodes<- function () {
   
 }
 
-Goneratevstworate<- function () {
-  
-  ##Getting AICS for one-rate model vs. two-rate model
-  #need to run one rate model
-  #we can use the same distortion as the abrupt, everything will be the same as the abrupt stuff
-  tf<- getreachesformodel(TF)
-  cf<- getreachesformodel(CF)
-  #Run the actual model fitting function for No-Cursor trials
-  tf1_par<- fitoneratemodel(reaches = tf$meanreaches, distortions = tf$distortion)
-  #rs        ls        rf        lf 
-  #0.9823168 0.1011206 0.6817995 0.2184631 
-  cf1_par<- fitoneratemodel(reaches = cf$meanreaches, distortions = cf$distortion)
-  #rs         ls         rf         lf 
-  #0.99322853 0.09372752 0.81847991 0.21359619 
-  #now run the model function to get the model output
-  tf1_model<-oneratemodel(par=tf1_par, distortions = tf$distortion)
-  cf1_model<-oneratemodel(par=cf1_par, distortions = cf$distortion)
-  
-  
-  #Now we can do the comparison to get the AICS
-  tfreaches<- tf$meanreaches
-  cfreaches<- cf$meanreaches
-  terminal1MSE<- mean((tfreaches - tf1_model$output)^2)
-  terminal2MSE<- mean((tfreaches - tf_model$output)^2)
-  continous1MSE<- mean((cfreaches - cf1_model$output)^2)
-  continous2MSE<- mean((cfreaches - cf_model$output)^2)
-  N<- 5
-  P1 <- 2
-  P2 <- 4
-  C <- N*(log(2*pi)+1)
-  terminal1AIC <- 2*P1 + N*log(terminal1MSE) + C
-  terminal2AIC <- 2*P2 + N*log(terminal2MSE) + C
-  continous1AIC <- 2*P1 + N*log(continous1MSE) + C
-  continous2AIC <- 2*P2 + N*log(continous2MSE) + C
-  AICts<- c('Terminal1'=terminal1AIC,'Terminal2'=terminal2AIC)
-  AICcs<- c('continous1'=continous1AIC, 'continous2'=continous2AIC)
-  relativeLikelihoodst <- exp((min(AICts) - AICts)/2)
-  relativeLikelihoodsc <- exp((min(AICcs) - AICcs)/2)
-  relativeLikelihoodst
-  relativeLikelihoodsc
-  
-  
-}
 
-Poneratevstworate<- function (data) {
-  ##Getting AICS for one-rate model vs. two-rate model
-  #need to run one rate model
-  par1<- prepdatagetonefits(data)
-  #need to run two rate model
-  par2<- prepdatagetfits(data)
 
-  # #now run the model function to get the model output
-  # one_model<-oneratemodel(par=par1, distortions = data$distortion)
-  # two_model<-tworatemodel(par=par2, distortions = data$distortion)
-  # 
-  # 
-  # #Now we can do the comparison to get the AICS
-  # ModelData<- getreachesformodel(data)
-  # meanreaches<- ModelData$meanreaches
-  # 
-  
-  Data1MSE<- par1$MSE
-  Data2MSE<- par2$MSE
-  N<- 5
-  P1 <- 2
-  P2 <- 4
-  C <- N*(log(2*pi)+1)
-  Data1AIC <- 2*P1 + N*log(Data1MSE) + C
-  Data2AIC <- 2*P2 + N*log(Data2MSE) + C
-  count<-sum(Data1AIC<Data2AIC)
-  AICs<- c('One Rate Model'=Data1AIC,'Two Rate Model'=Data2AIC)
-  print(AICs)
-  #relativeLikelihoods <- exp((min(AICs) - AICs)/2)
-  return(sprintf('the number of participants with a higher AIC for two rates are %d',count))
-}
 # data$distortion<- data$distortion*-1
 # reach_model<-tworatemodel(par=reach_par, distortions = data$distortion)
 #cohensD(EC_Late[AllDataRM$Experiment == 'Active'],EC_Late[AllDataRM$Experiment == 'No-Cursor'], data = AllDataRM)
