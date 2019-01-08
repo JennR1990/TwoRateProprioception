@@ -155,7 +155,7 @@ GroupAICS<- function(data, bootstraps) {
     distortion<- distortion*-1
     onerate_par<- fitoneratemodel(reaches = LC, distortions = distortion)
     tworate_par<- fittworatemodel(reaches = LC, distortions = distortion)
-    print(tworate_par)
+
 
     distortion<- distortion*-1
     onerate_model<- oneratemodel(par = onerate_par, distortions = distortion)
@@ -169,7 +169,7 @@ GroupAICS<- function(data, bootstraps) {
     C <- N*(log(2*pi)+1)
     onerateAIC <- 2*P1 + N*log(onerateMSE) + C
     tworateAIC <- 2*P2 + N*log(tworateMSE) + C
-    print(tworateAIC)
+
 
     onerateAICs <- c(onerateAICs, onerateAIC)
     tworateAICs <- c(tworateAICs, tworateAIC)
