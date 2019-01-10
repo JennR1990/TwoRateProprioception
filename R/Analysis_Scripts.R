@@ -141,7 +141,7 @@ prepdatagetonefits<- function (data){
 }
 
 
-GroupAICS<- function(data, bootstraps) {
+GroupAICS<- function(data, bootstraps=1) {
   
   reaches <- as.matrix(data[,2:33])
   distortion<- data[,1]
@@ -155,7 +155,8 @@ GroupAICS<- function(data, bootstraps) {
     distortion<- distortion*-1
     onerate_par<- fitoneratemodel(reaches = LC, distortions = distortion)
     tworate_par<- fittworatemodel(reaches = LC, distortions = distortion)
-
+    print(onerate_par)
+    print(tworate_par)
 
     distortion<- distortion*-1
     onerate_model<- oneratemodel(par = onerate_par, distortions = distortion)
@@ -182,6 +183,116 @@ GroupAICS<- function(data, bootstraps) {
   }
   
   return(data.frame(onerateAICs,tworateAICs))
+  
+}
+
+bootstrapModelAICsjENN <- function(group='active', bootstraps=10) {
+  
+  #library(RateRate)
+  
+  df <- read.csv(sprintf('data/%s_reaches.csv', group), stringsAsFactors = FALSE)
+  schedule <- df$distortion
+  
+  reaches <- as.matrix(df[,2:dim(df)[2]])
+  
+  N <- dim(df)[2] - 1
+  # prep for AICs:
+  
+  # the median length of a phase is 40 trials,
+  # and there are 7.2 of those in 288 trials
+  InOb <- 5
+  # # the mean length is 55 though:
+  # N <- 4
+  
+  # this is then used for C:
+  C <- InOb*(log(2*pi)+1)
+  
+  for (bootstrap in c(1:bootstraps)) {
+    
+    medReaches <- apply(reaches[,sample(c(1:N),N,replace=TRUE)], 1, median, na.rm=TRUE)
+    distortion<- distortion*-1
+    onerate_par<- fitoneratemodel(reaches = medReaches, distortions = distortion)
+    tworate_par<- fittworatemodel(reaches = medReaches, distortions = distortion)
+    
+    
+    distortion<- distortion*-1
+    onerate_model<- oneratemodel(par = onerate_par, distortions = distortion)
+    tworate_model<- tworatemodel(par = tworate_par, distortions = distortion)
+    
+    oneRateMSE<- mean((medReaches - onerate_model$output)^2)
+    twoRateMSE<- mean((medReaches - tworate_model$output)^2)
+    
+    # twoRateFit <- fitTwoRateReachModel(reaches=medReaches, schedule=schedule, oneTwoRates=2, grid='restricted', checkStability=TRUE)
+    # oneRateFit <- fitTwoRateReachModel(reaches=medReaches, schedule=schedule, oneTwoRates=1, grid='restricted', checkStability=TRUE)
+    # 
+    # 
+    # twoRateMSE <- twoRateReachModelErrors(par=twoRateFit, reaches=medReaches, schedule=schedule)
+    # oneRateMSE <- twoRateReachModelErrors(par=oneRateFit, reaches=medReaches, schedule=schedule)
+    
+    
+    twoRateAIC <- (2*4) + InOb*log(twoRateMSE) + C
+    oneRateAIC <- (2*2) + InOb*log(oneRateMSE) + C
+    
+    # print(twoRateFit)
+    # print(twoRateMSE)
+    # print(twoRateAIC)
+    # print(oneRateFit)
+    # print(oneRateMSE)
+    # print(oneRateAIC)
+    
+    cat(sprintf('1-rate AIC: %0.2f  %s  2-rate AIC: %0.2f\n',oneRateAIC,c('>=', ' <')[as.numeric(oneRateAIC<twoRateAIC)+1],twoRateAIC))
+    
+  }
+  
+}
+
+bootstrapModelAICs <- function(group='active', bootstraps=1) {
+  
+  library(RateRate)
+  
+  df <- read.csv(sprintf('data/%s_reaches.csv', group), stringsAsFactors = FALSE)
+  schedule <- df$distortion
+  
+  reaches <- as.matrix(df[,2:dim(df)[2]])
+  
+  N <- dim(df)[2] - 1
+  # prep for AICs:
+  
+  # the median length of a phase is 40 trials,
+  # and there are 7.2 of those in 288 trials
+  InOb <- 5
+  # # the mean length is 55 though:
+  # N <- 4
+  
+  # this is then used for C:
+  C <- InOb*(log(2*pi)+1)
+  
+  for (bootstrap in c(1:bootstraps)) {
+    
+    medReaches <- apply(reaches[,sample(c(1:N),N,replace=TRUE)], 1, median, na.rm=TRUE)
+    
+    twoRateFit <- fitTwoRateReachModel(reaches=medReaches, schedule=schedule, oneTwoRates=2, grid='restricted', checkStability=TRUE)
+    oneRateFit <- fitTwoRateReachModel(reaches=medReaches, schedule=schedule, oneTwoRates=1, grid='restricted', checkStability=TRUE)
+    print(oneRateFit)
+    print(twoRateFit)
+    
+    twoRateMSE <- twoRateReachModelErrors(par=twoRateFit, reaches=medReaches, schedule=schedule)
+    oneRateMSE <- twoRateReachModelErrors(par=oneRateFit, reaches=medReaches, schedule=schedule)
+    
+    
+    twoRateAIC <- (2*4) + InOb*log(twoRateMSE) + C
+    oneRateAIC <- (2*2) + InOb*log(oneRateMSE) + C
+    
+    # print(twoRateFit)
+    # print(twoRateMSE)
+    # print(twoRateAIC)
+    # print(oneRateFit)
+    # print(oneRateMSE)
+    # print(oneRateAIC)
+    
+    cat(sprintf('1-rate AIC: %0.2f  %s  2-rate AIC: %0.2f\n',oneRateAIC,c('>=', ' <')[as.numeric(oneRateAIC<twoRateAIC)+1],twoRateAIC))
+    
+  }
   
 }
 
