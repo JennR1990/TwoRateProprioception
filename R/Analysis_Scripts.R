@@ -188,7 +188,7 @@ GroupAICS<- function(data, bootstraps=1) {
 
 bootstrapModelAICsjENN <- function(group='active', bootstraps=10) {
   
-  #library(RateRate)
+  library(RateRate)
   
   df <- read.csv(sprintf('data/%s_reaches.csv', group), stringsAsFactors = FALSE)
   schedule <- df$distortion
@@ -249,11 +249,13 @@ bootstrapModelAICsjENN <- function(group='active', bootstraps=10) {
 
 
 
-bootstrapModelAICs <- function(group='active', bootstraps=1) {
+bootstrapModelAICs <- function(data, bootstraps=1) {
+  #group='active'# add this to the function call when i use the commented line below
   
   library(RateRate)
   
-  df <- read.csv(sprintf('data/%s_reaches.csv', group), stringsAsFactors = FALSE)
+  #df <- read.csv(sprintf('data/%s_reaches.csv', group), stringsAsFactors = FALSE)
+  df<-data
   schedule <- df$distortion
   
   reaches <- as.matrix(df[,2:dim(df)[2]])
@@ -296,7 +298,7 @@ bootstrapModelAICs <- function(group='active', bootstraps=1) {
     cat(sprintf('1-rate AIC: %0.2f  %s  2-rate AIC: %0.2f\n',oneRateAIC,c('>=', ' <')[as.numeric(oneRateAIC<twoRateAIC)+1],twoRateAIC))
     
   }
-  
+  return(data.frame(twoRateAIC, oneRateAIC))
 }
 
 

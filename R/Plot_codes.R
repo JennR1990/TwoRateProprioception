@@ -326,11 +326,13 @@ PlotactiveLineTapCI<- function(dataset){
 Reachmodelnc<- function(data, ncdata) {
   #svglite(file='reach_models_ncdata.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
   #layout(matrix(c(1,1,1,1,2,3,4,5), nrow=2, byrow=TRUE), heights=c(3,1))
-  data$distortion<- data$distortion*-1
+  #data$distortion<- data$distortion*-1
   reaches<- getreachesformodel(data)
-  reach_par<- fittworatemodel(reaches = reaches$meanreaches, reaches$distortion)
-  data$distortion<- data$distortion*-1
-  reach_model<-tworatemodel(par=reach_par, distortions = data$distortion)
+  #reach_par<- fittworatemodel(reaches = reaches$meanreaches, reaches$distortion)
+  reach_par <- fitTwoRateReachModel(reaches=reaches$meanreaches, schedule=reaches$distortion, oneTwoRates=2, grid='restricted', checkStability=TRUE)
+  #data$distortion<- data$distortion*-1
+  #reach_model<-tworatemodel(par=reach_par, distortions = data$distortion)
+  reach_model<- twoRateReachModel(par=reach_par, schedule = reaches$distortion)
   Plotmodel(data)
   lines(reach_model$output, col = c(rgb(.5,0.,.5)))
   lines(reach_model$slow, col = rgb(0.,.5,1.))
@@ -353,17 +355,20 @@ Allreachmodels<- function (data1, data2, data3, data4) {
 }
 
 Reachmodel<- function(data) {
+  library(RateRate)
   #svglite(file='reach_models_passive_pause.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
   #layout(matrix(c(1,1,1,1,2,3,4,5), nrow=2, byrow=TRUE), heights=c(3,1))
-  data$distortion<- data$distortion*-1
+  #data$distortion<- data$distortion*-1
   reaches<- getreachesformodel(data)
-  reach_par<- fittworatemodel(reaches = reaches$meanreaches, reaches$distortion)
-  data$distortion<- data$distortion*-1
-  reach_model<-tworatemodel(par=reach_par, distortions = data$distortion)
+  #reach_par<- fittworatemodel(reaches = reaches$meanreaches, reaches$distortion)
+  reach_par <- fitTwoRateReachModel(reaches=reaches$meanreaches, schedule=reaches$distortion, oneTwoRates=2, grid='restricted', checkStability=TRUE)
+  #data$distortion<- data$distortion*-1
+  #reach_model<-tworatemodel(par=reach_par, distortions = data$distortion)
+  reach_model<- twoRateReachModel(par=reach_par, schedule = reaches$distortion)
   Plotmodel(data)
-  lines(reach_model$output, col = c(rgb(.5,0.,.5)))
-  lines(reach_model$slow, col = rgb(0.,.5,1.))
-  lines(reach_model$fast, col = rgb(0.0,0.7,0.0))
+  lines(reach_model$total*-1, col = c(rgb(.5,0.,.5)))
+  lines(reach_model$slow*-1, col = rgb(0.,.5,1.))
+  lines(reach_model$fast*-1, col = rgb(0.0,0.7,0.0))
   return(reach_par)
 }
 

@@ -79,14 +79,10 @@ library("svglite", lib.loc="~/R/win-library/3.4")
 - Fig 6: A) localization throughout for the two localization groups, B) localization shift in the pause and no-cursor group, C) speed of localization shift, D/E) localization shift with the two processes for each group (show the incredible speed of localization shifts and how non-matching the slow but also the fast process are)
 #PlotallTapCI(passive_localization, active_localizations) has no model output
 - Fig 7: alternative models of localization? (20% model works reasonably well... even better than giving localization it's own two- or one-rate model)
-#Poneratevstworate(active_reaches)
-#Poneratevstworate(passive_reaches)
-#Poneratevstworate(pause_reaches)
-#Poneratevstworate(nocursor_reaches)
-#Active_AICS<- bootstrapAICS(active_reaches, 15)
-#Passive_AICS<- bootstrapAICS(passive_reaches, 15)
-#Pause_AICS<- bootstrapAICS(pause_reaches, 15)
-#NC_AICS<- bootstrapAICS(nocursor_reaches, 15)
+#Active_AICS<- bootstrapModelAICs(active_reaches)
+#Passive_AICS<- bootstrapModelAICs(passive_reaches)
+#Pause_AICS<- bootstrapModelAICs(pause_reaches)
+#NC_AICS<- bootstrapModelAICs(nocursor_reaches)
 - Fig 8: A) time course of no-cursor changes (no-cursor could reflect a watered down version of the slow process?)
 
 ## Analysis of data
