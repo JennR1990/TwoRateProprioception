@@ -167,17 +167,20 @@ tworatemodel<- function(par, distortions) {
   slow<- c()
   
   # initial state of the processes / model:
-  e0  <- 0
+  e0  <- 0 # in Marius' version this is not set to anything
   Xf0 <- 0
   Xs0 <- 0
   
+  
+  # In marius' version he does a bunch of stuff to the parameters when the and some stuff that we do within the loop he does here
   # loop through all trials:
   for(trial in c(1:length(distortions))) {
     
     # generate motor output:
     Xf1 <- (par['rf']*Xf0) + (par['lf']* e0)
     Xs1 <- (par['rs']*Xs0) + (par['ls']* e0)
-    X1 <- Xf1 + Xs1
+    X1 <- Xf1 + Xs1 # Marius does this earlier and then again after they find the error
+    # marius constrains the parameters to act the way they should given other parameters
     
     
     
