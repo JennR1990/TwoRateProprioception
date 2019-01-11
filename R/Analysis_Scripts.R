@@ -246,6 +246,9 @@ bootstrapModelAICsjENN <- function(group='active', bootstraps=10) {
   
 }
 
+
+
+
 bootstrapModelAICs <- function(group='active', bootstraps=1) {
   
   library(RateRate)
