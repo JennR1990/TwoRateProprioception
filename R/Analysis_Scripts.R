@@ -11,6 +11,19 @@ tanalyzedata<- function(AllDataRM){
   PairedT(AllDataRM, 'No-Cursor')
 }
 
+tpanalyzedata<- function(AllDataRM){
+  IndependentT(AllDataRM, 'Active', 'Passive')
+  # IndependentT(AllDataRM, 'Pause', 'No-Cursor')
+  # IndependentT(AllDataRM, 'Active', 'No-Cursor')
+  # IndependentT(AllDataRM, 'Passive', 'No-Cursor')
+  # IndependentT(AllDataRM, 'Active', 'Pause')
+  # IndependentT(AllDataRM, 'Passive', 'Pause')
+  PairedT(AllDataRM, 'Active')
+  PairedT(AllDataRM, 'Passive')
+  # PairedT(AllDataRM, 'Pause')
+  # PairedT(AllDataRM, 'No-Cursor')
+}
+
 #adata, pasdata, paudata, ncdata
 ANOVAanalysis<- function(AllDataANOVA){
   AllDataANOVA$ID<- as.factor(AllDataANOVA$ID)
@@ -69,7 +82,48 @@ PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata) {
   
 }
 
+PrepdataforPropT<- function(adata, pasdata, paudata, ncdata, ncncdata){
+  A_RM<-TCombine(adata)
+  A_RM$Experiment <- rep('Active', nrow(A_RM))
+  Pas_RM<-TCombine(pasdata)
+  Pas_RM$Experiment <- rep('Passive', nrow(Pas_RM))
+  # Pau_RM<-TCombine(paudata)
+  # Pau_RM$Experiment <- rep('Pause', nrow(Pau_RM))
+  # nc_RM<-TCombine(ncdata)
+  # nc_RM$Experiment <- rep('No-Cursor', nrow(nc_RM))
+  # ncnc_RM<-NoCursorsTCombine(ncncdata)
+  # ncnc_RM$Experiment <- rep('No-Cursor_No-Cursors', nrow(ncnc_RM))
+  AllDataRM<- rbind(A_RM, Pas_RM)
+  return(AllDataRM)
+}
 
+PrepdataforPropANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata) {
+  
+  A_RM<-ANOVAcombine(adata)
+  A_RM$ID <- sprintf('ActLoc.%s',A_RM$ID)
+  A_RM$Experiment <- rep('Active', nrow(A_RM))
+  
+  Pas_RM<-ANOVAcombine(pasdata)
+  Pas_RM$ID <- sprintf('PasLoc.%s',Pas_RM$ID)
+  Pas_RM$Experiment <- rep('Passive', nrow(Pas_RM))
+  # 
+  # Pau_RM<-ANOVAcombine(paudata)
+  # Pau_RM$ID <- sprintf('Pause.%s',Pau_RM$ID)
+  # Pau_RM$Experiment <- rep('Pause', nrow(Pau_RM))
+  # 
+  # nc_RM<-ANOVAcombine(ncdata)
+  # nc_RM$ID <- sprintf('NoCursor.%s',nc_RM$ID)
+  # nc_RM$Experiment <- rep('No-Cursor', nrow(nc_RM))
+  # 
+  # ncnc_RM<-NoCursorACombine(ncncdata)
+  # ncnc_RM$ID <- sprintf('NoCursor_No-Cursors.%s',ncnc_RM$ID)
+  # ncnc_RM$Experiment <- rep('No-Cursor_No-Cursors', nrow(ncnc_RM))
+  
+  AllDataRM<- rbind(A_RM, Pas_RM)
+  
+  return(AllDataRM)
+  
+}
 IndependentT<- function(data, exp1, exp2) {
   sprintf('this is the between subjects comparison of %s to %s', exp1, exp2)
   print('Aligned')

@@ -57,7 +57,9 @@ Preparing Data for Figures and Analysis:
 #active_localization<- Loaddata(group='active', task = 'localization')
 #nocursor_nocursors<- Loaddata(group='nocursor', task = 'nocursors')
 #ANOVAdata<- PrepdataforANOVA(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors)
+#ANOVAPdata<- PrepdataforPropANOVA(active_localization,passive_localization)
 #Ttestdata<- PrepdataforT(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors)
+#TtestPdata<- PrepdataforPropT(active_localization, passive_localization)
 
 Here is a list of planned figures with their potential message:
 library("svglite", lib.loc="~/R/win-library/3.4")
@@ -91,6 +93,9 @@ We begin with some ANOVA's and T-tests to check for significance
 #tanalyzedata(Ttestdata)
 #library("ez")
 #FullANOVA<-ANOVAanalysis(ANOVAdata)
+#tpanalyzedata(TtestPdata)
+#library("ez")
+#FullPANOVA<-ANOVAanalysis(ANOVAPdata)
 
 
 
