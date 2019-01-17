@@ -53,6 +53,7 @@ source('C:/Users/jeruttle/Jenn Dropbox/Jennifer Ruttle/TwoRateProprioception/R/A
 source('C:/Users/jeruttle/Jenn Dropbox/Jennifer Ruttle/TwoRateProprioception/R/Plot_codes.R', encoding = 'UTF-8')
 source('C:/Users/jeruttle/Jenn Dropbox/Jennifer Ruttle/TwoRateProprioception/R/Repeated_Measures_Combine.R')
 source('C:/Users/jeruttle/Jenn Dropbox/Jennifer Ruttle/TwoRateProprioception/R/shared.R')
+loadcolors()
 downloadOSFdata()
 pause_reaches<- Loaddata(group='pause')
 active_reaches<- Loaddata(group='active')
@@ -80,11 +81,11 @@ Plotnocursordata(nocursor_reaches)
 ```
 - Fig 4: A,B,C,D) one subplot for each group showing the median reach deviations in the four main phases, plus the two-rate model fit and it's fast and slow process (show quality of the fits)
 ```{r}
-Allpars<-Allreachmodels(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,])
-Reachmodel(pause_reaches[33:320,])
-Reachmodel(nocursor_reaches[33:320,])
-Reachmodel(active_reaches)
-Reachmodel(passive_reaches)
+#Allpars<-Allreachmodels(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,])
+Reachmodel(pause_reaches[33:320,], 'Pause')
+Reachmodel(nocursor_reaches[33:320,], 'No-Cursor')
+Reachmodel(active_reaches, 'Active')
+Reachmodel(passive_reaches, 'Passive')
 ```
 - Fig 5: comparing reach deviations over time, (show differences between the groups, or should this go in a previous figure? seems it would get cluttered)
 ```{r}
@@ -92,13 +93,13 @@ PlotallreachesCI(active_reaches,passive_reaches, pause_reaches,nocursor_reaches)
 ```
 - Fig 6: A) localization throughout for the two localization groups, B) localization shift in the pause and no-cursor group, C) speed of localization shift, D/E) localization shift with the two processes for each group (show the incredible speed of localization shifts and how non-matching the slow but also the fast process are)
 ```{r}
-PlotallTapCI(passive_localization, active_localizations) #has no model output
+PlotallTapCI(passive_localization, active_localization) #has no model output
 ```
 - Fig 7: alternative models of localization? (20% model works reasonably well... even better than giving localization it's own two- or one-rate model)
 
 - Fig 8: A) time course of no-cursor changes (no-cursor could reflect a watered down version of the slow process?)
 ```{r}
-Reachmodelnc(nocursor_reaches, nocursor_nocursors)
+Reachmodelnc(nocursor_reaches, nocursor_nocursors, 'No-Cursor')
 ```
 
 ## Analysis of data

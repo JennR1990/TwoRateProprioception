@@ -1,25 +1,25 @@
 tanalyzedata<- function(AllDataRM){
-  IndependentT(AllDataRM, 'Active', 'Passive')
-  IndependentT(AllDataRM, 'Pause', 'No-Cursor')
-  IndependentT(AllDataRM, 'Active', 'No-Cursor')
-  IndependentT(AllDataRM, 'Passive', 'No-Cursor')
-  IndependentT(AllDataRM, 'Active', 'Pause')
-  IndependentT(AllDataRM, 'Passive', 'Pause')
-  PairedT(AllDataRM, 'Active')
-  PairedT(AllDataRM, 'Passive')
-  PairedT(AllDataRM, 'Pause')
-  PairedT(AllDataRM, 'No-Cursor')
+  IndependentT(AllDataRM, 'Active', 'Passive', 'Reach')
+  IndependentT(AllDataRM, 'Pause', 'No-Cursor', 'Reach')
+  IndependentT(AllDataRM, 'Active', 'No-Cursor', 'Reach')
+  IndependentT(AllDataRM, 'Passive', 'No-Cursor', 'Reach')
+  IndependentT(AllDataRM, 'Active', 'Pause', 'Reach')
+  IndependentT(AllDataRM, 'Passive', 'Pause', 'Reach')
+  PairedT(AllDataRM, 'Active', 'Reach')
+  PairedT(AllDataRM, 'Passive', 'Reach')
+  PairedT(AllDataRM, 'Pause', 'Reach')
+  PairedT(AllDataRM, 'No-Cursor', 'Reach')
 }
 
 tpanalyzedata<- function(AllDataRM){
-  IndependentT(AllDataRM, 'Active', 'Passive')
+  IndependentT(AllDataRM, 'Active', 'Passive', 'Localization')
   # IndependentT(AllDataRM, 'Pause', 'No-Cursor')
   # IndependentT(AllDataRM, 'Active', 'No-Cursor')
   # IndependentT(AllDataRM, 'Passive', 'No-Cursor')
   # IndependentT(AllDataRM, 'Active', 'Pause')
   # IndependentT(AllDataRM, 'Passive', 'Pause')
-  PairedT(AllDataRM, 'Active')
-  PairedT(AllDataRM, 'Passive')
+  PairedT(AllDataRM, 'Active', 'Localization')
+  PairedT(AllDataRM, 'Passive', 'Localization')
   # PairedT(AllDataRM, 'Pause')
   # PairedT(AllDataRM, 'No-Cursor')
 }
@@ -124,8 +124,8 @@ PrepdataforPropANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata) {
   return(AllDataRM)
   
 }
-IndependentT<- function(data, exp1, exp2) {
-  sprintf('this is the between subjects comparison of %s to %s', exp1, exp2)
+IndependentT<- function(data, exp1, exp2, task) {
+  print(sprintf('this is the between subjects comparison of %s to %s %s Data', exp1, exp2, task))
   print('Aligned')
   print(t.test(data$Aligned[data$Experiment == exp1],data$Aligned[data$Experiment == exp2])) #not sig A vs. NC
   print('Beginning of 1st rotation')
@@ -134,15 +134,15 @@ IndependentT<- function(data, exp1, exp2) {
   print(t.test(data$R1_Late[data$Experiment == exp1],data$R1_Late[data$Experiment == exp2])) # not sig A vs. NC
   print('Beginning of 2nd rotation')
   print(t.test(data$R2[data$Experiment == exp1],data$R2[data$Experiment == exp2])) # not sig  A vs. NC
-  print('Beginnig of Error Clamp')
+  print('Beginning of Error Clamp')
   print(t.test(data$EC[data$Experiment == exp1],data$EC[data$Experiment == exp2])) # p-value = 0.005945  A vs. NC
   print('End of Error Clamp (32 trials)')
   print(t.test(data$EC_Late[data$Experiment == exp1],data$EC_Late[data$Experiment == exp2]))  #p-value = 1.36e-07  A vs. NC
   
   
 }
-PairedT<- function(data, exp1) {
-  sprintf('this is the within subjects comparison of %s', exp1)  
+PairedT<- function(data, exp1, task) {
+  print(sprintf('this is the within subjects analysis of %s %s Data', exp1, task))
   print('Is there early learning?')
   print(t.test(data$Aligned[data$Experiment == exp1],data$R1_Early[data$Experiment == exp1], paired = TRUE)) #not sig A vs. NC
   print('Did they return to baseline? (Should not)')

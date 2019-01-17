@@ -94,9 +94,11 @@ We begin with some ANOVA's and T-tests to check for significance
 tanalyzedata(Ttestdata)
 library("ez")
 FullANOVA<-ANOVAanalysis(ANOVAdata)
+FullANOVA
 tpanalyzedata(TtestPdata)
 library("ez")
 FullPANOVA<-ANOVAanalysis(ANOVAPdata)
+FullPANOVA
 ```
 Then we check to see if the data is more one-rate or two-rate
 ```{r}
