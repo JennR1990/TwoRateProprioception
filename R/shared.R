@@ -1,3 +1,9 @@
+getreachesformodel<- function(data) {
+  meanreaches<-rowMeans(data[,2:ncol(data)], na.rm=TRUE)
+  distortion<- data$distortion
+  return(data.frame(meanreaches,distortion))
+}
+
 Loaddata<- function (group='passive', task='reaches') {
   # filename <- sprintf('data/%s_%s.csv',group,task)
   # df <- read.csv(filename, stringsAsFactors=F)

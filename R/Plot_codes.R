@@ -1,13 +1,15 @@
 ##Figures we want to make often##
-# color1       <- rgb(0.7,0.0,0.7)         # purple
-# color1_trans <- rgb(0.7,0.0,0.7,0.2)     # transparent purple
-# color2       <- rgb(0.63,0.71,0.81)      # blue-gray
-# color2_trans <- rgb(0.63,0.71,0.81,0.2)  # transparent blue-gray
-# color4       <- rgb(0.0,0.7,0.0)         # green
-# color4_trans <- rgb(0.0,0.7,0.0,0.2)     # transparent green
-# color5       <- rgb(1.0,0.4,0.0)         # orange
-# color5_trans <- rgb(1.0,0.4,0.0,0.2)     # transparent orange
 
+loadcolors<- function(){
+color1       <- rgb(0.7,0.0,0.7)         # purple
+color1_trans <- rgb(0.7,0.0,0.7,0.2)     # transparent purple
+color2       <- rgb(0.63,0.71,0.81)      # blue-gray
+color2_trans <- rgb(0.63,0.71,0.81,0.2)  # transparent blue-gray
+color4       <- rgb(0.0,0.7,0.0)         # green
+color4_trans <- rgb(0.0,0.7,0.0,0.2)     # transparent green
+color5       <- rgb(1.0,0.4,0.0)         # orange
+color5_trans <- rgb(1.0,0.4,0.0,0.2)     # transparent orange
+}
 
 
 ##individual traces with the average over that
@@ -301,6 +303,8 @@ PlotoutlineTapCI<- function(dataset){
 }
 
 PlotpassiveLineTapCI<- function(dataset){
+  color1       <- rgb(0.7,0.0,0.7)         # purple
+  color1_trans <- rgb(0.7,0.0,0.7,0.2)     # transparent purple
   dataCIs<- trialCI(data = dataset)
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
   dataset$Mean <- rowMeans(dataset[,2:length(dataset)], na.rm = TRUE)
@@ -312,6 +316,8 @@ PlotpassiveLineTapCI<- function(dataset){
   
 }
 PlotactiveLineTapCI<- function(dataset){
+  color5       <- rgb(1.0,0.4,0.0)         # orange
+  color5_trans <- rgb(1.0,0.4,0.0,0.2)     # transparent orange
   dataCIs<- trialCI(data = dataset)
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
   dataset$Mean <- rowMeans(dataset[,2:length(dataset)], na.rm = TRUE)
@@ -345,15 +351,15 @@ Reachmodelnc<- function(data, ncdata) {
 }
 
 Allreachmodels<- function (data1, data2, data3, data4) {
-  svglite(file='All_reach_models.svg', width=10, height=7, system_fonts=list(sans = "Arial"))
-  layout(matrix(c(1,2,3,4),nrow=2, ncol = 2, byrow=TRUE), widths=c(1.5,1.5), heights=c(1,1))
+  #svglite(file='All_reach_models.svg', width=10, height=7, system_fonts=list(sans = "Arial"))
+  #layout(matrix(c(1,2,3,4),nrow=2, ncol = 2, byrow=TRUE), widths=c(1.5,1.5), heights=c(1,1))
   data1_par<-Reachmodel(data1)
  data2_par<-Reachmodel(data2)
  data3_par<-Reachmodel(data3)
  data4_par<-Reachmodel(data4)
  pars<-rbind(data1_par, data2_par, data3_par, data4_par)
  return(pars)
- dev.off()
+ #dev.off()
 }
 
 Reachmodel<- function(data) {
