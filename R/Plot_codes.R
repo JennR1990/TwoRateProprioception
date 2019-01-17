@@ -324,6 +324,7 @@ PlotactiveLineTapCI<- function(dataset){
 }
 
 Reachmodelnc<- function(data, ncdata) {
+  library(RateRate)
   #svglite(file='reach_models_ncdata.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
   #layout(matrix(c(1,1,1,1,2,3,4,5), nrow=2, byrow=TRUE), heights=c(3,1))
   #data$distortion<- data$distortion*-1
@@ -332,8 +333,9 @@ Reachmodelnc<- function(data, ncdata) {
   reach_par <- fitTwoRateReachModel(reaches=reaches$meanreaches, schedule=reaches$distortion, oneTwoRates=2, grid='restricted', checkStability=TRUE)
   #data$distortion<- data$distortion*-1
   #reach_model<-tworatemodel(par=reach_par, distortions = data$distortion)
-  reach_model<- twoRateReachModel(par=reach_par, schedule = reaches$distortion)
-  Plotmodel(data)
+  reach_model1<- twoRateReachModel(par=reach_par, schedule = reaches$distortion)
+  reach_model<- reach_model1[33:320,]
+  Plotmodel(data[33:320,])
   lines(reach_model$total*-1, col = c(rgb(.5,0.,.5)))
   lines(reach_model$slow*-1, col = rgb(0.,.5,1.))
   lines(reach_model$fast*-1, col = rgb(0.0,0.7,0.0))
