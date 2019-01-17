@@ -66,11 +66,11 @@ Plotnocursordata(nocursor_reaches)
 ```
 - Fig 4: A,B,C,D) one subplot for each group showing the median reach deviations in the four main phases, plus the two-rate model fit and it's fast and slow process (show quality of the fits)
 ```{r}
-Allpars<-Allreachmodels(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,])
-Reachmodel(pause_reaches[33:320,])
-Reachmodel(nocursor_reaches[33:320,])
-Reachmodel(active_reaches)
-Reachmodel(passive_reaches)
+#Allpars<-Allreachmodels(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,])
+Reachmodel(pause_reaches[33:320,], 'Pause')
+Reachmodel(nocursor_reaches[33:320,], 'No-Cursor')
+Reachmodel(active_reaches, 'Active')
+Reachmodel(passive_reaches, 'Passive')
 ```
 - Fig 5: comparing reach deviations over time, (show differences between the groups, or should this go in a previous figure? seems it would get cluttered)
 ```{r}
@@ -84,7 +84,7 @@ PlotallTapCI(passive_localization, active_localization) #has no model output
 
 - Fig 8: A) time course of no-cursor changes (no-cursor could reflect a watered down version of the slow process?)
 ```{r}
-Reachmodelnc(nocursor_reaches, nocursor_nocursors)
+Reachmodelnc(nocursor_reaches, nocursor_nocursors, 'No-Cursor')
 ```
 
 ## Analysis of data
