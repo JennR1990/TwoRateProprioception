@@ -351,9 +351,10 @@ Reachmodelnc<- function(data, ncdata, name) {
 }
 
 Allreachmodels<- function (data1, data2, data3, data4) {
-  #svglite(file='All_reach_models.svg', width=10, height=7, system_fonts=list(sans = "Arial"))
-  #par(mfrow=c(4,1))
-  layout(matrix(c(1,2,3,4),nrow=4, ncol = 1, byrow=TRUE), widths=c(1.5, 1.5, 1.5, 1.5), heights=c(1,1,1,1))
+  library("svglite", lib.loc="~/R/win-library/3.4")
+  svglite(file='All_reach_models.svg', width=12, height=7, system_fonts=list(sans = "Arial"))
+  par(mfrow=c(2,2), mai= c(.85, .68, .68, .1))
+  #layout(matrix(c(1,2,3,4),nrow=2, ncol = 2, byrow=TRUE), widths=c(1.5, 1.5, 1.5, 1.5), heights=c(1,1,1,1))
   data1_par<-Reachmodel(data1, 'Active')
 #  par(new=TRUE)
  data2_par<-Reachmodel(data2, 'Passive')
@@ -363,7 +364,7 @@ Allreachmodels<- function (data1, data2, data3, data4) {
  data4_par<-Reachmodel(data4, "No-Cursor")
  pars<-rbind(data1_par, data2_par, data3_par, data4_par)
  return(pars)
- #dev.off()
+ dev.off()
 }
 
 Reachmodel<- function(data, name) {

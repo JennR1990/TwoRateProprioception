@@ -67,7 +67,6 @@ Plotnocursordata(nocursor_reaches)
 - Fig 4: A,B,C,D) one subplot for each group showing the median reach deviations in the four main phases, plus the two-rate model fit and it's fast and slow process (show quality of the fits)
 ```{r}
 #Allpars<-Allreachmodels(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,])
-#par(mfrow=c(4,1))
 Reachmodel(pause_reaches[33:320,], 'Pause')
 Reachmodel(nocursor_reaches[33:320,], 'No-Cursor')
 Reachmodel(active_reaches, 'Active')

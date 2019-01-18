@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/W32TeX) (preloaded format=pdflatex 2019.1.17)  17 JAN 2019 15:27
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/W32TeX) (preloaded format=pdflatex 2019.1.17)  18 JAN 2019 14:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -736,7 +736,7 @@ File: TwoRatePaperOutline_files/figure-latex/unnamed-chunk-3-1.pdf Graphic file
  (type pdf)
 <use TwoRatePaperOutline_files/figure-latex/unnamed-chunk-3-1.pdf>
 Package pdftex.def Info: TwoRatePaperOutline_files/figure-latex/unnamed-chunk-3
--1.pdf  used on input line 249.
+-1.pdf  used on input line 248.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [5 <./TwoRatePaperOutline_files/figure-latex/unnamed-chunk-2-4.pdf>]
 <TwoRatePaperOutline_files/figure-latex/unnamed-chunk-3-2.pdf, id=93, 469.755pt
@@ -745,7 +745,7 @@ File: TwoRatePaperOutline_files/figure-latex/unnamed-chunk-3-2.pdf Graphic file
  (type pdf)
 <use TwoRatePaperOutline_files/figure-latex/unnamed-chunk-3-2.pdf>
 Package pdftex.def Info: TwoRatePaperOutline_files/figure-latex/unnamed-chunk-3
--2.pdf  used on input line 262.
+-2.pdf  used on input line 261.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [6 <./TwoRatePaperOutline_files/figure-latex/unnamed-chunk-3-1.pdf>]
 <TwoRatePaperOutline_files/figure-latex/unnamed-chunk-3-3.pdf, id=104, 469.755p
@@ -754,7 +754,7 @@ File: TwoRatePaperOutline_files/figure-latex/unnamed-chunk-3-3.pdf Graphic file
  (type pdf)
 <use TwoRatePaperOutline_files/figure-latex/unnamed-chunk-3-3.pdf>
 Package pdftex.def Info: TwoRatePaperOutline_files/figure-latex/unnamed-chunk-3
--3.pdf  used on input line 275.
+-3.pdf  used on input line 274.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [7 <./TwoRatePaperOutline_files/figure-latex/unnamed-chunk-3-2.pdf>]
 <TwoRatePaperOutline_files/figure-latex/unnamed-chunk-3-4.pdf, id=116, 469.755p
@@ -763,10 +763,10 @@ File: TwoRatePaperOutline_files/figure-latex/unnamed-chunk-3-4.pdf Graphic file
  (type pdf)
 <use TwoRatePaperOutline_files/figure-latex/unnamed-chunk-3-4.pdf>
 Package pdftex.def Info: TwoRatePaperOutline_files/figure-latex/unnamed-chunk-3
--4.pdf  used on input line 288.
+-4.pdf  used on input line 287.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [8 <./TwoRatePaperOutline_files/figure-latex/unnamed-chunk-3-3.pdf>]
-LaTeX Font Info:    Try loading font information for TS1+lmr on input line 298.
+LaTeX Font Info:    Try loading font information for TS1+lmr on input line 297.
 
 (c:/Users/jeruttle/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
@@ -777,10 +777,10 @@ File: TwoRatePaperOutline_files/figure-latex/unnamed-chunk-4-1.pdf Graphic file
  (type pdf)
 <use TwoRatePaperOutline_files/figure-latex/unnamed-chunk-4-1.pdf>
 Package pdftex.def Info: TwoRatePaperOutline_files/figure-latex/unnamed-chunk-4
--1.pdf  used on input line 309.
+-1.pdf  used on input line 308.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 309--315
+Underfull \hbox (badness 10000) in paragraph at lines 308--314
 [][]
  []
 
@@ -791,10 +791,10 @@ File: TwoRatePaperOutline_files/figure-latex/unnamed-chunk-5-1.pdf Graphic file
  (type pdf)
 <use TwoRatePaperOutline_files/figure-latex/unnamed-chunk-5-1.pdf>
 Package pdftex.def Info: TwoRatePaperOutline_files/figure-latex/unnamed-chunk-5
--1.pdf  used on input line 322.
+-1.pdf  used on input line 321.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 322--326
+Underfull \hbox (badness 10000) in paragraph at lines 321--325
 [][]
  []
 
@@ -805,175 +805,175 @@ File: TwoRatePaperOutline_files/figure-latex/unnamed-chunk-6-1.pdf Graphic file
  (type pdf)
 <use TwoRatePaperOutline_files/figure-latex/unnamed-chunk-6-1.pdf>
 Package pdftex.def Info: TwoRatePaperOutline_files/figure-latex/unnamed-chunk-6
--1.pdf  used on input line 340.
+-1.pdf  used on input line 339.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [11 <./TwoRatePaperOutline_files/figure-latex/unnamed-chunk-5-1.pdf>] [12 <./Tw
 oRatePaperOutline_files/figure-latex/unnamed-chunk-6-1.pdf>]
-Overfull \hbox (7.99359pt too wide) in paragraph at lines 1303--1303
+Overfull \hbox (7.99359pt too wide) in paragraph at lines 1302--1302
 []\T1/lmtt/m/n/10 ## data:  data$R1_Early[data$Experiment == exp1] and data$R1_
 Early[data$Experiment == exp2][] 
  []
 
 [13]
-Overfull \hbox (7.99359pt too wide) in paragraph at lines 1303--1303
+Overfull \hbox (7.99359pt too wide) in paragraph at lines 1302--1302
 []\T1/lmtt/m/n/10 ## data:  data$R1_Early[data$Experiment == exp1] and data$R1_
 Early[data$Experiment == exp2][] 
  []
 
 [14]
-Overfull \hbox (7.99359pt too wide) in paragraph at lines 1303--1303
+Overfull \hbox (7.99359pt too wide) in paragraph at lines 1302--1302
 []\T1/lmtt/m/n/10 ## data:  data$R1_Early[data$Experiment == exp1] and data$R1_
 Early[data$Experiment == exp2][] 
  []
 
 [15] [16]
-Overfull \hbox (7.99359pt too wide) in paragraph at lines 1303--1303
+Overfull \hbox (7.99359pt too wide) in paragraph at lines 1302--1302
 []\T1/lmtt/m/n/10 ## data:  data$R1_Early[data$Experiment == exp1] and data$R1_
 Early[data$Experiment == exp2][] 
  []
 
 [17]
-Overfull \hbox (7.99359pt too wide) in paragraph at lines 1303--1303
+Overfull \hbox (7.99359pt too wide) in paragraph at lines 1302--1302
 []\T1/lmtt/m/n/10 ## data:  data$R1_Early[data$Experiment == exp1] and data$R1_
 Early[data$Experiment == exp2][] 
  []
 
 [18] [19]
-Overfull \hbox (7.99359pt too wide) in paragraph at lines 1303--1303
+Overfull \hbox (7.99359pt too wide) in paragraph at lines 1302--1302
 []\T1/lmtt/m/n/10 ## data:  data$R1_Early[data$Experiment == exp1] and data$R1_
 Early[data$Experiment == exp2][] 
  []
 
 [20]
-Overfull \hbox (2.7436pt too wide) in paragraph at lines 1303--1303
+Overfull \hbox (2.7436pt too wide) in paragraph at lines 1302--1302
 []\T1/lmtt/m/n/10 ## data:  data$Aligned[data$Experiment == exp1] and data$R1_E
 arly[data$Experiment == exp1][] 
  []
 
 [21]
-Overfull \hbox (2.7436pt too wide) in paragraph at lines 1303--1303
+Overfull \hbox (2.7436pt too wide) in paragraph at lines 1302--1302
 []\T1/lmtt/m/n/10 ## data:  data$R1_Early[data$Experiment == exp1] and data$R1_
 Late[data$Experiment == exp1][] 
  []
 
 [22]
-Overfull \hbox (2.7436pt too wide) in paragraph at lines 1303--1303
+Overfull \hbox (2.7436pt too wide) in paragraph at lines 1302--1302
 []\T1/lmtt/m/n/10 ## data:  data$Aligned[data$Experiment == exp1] and data$R1_E
 arly[data$Experiment == exp1][] 
  []
 
 [23]
-Overfull \hbox (2.7436pt too wide) in paragraph at lines 1303--1303
+Overfull \hbox (2.7436pt too wide) in paragraph at lines 1302--1302
 []\T1/lmtt/m/n/10 ## data:  data$R1_Early[data$Experiment == exp1] and data$R1_
 Late[data$Experiment == exp1][] 
  []
 
 [24]
-Overfull \hbox (2.7436pt too wide) in paragraph at lines 1303--1303
+Overfull \hbox (2.7436pt too wide) in paragraph at lines 1302--1302
 []\T1/lmtt/m/n/10 ## data:  data$Aligned[data$Experiment == exp1] and data$R1_E
 arly[data$Experiment == exp1][] 
  []
 
 [25]
-Overfull \hbox (2.7436pt too wide) in paragraph at lines 1303--1303
+Overfull \hbox (2.7436pt too wide) in paragraph at lines 1302--1302
 []\T1/lmtt/m/n/10 ## data:  data$R1_Early[data$Experiment == exp1] and data$R1_
 Late[data$Experiment == exp1][] 
  []
 
 [26] [27]
-Overfull \hbox (2.7436pt too wide) in paragraph at lines 1303--1303
+Overfull \hbox (2.7436pt too wide) in paragraph at lines 1302--1302
 []\T1/lmtt/m/n/10 ## data:  data$Aligned[data$Experiment == exp1] and data$R1_E
 arly[data$Experiment == exp1][] 
  []
 
 
-Overfull \hbox (2.7436pt too wide) in paragraph at lines 1303--1303
+Overfull \hbox (2.7436pt too wide) in paragraph at lines 1302--1302
 []\T1/lmtt/m/n/10 ## data:  data$R1_Early[data$Experiment == exp1] and data$R1_
 Late[data$Experiment == exp1][] 
  []
 
 [28] [29] [30]
-Overfull \hbox (7.99359pt too wide) in paragraph at lines 1683--1683
+Overfull \hbox (7.99359pt too wide) in paragraph at lines 1682--1682
 []\T1/lmtt/m/n/10 ## data:  data$R1_Early[data$Experiment == exp1] and data$R1_
 Early[data$Experiment == exp2][] 
  []
 
 [31]
-Overfull \hbox (2.7436pt too wide) in paragraph at lines 1683--1683
+Overfull \hbox (2.7436pt too wide) in paragraph at lines 1682--1682
 []\T1/lmtt/m/n/10 ## data:  data$Aligned[data$Experiment == exp1] and data$R1_E
 arly[data$Experiment == exp1][] 
  []
 
 [32]
-Overfull \hbox (2.7436pt too wide) in paragraph at lines 1683--1683
+Overfull \hbox (2.7436pt too wide) in paragraph at lines 1682--1682
 []\T1/lmtt/m/n/10 ## data:  data$R1_Early[data$Experiment == exp1] and data$R1_
 Late[data$Experiment == exp1][] 
  []
 
 [33]
-Overfull \hbox (2.7436pt too wide) in paragraph at lines 1683--1683
+Overfull \hbox (2.7436pt too wide) in paragraph at lines 1682--1682
 []\T1/lmtt/m/n/10 ## data:  data$Aligned[data$Experiment == exp1] and data$R1_E
 arly[data$Experiment == exp1][] 
  []
 
 [34]
-Overfull \hbox (2.7436pt too wide) in paragraph at lines 1683--1683
+Overfull \hbox (2.7436pt too wide) in paragraph at lines 1682--1682
 []\T1/lmtt/m/n/10 ## data:  data$R1_Early[data$Experiment == exp1] and data$R1_
 Late[data$Experiment == exp1][] 
  []
 
 [35] [36] [37]
-LaTeX Font Info:    Try loading font information for OT1+lmr on input line 1802
+LaTeX Font Info:    Try loading font information for OT1+lmr on input line 1801
 .
 (c:/Users/jeruttle/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OML+lmm on input line 1802
+LaTeX Font Info:    Try loading font information for OML+lmm on input line 1801
 .
 (c:/Users/jeruttle/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 180
-2.
+1.
 (c:/Users/jeruttle/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Try loading font information for OMX+lmex on input line 180
-2.
+1.
 (c:/Users/jeruttle/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 1802.
+(Font)              <10> on input line 1801.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 1802.
+(Font)              <7> on input line 1801.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 1802.
-LaTeX Font Info:    Try loading font information for U+msa on input line 1802.
+(Font)              <5> on input line 1801.
+LaTeX Font Info:    Try loading font information for U+msa on input line 1801.
 
 (c:/Users/jeruttle/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.f
 d
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 1802.
+LaTeX Font Info:    Try loading font information for U+msb on input line 1801.
 
 (c:/Users/jeruttle/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.f
 d
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [38]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1844.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1843.
 [39]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1844.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1843.
 (./TwoRatePaperOutline.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1844.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1844.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1843.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1843.
 
 Package rerunfilecheck Info: File `TwoRatePaperOutline.out' has not changed.
 (rerunfilecheck)             Checksum: 53B11FDC8847B20C09B599081430C25A;552.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1844.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1843.
  ) 
 Here is how much of TeX's memory you used:
  10796 strings out of 494562
@@ -1000,7 +1000,7 @@ fb><c:/Users/jeruttle/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/
 lmtk10.pfb><c:/Users/jeruttle/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/pu
 blic/lm/lmtt10.pfb><c:/Users/jeruttle/AppData/Roaming/TinyTeX/texmf-dist/fonts/
 type1/public/lm/lmtti10.pfb>
-Output written on TwoRatePaperOutline.pdf (39 pages, 542076 bytes).
+Output written on TwoRatePaperOutline.pdf (39 pages, 541326 bytes).
 PDF statistics:
  354 PDF objects out of 1000 (max. 8388607)
  278 compressed objects within 3 object streams
