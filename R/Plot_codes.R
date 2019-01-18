@@ -251,14 +251,15 @@ PlotPassivedata<- function (data) {
   PlotpassiveLineReachesCI(passive_reaches)
 }
 Plotnocursordata<- function (data) {
-  PlotoutLinefornocursorReaches(nocursor_reaches)
-  PlotnocursorLineReachesCI(nocursor_reaches)
-  nocursorR<- nocursor_reaches[33:320,]*-1
-  participants <- 2:33
+  PlotoutLinefornocursorReaches(data)
+  PlotnocursorLineReachesCI(data)
+  nocursorR<- data[33:320,]*-1
+  str(nocursorR)
+  participants <- 2:11
   for (pn in participants) {
-    lines(nocursorR[,pn], col = rgb(0.0,0.7,0.0,0.06))
+    lines(nocursorR[,pn], col = rgb(0.0,0.7,0.0,0.6))
   }
-  PlotnocursorLineReachesCI(nocursor_reaches)
+  #PlotnocursorLineReachesCI(data)
 }
 
 
@@ -336,7 +337,7 @@ Reachmodelnc<- function(data, ncdata, name) {
   #data$distortion<- data$distortion*-1
   reaches<- getreachesformodel(data)
   #reach_par<- fittworatemodel(reaches = reaches$meanreaches, reaches$distortion)
-  reach_par <- fitTwoRateReachModel(reaches=reaches$meanreaches, schedule=reaches$distortion, oneTwoRates=2, grid='restricted', checkStability=TRUE)
+  reach_par <- fitTwoRateReachModel(reaches=reaches$meanreaches, schedule=reaches$distortion, oneTwoRates=2, grid='skewed', checkStability=TRUE)
   #data$distortion<- data$distortion*-1
   #reach_model<-tworatemodel(par=reach_par, distortions = data$distortion)
   reach_model1<- twoRateReachModel(par=reach_par, schedule = reaches$distortion)
