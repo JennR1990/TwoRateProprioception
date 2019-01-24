@@ -39,22 +39,33 @@ ANOVAanalysis<- function(AllDataANOVA){
 }
 
 
-PrepdataforT<- function(adata, pasdata, paudata, ncdata, ncncdata){
+PrepdataforT<- function(adata, pasdata, paudata, ncdata, ncncdata, ncIdata, ncncIdata){
   A_RM<-TCombine(adata)
   A_RM$Experiment <- rep('Active', nrow(A_RM))
+  
   Pas_RM<-TCombine(pasdata)
   Pas_RM$Experiment <- rep('Passive', nrow(Pas_RM))
+  
   Pau_RM<-TCombine(paudata)
   Pau_RM$Experiment <- rep('Pause', nrow(Pau_RM))
+  
   nc_RM<-TCombine(ncdata)
   nc_RM$Experiment <- rep('No-Cursor', nrow(nc_RM))
+  
   ncnc_RM<-NoCursorsTCombine(ncncdata)
   ncnc_RM$Experiment <- rep('No-Cursor_No-Cursors', nrow(ncnc_RM))
-  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM)
+  
+  ncI_RM<-TCombine(ncIdata)
+  ncI_RM$Experiment <- rep('No-CursorI', nrow(ncI_RM))
+  
+  ncncI_RM<-NoCursorsTCombine(ncncIdata)
+  ncncI_RM$Experiment <- rep('No-CursorI_No-Cursors', nrow(ncncI_RM))
+  
+  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM, ncI_RM, ncncI_RM)
   return(AllDataRM)
 }
 
-PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata) {
+PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata, ncIdata, ncncIdata) {
   
   A_RM<-ANOVAcombine(adata)
   A_RM$ID <- sprintf('ActLoc.%s',A_RM$ID)
@@ -76,7 +87,15 @@ PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata) {
   ncnc_RM$ID <- sprintf('NoCursor_No-Cursors.%s',ncnc_RM$ID)
   ncnc_RM$Experiment <- rep('No-Cursor_No-Cursors', nrow(ncnc_RM))
   
-  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM)
+  ncI_RM<-ANOVAcombine(ncIdata)
+  ncI_RM$ID <- sprintf('NoCursor.%s',ncI_RM$ID)
+  ncI_RM$Experiment <- rep('No-CursorI', nrow(ncI_RM))
+  
+  ncncI_RM<-NoCursorACombine(ncncIdata)
+  ncncI_RM$ID <- sprintf('NoCursorI_No-Cursors.%s',ncncI_RM$ID)
+  ncncI_RM$Experiment <- rep('No-CursorI_No-Cursors', nrow(ncncI_RM))
+  
+  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM, ncI_RM, ncncI_RM)
   
   return(AllDataRM)
   

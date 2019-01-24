@@ -34,10 +34,10 @@ By comparing the trial-by-trial changes in the four paradigms, we can investigat
 
 Preparing Data for Figures and Analysis:
 ```{r}
-source('C:/Users/jeruttle/Jenn Dropbox/Jennifer Ruttle/TwoRateProprioception/R/Analysis_Scripts.R')
-source('C:/Users/jeruttle/Jenn Dropbox/Jennifer Ruttle/TwoRateProprioception/R/Plot_codes.R', encoding = 'UTF-8')
-source('C:/Users/jeruttle/Jenn Dropbox/Jennifer Ruttle/TwoRateProprioception/R/Repeated_Measures_Combine.R')
-source('C:/Users/jeruttle/Jenn Dropbox/Jennifer Ruttle/TwoRateProprioception/R/shared.R')
+source('R/Analysis_Scripts.R')
+source('R/Plot_codes.R', encoding = 'UTF-8')
+source('R/Repeated_Measures_Combine.R')
+source('R/shared.R')
 loadcolors()
 downloadOSFdata()
 pause_reaches<- Loaddata(group='pause')
@@ -49,9 +49,9 @@ passive_localization<- Loaddata(task = 'localization')
 active_localization<- Loaddata(group='active', task = 'localization')
 nocursor_nocursors<- Loaddata(group='nocursor', task = 'nocursors')
 nocursorI_nocursors<- Loaddata(group='nocursor', task = 'nocursors_NI')
-ANOVAdata<- PrepdataforANOVA(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors)
+ANOVAdata<- PrepdataforANOVA(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors, nocursorI_reaches[33:320,], nocursorI_nocursors)
 ANOVAPdata<- PrepdataforPropANOVA(active_localization,passive_localization)
-Ttestdata<- PrepdataforT(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors)
+Ttestdata<- PrepdataforT(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors, nocursorI_reaches[33:320,], nocursorI_nocursors)
 TtestPdata<- PrepdataforPropT(active_localization, passive_localization)
 ```
 
