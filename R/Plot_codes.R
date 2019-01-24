@@ -368,16 +368,16 @@ Allreachmodels<- function (data1, data2, data3, data4) {
  dev.off()
 }
 
-Reachmodel<- function(data, name) {
-
+Reachmodel<- function(data, name, grid = 'restricted') {
+  grid <- grid
   library(RateRate)
   #svglite(file='reach_models_passive_pause.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
- 
+  
   #layout(matrix(c(1,1,1,1,2,3,4,5), nrow=2, byrow=TRUE), heights=c(3,1))
   #data$distortion<- data$distortion*-1
   reaches<- getreachesformodel(data)
   #reach_par<- fittworatemodel(reaches = reaches$meanreaches, reaches$distortion)
-  reach_par <- fitTwoRateReachModel(reaches=reaches$meanreaches, schedule=reaches$distortion, oneTwoRates=2, grid='restricted', checkStability=TRUE)
+  reach_par <- fitTwoRateReachModel(reaches=reaches$meanreaches, schedule=reaches$distortion, oneTwoRates=2, grid=grid, checkStability=TRUE)
   #data$distortion<- data$distortion*-1
   #reach_model<-tworatemodel(par=reach_par, distortions = data$distortion)
   reach_model<- twoRateReachModel(par=reach_par, schedule = reaches$distortion)

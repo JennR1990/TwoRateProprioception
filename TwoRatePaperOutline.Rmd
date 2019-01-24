@@ -44,9 +44,11 @@ pause_reaches<- Loaddata(group='pause')
 active_reaches<- Loaddata(group='active')
 passive_reaches<- Loaddata()
 nocursor_reaches<- Loaddata(group='nocursor')
+nocursorI_reaches<- Loaddata(group='nocursor', task = 'reaches_NI')
 passive_localization<- Loaddata(task = 'localization')
 active_localization<- Loaddata(group='active', task = 'localization')
 nocursor_nocursors<- Loaddata(group='nocursor', task = 'nocursors')
+nocursorI_nocursors<- Loaddata(group='nocursor', task = 'nocursors_NI')
 ANOVAdata<- PrepdataforANOVA(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors)
 ANOVAPdata<- PrepdataforPropANOVA(active_localization,passive_localization)
 Ttestdata<- PrepdataforT(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors)
@@ -63,12 +65,14 @@ PlotPausedata(pause_reaches) #individual traces for pause data
 PlotActivedata(active_reaches)
 PlotPassivedata(passive_reaches)
 Plotnocursordata(nocursor_reaches)
+Plotnocursordata(nocursorI_reaches)
 ```
 - Fig 4: A,B,C,D) one subplot for each group showing the median reach deviations in the four main phases, plus the two-rate model fit and it's fast and slow process (show quality of the fits)
 ```{r}
 #Allpars<-Allreachmodels(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,])
 Reachmodel(pause_reaches[33:320,], 'Pause')
 Reachmodel(nocursor_reaches[33:320,], 'No-Cursor')
+Reachmodel(nocursorI_reaches[33:320,], 'No-Cursor', grid = 'skewed')
 Reachmodel(active_reaches, 'Active')
 Reachmodel(passive_reaches, 'Passive')
 ```
@@ -85,6 +89,7 @@ PlotallTapCI(passive_localization, active_localization) #has no model output
 - Fig 8: A) time course of no-cursor changes (no-cursor could reflect a watered down version of the slow process?)
 ```{r}
 Reachmodelnc(nocursor_reaches, nocursor_nocursors, 'No-Cursor')
+Reachmodelnc(nocursorI_reaches, nocursorI_nocursors, 'No-Cursor')
 ```
 
 ## Analysis of data
@@ -106,6 +111,7 @@ Active_AICS<- bootstrapModelAICs(active_reaches)
 Passive_AICS<- bootstrapModelAICs(passive_reaches)
 Pause_AICS<- bootstrapModelAICs(pause_reaches)
 NC_AICS<- bootstrapModelAICs(nocursor_reaches)
+NCI_AICS<- bootstrapModelAICs(nocursorI_reaches)
 ```
 
 ## Two-Rate model
