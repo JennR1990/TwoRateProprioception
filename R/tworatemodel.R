@@ -73,7 +73,7 @@ fittworatemodel<- function(reaches, distortions) {
   # to search longer, so that the fit might be improved at the cost of longer computation.
 }
 
-dogridsearch<- function(reaches, distortions, nsteps=7, topn=5) {
+dogridsearch<- function(reaches, distortions, nsteps=6, topn=6) {
   
   cat('doing grid search...\n')
   
@@ -137,7 +137,7 @@ twoRateReachModelError <- function(par, reaches, distortions) {
   
   
   
-  df<- tworatemodel(par, distortions = distortions)
+  df<- tworatemodel(par, distortions = distortions*-1)
   # If we got this far, the parameters are valid.
   # We can see what the model output is with those parameters.
   errors <- df$output - reaches
@@ -153,10 +153,10 @@ twoRateReachModelError <- function(par, reaches, distortions) {
   
   # We want to minimize the root mean squared errors, or RMSE:
   MSE <- mean(errors^2, na.rm=TRUE)
-  
+
   # Optim() needs to know what the MSE is:
   return(MSE)
-  
+
 }
 
 tworatemodel<- function(par, distortions) {
@@ -1296,7 +1296,7 @@ oneRateReachModelError <- function(par, reaches, distortions) {
   
   
   
-  df<- cmp.oneratemodel(par, distortions = distortions)
+  df<- cmp.oneratemodel(par, distortions = distortions*-1)
   # If we got this far, the parameters are valid.
   # We can see what the model output is with those parameters.
   errors <- df$output - reaches
@@ -1315,7 +1315,7 @@ oneRateReachModelError <- function(par, reaches, distortions) {
   
   # Optim() needs to know what the MSE is:
   return(MSE)
-  
+  print(MSE)
 }
 
 cmp.oneRateReachModelError <- cmpfun(oneRateReachModelError)

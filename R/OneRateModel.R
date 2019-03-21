@@ -124,7 +124,7 @@ oneRateReachModelError <- function(par, reaches, distortions) {
   
   
   
-  df<- cmp.oneratemodel(par, distortions = distortions)
+  df<- cmp.oneratemodel(par, distortions = distortions*-1)
   # If we got this far, the parameters are valid.
   # We can see what the model output is with those parameters.
   errors <- df$output - reaches

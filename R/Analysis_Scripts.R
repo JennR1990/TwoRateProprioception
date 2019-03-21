@@ -259,12 +259,12 @@ GroupAICS<- function(data, bootstraps=1) {
   
 }
 
-bootstrapModelAICsjENN <- function(group='active', bootstraps=10) {
+bootstrapModelAICsjENN <- function(group='active', bootstraps=1) {
   
   library(RateRate)
   
   df <- read.csv(sprintf('data/%s_reaches.csv', group), stringsAsFactors = FALSE)
-  schedule <- df$distortion
+  distortion <- df$distortion
   
   reaches <- as.matrix(df[,2:dim(df)[2]])
   
@@ -283,17 +283,20 @@ bootstrapModelAICsjENN <- function(group='active', bootstraps=10) {
   for (bootstrap in c(1:bootstraps)) {
     
     medReaches <- apply(reaches[,sample(c(1:N),N,replace=TRUE)], 1, median, na.rm=TRUE)
-    distortion<- distortion*-1
+    distortion<- distortion
     onerate_par<- fitoneratemodel(reaches = medReaches, distortions = distortion)
     tworate_par<- fittworatemodel(reaches = medReaches, distortions = distortion)
     
     
-    distortion<- distortion*-1
+    distortion<- distortion
     onerate_model<- oneratemodel(par = onerate_par, distortions = distortion)
     tworate_model<- tworatemodel(par = tworate_par, distortions = distortion)
     
-    oneRateMSE<- mean((medReaches - onerate_model$output)^2)
-    twoRateMSE<- mean((medReaches - tworate_model$output)^2)
+    
+    twoRateMSE<-twoRateReachModelError(tworate_par, reaches = medReaches, distortions = distortion*-1)
+    oneRateMSE<-oneRateReachModelError(onerate_par, reaches = medReaches, distortions = distortion*-1)
+    print(oneRateMSE<- mean((medReaches - onerate_model$output*-1)^2))
+    print(twoRateMSE<- mean((medReaches - tworate_model$output*-1)^2))
     
     # twoRateFit <- fitTwoRateReachModel(reaches=medReaches, schedule=schedule, oneTwoRates=2, grid='restricted', checkStability=TRUE)
     # oneRateFit <- fitTwoRateReachModel(reaches=medReaches, schedule=schedule, oneTwoRates=1, grid='restricted', checkStability=TRUE)

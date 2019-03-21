@@ -74,7 +74,15 @@ PlotallTapCI <- function (pl=dataset1, al=dataset2){
 # return(datasets)
 #  }
 
-
+PlotoutLine<- function(dataset){
+  dataset["distortion"][is.na(dataset["distortion"])] <- 0
+  dataset$Mean <- rowMeans(dataset[,2:length(dataset)], na.rm = TRUE)
+  plot(dataset$Mean, ylim = c(-35, 35), xlab = "Trial", ylab = "Hand Direction [°]",axes=F, main = "Learning Curves", type = 'l', col= 'white')
+  lines(c(1,64,64,224,224,240,240),c(0,0,30,30,-30,-30,0),col=rgb(0.,0.,0.))
+  lines(c(240,288),c(0,0),lty=2,col=rgb(0.,0.,0.))
+  axis(2, at=c(-30,-15,0,15,30), cex.axis=0.75)
+  axis(1, at=c(1,64,224,240,288), cex.axis=0.75)
+}
 
 PlotoutLineforReachesCI<- function(dataset){
   color1       <- rgb(0.7,0.0,0.7)      # purple

@@ -1,6 +1,7 @@
 ---
 title: "Two Rate Proprioception Paper"
 output:
+  word_document: default
   pdf_document: default
   html_document:
     df_print: paged
@@ -59,6 +60,7 @@ Here is a list of planned figures with their potential message:
 library("svglite", lib.loc="~/R/win-library/3.4")
 - Fig 1: A) setup, B) reach training + targets, C) localization + points, D) no-cursor + targets (illustrate the hardware and trial types, not done in R)
 - Fig 2: paradigm, four phases (aligned, rotated, reversed, error-clamped), plus extra localization phases (illustrate the main paradigm... add expected model fit?)
+PlotoutLine(active_reaches)
 - Fig 3: A,B,C,D) one subplot for each group showing reach deviations in the four main phases: individual traces, 95% confidence intervals, median (show quality of the data)
 ```{r}
 PlotPausedata(pause_reaches) #individual traces for pause data
