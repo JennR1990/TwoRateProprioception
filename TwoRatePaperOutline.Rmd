@@ -50,9 +50,9 @@ passive_localization<- Loaddata(task = 'localization')
 active_localization<- Loaddata(group='active', task = 'localization')
 nocursor_nocursors<- Loaddata(group='nocursor', task = 'nocursors')
 nocursorI_nocursors<- Loaddata(group='nocursor', task = 'nocursors_NI')
-ANOVAdata<- PrepdataforANOVA(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors, nocursorI_reaches[33:320,], nocursorI_nocursors)
+ANOVAdata<- PrepdataforANOVA(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors) # , nocursorI_reaches[33:320,], nocursorI_nocursors
 ANOVAPdata<- PrepdataforPropANOVA(active_localization,passive_localization)
-Ttestdata<- PrepdataforT(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors, nocursorI_reaches[33:320,], nocursorI_nocursors)
+Ttestdata<- PrepdataforT(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors)  # , nocursorI_reaches[33:320,], nocursorI_nocursors
 TtestPdata<- PrepdataforPropT(active_localization, passive_localization)
 ```
 
@@ -107,7 +107,7 @@ library("ez")
 FullPANOVA<-ANOVAanalysis(ANOVAPdata)
 FullPANOVA
 ```
-Then we check to see if the data is more one-rate or two-rate
+Then we check to see if the data is more one-rate or two-rate on the group level
 ```{r}
 Active_AICS<- bootstrapModelAICs(active_reaches)
 Passive_AICS<- bootstrapModelAICs(passive_reaches)
@@ -115,7 +115,12 @@ Pause_AICS<- bootstrapModelAICs(pause_reaches)
 NC_AICS<- bootstrapModelAICs(nocursor_reaches)
 NCI_AICS<- bootstrapModelAICs(nocursorI_reaches)
 ```
+Check to see if the data is more one-rate or two-rate on the participant level
+```{r}
 
+
+
+```
 ## Two-Rate model
 
 In the two-rate model, the motor output X at trial t, $X_t$ is simply the added output of the slow and fast process at trial t:

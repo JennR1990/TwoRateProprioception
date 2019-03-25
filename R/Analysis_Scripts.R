@@ -39,7 +39,9 @@ ANOVAanalysis<- function(AllDataANOVA){
 }
 
 
-PrepdataforT<- function(adata, pasdata, paudata, ncdata, ncncdata, ncIdata, ncncIdata){
+PrepdataforT<- function(adata, pasdata, paudata, ncdata, ncncdata){
+  #, ncIdata, ncncIdata
+  
   A_RM<-TCombine(adata)
   A_RM$Experiment <- rep('Active', nrow(A_RM))
   
@@ -55,17 +57,20 @@ PrepdataforT<- function(adata, pasdata, paudata, ncdata, ncncdata, ncIdata, ncnc
   ncnc_RM<-NoCursorsTCombine(ncncdata)
   ncnc_RM$Experiment <- rep('No-Cursor_No-Cursors', nrow(ncnc_RM))
   
-  ncI_RM<-TCombine(ncIdata)
-  ncI_RM$Experiment <- rep('No-CursorI', nrow(ncI_RM))
+  # ncI_RM<-TCombine(ncIdata)
+  # ncI_RM$Experiment <- rep('No-CursorI', nrow(ncI_RM))
+  # 
+  # ncncI_RM<-NoCursorsTCombine(ncncIdata)
+  # ncncI_RM$Experiment <- rep('No-CursorI_No-Cursors', nrow(ncncI_RM))
   
-  ncncI_RM<-NoCursorsTCombine(ncncIdata)
-  ncncI_RM$Experiment <- rep('No-CursorI_No-Cursors', nrow(ncncI_RM))
-  
-  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM, ncI_RM, ncncI_RM)
+  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM)
+  # , ncI_RM, ncncI_RM
   return(AllDataRM)
 }
 
-PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata, ncIdata, ncncIdata) {
+PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata) {
+  
+  # , ncIdata, ncncIdata
   
   A_RM<-ANOVAcombine(adata)
   A_RM$ID <- sprintf('ActLoc.%s',A_RM$ID)
@@ -87,16 +92,16 @@ PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata, ncIdata,
   ncnc_RM$ID <- sprintf('NoCursor_No-Cursors.%s',ncnc_RM$ID)
   ncnc_RM$Experiment <- rep('No-Cursor_No-Cursors', nrow(ncnc_RM))
   
-  ncI_RM<-ANOVAcombine(ncIdata)
-  ncI_RM$ID <- sprintf('NoCursor.%s',ncI_RM$ID)
-  ncI_RM$Experiment <- rep('No-CursorI', nrow(ncI_RM))
+  # ncI_RM<-ANOVAcombine(ncIdata)
+  # ncI_RM$ID <- sprintf('NoCursor.%s',ncI_RM$ID)
+  # ncI_RM$Experiment <- rep('No-CursorI', nrow(ncI_RM))
+  # 
+  # ncncI_RM<-NoCursorACombine(ncncIdata)
+  # ncncI_RM$ID <- sprintf('NoCursorI_No-Cursors.%s',ncncI_RM$ID)
+  # ncncI_RM$Experiment <- rep('No-CursorI_No-Cursors', nrow(ncncI_RM))
   
-  ncncI_RM<-NoCursorACombine(ncncIdata)
-  ncncI_RM$ID <- sprintf('NoCursorI_No-Cursors.%s',ncncI_RM$ID)
-  ncncI_RM$Experiment <- rep('No-CursorI_No-Cursors', nrow(ncncI_RM))
-  
-  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM, ncI_RM, ncncI_RM)
-  
+  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM)
+  #, ncI_RM, ncncI_RM
   return(AllDataRM)
   
 }
@@ -200,14 +205,14 @@ ParticipantReachmodels<- function(adata, pasdata, paudata, ncdata) {
 }
 
 prepdatagetfits<- function (data){
-  data$distortion<- data$distortion*-1
+  data$distortion<- data$distortion
   # modeldata<- getreachesformodel(data)
   pars<- getParticipantFits(data)
   return(pars)
 }
 
 prepdatagetonefits<- function (data){
-  data$distortion<- data$distortion*-1
+  data$distortion<- data$distortion
   # modeldata<- getreachesformodel(data)
   pars<- getoneParticipantFits(data)
   return(pars)
@@ -261,7 +266,7 @@ GroupAICS<- function(data, bootstraps=1) {
 
 bootstrapModelAICsjENN <- function(group='active', bootstraps=1) {
   
-  library(RateRate)
+  
   
   df <- read.csv(sprintf('data/%s_reaches.csv', group), stringsAsFactors = FALSE)
   distortion <- df$distortion
@@ -284,6 +289,8 @@ bootstrapModelAICsjENN <- function(group='active', bootstraps=1) {
     
     medReaches <- apply(reaches[,sample(c(1:N),N,replace=TRUE)], 1, median, na.rm=TRUE)
     distortion<- distortion
+
+    
     onerate_par<- fitoneratemodel(reaches = medReaches, distortions = distortion)
     tworate_par<- fittworatemodel(reaches = medReaches, distortions = distortion)
     
@@ -378,12 +385,14 @@ bootstrapModelAICs <- function(data, bootstraps=1) {
 }
 
 
-Poneratevstworate<- function (data) {
+Poneratevstworate<- function (data, group = 'Passive') {
   ##Getting AICS for one-rate model vs. two-rate model
   #need to run one rate model
   par1<- prepdatagetonefits(data)
+  write.csv(par1, sprintf("One Rate Parameters for %s Reaches.csv", group), row.names = TRUE, quote = FALSE)
   #need to run two rate model
   par2<- prepdatagetfits(data)
+  write.csv(par2, sprintf("Two Rate Parameters for %s Reaches.csv", group), row.names = TRUE, quote = FALSE)
 
   Data1MSE<- par1$MSE
   Data2MSE<- par2$MSE
@@ -395,7 +404,7 @@ Poneratevstworate<- function (data) {
   Data2AIC <- 2*P2 + N*log(Data2MSE) + C
   count<-sum(Data1AIC<Data2AIC)
   AICs<- c('One Rate Model'=Data1AIC,'Two Rate Model'=Data2AIC)
-  print(AICs)
+  write.csv(AICs, sprintf("AICs for one and two rate reach data.csv"), row.names = TRUE, quote = FALSE)
   #relativeLikelihoods <- exp((min(AICs) - AICs)/2)
   return(sprintf('the number of participants with a higher AIC for two rates are %d',count))
 }
