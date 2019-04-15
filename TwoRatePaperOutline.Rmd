@@ -110,9 +110,13 @@ FullPANOVA
 Then we check to see if the data is more one-rate or two-rate on the group level
 ```{r}
 Active_AICS<- bootstrapModelAICs(active_reaches)
+Active_AIC<- bootstrapModelAICsjENN()
 Passive_AICS<- bootstrapModelAICs(passive_reaches)
+Passive_AIC<- bootstrapModelAICsjENN('passive')
 Pause_AICS<- bootstrapModelAICs(pause_reaches)
+Pause_AIC<- bootstrapModelAICsjENN('pause')
 NC_AICS<- bootstrapModelAICs(nocursor_reaches)
+NC_AIC<- bootstrapModelAICsjENN('nocursor')
 NCI_AICS<- bootstrapModelAICs(nocursorI_reaches)
 ```
 Check to see if the data is more one-rate or two-rate on the participant level
