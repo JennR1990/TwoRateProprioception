@@ -45,14 +45,14 @@ pause_reaches<- Loaddata(group='pause')
 active_reaches<- Loaddata(group='active')
 passive_reaches<- Loaddata()
 nocursor_reaches<- Loaddata(group='nocursor')
-nocursorI_reaches<- Loaddata(group='nocursor', task = 'reaches_NI')
+nocursorI_reaches<- Loaddata(group='nocursor', task = 'NI_reaches')
 passive_localization<- Loaddata(task = 'localization')
 active_localization<- Loaddata(group='active', task = 'localization')
 nocursor_nocursors<- Loaddata(group='nocursor', task = 'nocursors')
-nocursorI_nocursors<- Loaddata(group='nocursor', task = 'nocursors_NI')
-ANOVAdata<- PrepdataforANOVA(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors) # , nocursorI_reaches[33:320,], nocursorI_nocursors
+nocursorI_nocursors<- Loaddata(group='nocursor', task = 'NI_nocursors')
+ANOVAdata<- PrepdataforANOVA(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors, nocursorI_reaches[33:320,], nocursorI_nocursors)  
 ANOVAPdata<- PrepdataforPropANOVA(active_localization,passive_localization)
-Ttestdata<- PrepdataforT(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors)  # , nocursorI_reaches[33:320,], nocursorI_nocursors
+Ttestdata<- PrepdataforT(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors, nocursorI_reaches[33:320,], nocursorI_nocursors)  
 TtestPdata<- PrepdataforPropT(active_localization, passive_localization)
 ```
 

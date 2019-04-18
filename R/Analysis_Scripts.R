@@ -1,3 +1,41 @@
+ppfits<- function (groups = c('active', 'passive', 'pause', 'nocursor', 'nocursor_NI')) {
+  pars<- data.frame()
+  counter<- 1
+  for (group in groups){
+  filename<- sprintf('data/%s_reaches.csv', group)
+  data<- read.csv(filename, stringsAsFactors = F, header = TRUE)
+  par<- getParticipantFits(data)
+  par$experiment<- rep(group, times = nrow(par))
+  
+  if (counter >1){
+    pars<- rbind(pars, par)
+  } else {
+    pars<- par
+  }
+  counter<- counter + 1
+  print(dim(pars))
+  # output<- sprintf('%s_participant_parameters.csv', group)
+  # write.csv(pars, output, quote = FALSE, row.names = FALSE)
+  }
+  return(pars)
+}
+
+#polynomial logistic regression
+
+pLogRegression <- function(data) {
+  
+  #df <- read.csv('data/Pilot/rebound.csv', stringsAsFactors = F)
+  
+  data$experiment <- as.factor(data$experiment)
+  
+
+    
+    print(summary(glm(formula = experiment ~ rs + ls + rf + lf, family = binomial(link = "logit"), 
+                      data = data)))
+
+  
+}
+
 tanalyzedata<- function(AllDataRM){
   IndependentT(AllDataRM, 'Active', 'Passive', 'Reach')
   IndependentT(AllDataRM, 'Pause', 'No-Cursor', 'Reach')
