@@ -1,3 +1,85 @@
+Allmeans<- function() {
+  
+  ActiveReach<- means(active_reaches)
+  ActiveReach$Experiment<- "ActiveR"
+  ActiveProp<- means(active_localization)
+  ActiveProp$Experiment<- "ActiveL"
+  PassiveReach<- means(passive_reaches)
+  PassiveReach$Experiment<- "PassiveR"
+  PassiveProp<- means(passive_localization)
+  PassiveProp$Experiment<- "PassiveL"
+  PauseReach<- means(pause_reaches[33:320,])
+  PauseReach$Experiment<- "PauseR"
+  NocursorReach<- means(nocursor_reaches[33:320,])
+  NocursorReach$Experiment<- "NocursorR"
+  NocursorIReach<- means(nocursorI_reaches[33:320,])
+  NocursorIReach$Experiment<- "NocursorIR"
+  NocursorNCReach<- NCmeans(nocursor_nocursors)
+  NocursorNCReach$Experiment<- "NocursorNC"
+  NocursorNCIReach<- NCmeans(nocursorI_nocursors)
+  NocursorNCIReach$Experiment<- "NocursorINC"
+  Allmeans<- rbind(ActiveReach, ActiveProp, PassiveReach, PassiveProp, PauseReach, NocursorReach, NocursorNCReach, NocursorIReach, NocursorNCIReach)
+  write.csv(Allmeans, 'ana/All Experiments Descriptive Stats.csv', quote = FALSE, row.names = FALSE )
+  
+  return(Allmeans)
+  
+  
+}
+
+NCmeans<- function (data) {
+  
+  
+  
+  AlignedMean<- mean(unlist(data[29:32,2:ncol(data)]), na.rm= TRUE)
+  AlignedMax<- max(unlist(data[29:32,2:ncol(data)]), na.rm= TRUE)
+  AlignedMin<- min(unlist(data[29:32,2:ncol(data)]), na.rm= TRUE)
+  InitialRotationMean<- mean(unlist(data[33:36,2:ncol(data)]), na.rm= TRUE)
+  InitialRotationMax<- max(unlist(data[33:36,2:ncol(data)]), na.rm= TRUE)
+  InitialRotationMin<- min(unlist(data[33:36,2:ncol(data)]), na.rm= TRUE)
+  EndofIRotationMean<- mean(unlist(data[189:192,2:ncol(data)]), na.rm= TRUE)
+  EndofIRotationMax<- max(unlist(data[189:192,2:ncol(data)]), na.rm= TRUE)
+  EndofIRotationMin<- min(unlist(data[189:192,2:ncol(data)]), na.rm= TRUE)
+  SecondRotationMean<- mean(unlist(data[205:208,2:ncol(data)]), na.rm= TRUE)
+  SecondRotationMax<- max(unlist(data[205:208,2:ncol(data)]), na.rm= TRUE)
+  SecondRotationMin<- min(unlist(data[205:208,2:ncol(data)]), na.rm= TRUE)
+  ErrorClampMean<- mean(unlist(data[209:212,2:ncol(data)]), na.rm= TRUE)
+  ErrorClampMax<- max(unlist(data[209:212,2:ncol(data)]), na.rm= TRUE)
+  ErrorClampMin<- min(unlist(data[209:212,2:ncol(data)]), na.rm= TRUE)
+  ErrorClampLateMean<- mean(unlist(data[253:256,2:ncol(data)]), na.rm= TRUE)
+  ErrorClampLateMax<- max(unlist(data[253:256,2:ncol(data)]), na.rm= TRUE)
+  ErrorClampLateMin<- min(unlist(data[253:256,2:ncol(data)]), na.rm= TRUE)
+
+  
+  return(Descriptives<- (data.frame(AlignedMean, AlignedMax, AlignedMin, InitialRotationMean, InitialRotationMax, InitialRotationMin, EndofIRotationMean, EndofIRotationMax, EndofIRotationMin, SecondRotationMean, SecondRotationMax, SecondRotationMin, ErrorClampMean, ErrorClampMax, ErrorClampMin, ErrorClampLateMean, ErrorClampLateMax, ErrorClampLateMin))*-1)
+}
+means<- function (data) {
+  
+
+  
+  AlignedMean<- mean(unlist(data[61:64,2:ncol(data)]), na.rm= TRUE)
+  AlignedMax<- max(unlist(data[61:64,2:ncol(data)]), na.rm= TRUE)
+  AlignedMin<- min(unlist(data[61:64,2:ncol(data)]), na.rm= TRUE)
+  InitialRotationMean<- mean(unlist(data[65:68,2:ncol(data)]), na.rm= TRUE)
+  InitialRotationMax<- max(unlist(data[65:68,2:ncol(data)]), na.rm= TRUE)
+  InitialRotationMin<- min(unlist(data[65:68,2:ncol(data)]), na.rm= TRUE)
+  EndofIRotationMean<- mean(unlist(data[208:224,2:ncol(data)]), na.rm= TRUE)
+  EndofIRotationMax<- max(unlist(data[208:224,2:ncol(data)]), na.rm= TRUE)
+  EndofIRotationMin<- min(unlist(data[208:224,2:ncol(data)]), na.rm= TRUE)
+  SecondRotationMean<- mean(unlist(data[237:240,2:ncol(data)]), na.rm= TRUE)
+  SecondRotationMax<- max(unlist(data[237:240,2:ncol(data)]), na.rm= TRUE)
+  SecondRotationMin<- min(unlist(data[237:240,2:ncol(data)]), na.rm= TRUE)
+  ErrorClampMean<- mean(unlist(data[241:244,2:ncol(data)]), na.rm= TRUE)
+  ErrorClampMax<- max(unlist(data[241:244,2:ncol(data)]), na.rm= TRUE)
+  ErrorClampMin<- min(unlist(data[241:244,2:ncol(data)]), na.rm= TRUE)
+  ErrorClampLateMean<- mean(unlist(data[256:288,2:ncol(data)]), na.rm= TRUE)
+  ErrorClampLateMax<- max(unlist(data[256:288,2:ncol(data)]), na.rm= TRUE)
+  ErrorClampLateMin<- min(unlist(data[256:288,2:ncol(data)]), na.rm= TRUE)
+
+  
+return(Descriptives<- (data.frame(AlignedMean, AlignedMax, AlignedMin, InitialRotationMean, InitialRotationMax, InitialRotationMin, EndofIRotationMean, EndofIRotationMax, EndofIRotationMin, SecondRotationMean, SecondRotationMax, SecondRotationMin, ErrorClampMean, ErrorClampMax, ErrorClampMin, ErrorClampLateMean, ErrorClampLateMax, ErrorClampLateMin))*-1)
+  }
+
+
 tanalyzedata<- function(AllDataRM){
   IndependentT(AllDataRM, 'Active', 'Passive', 'Reach')
   IndependentT(AllDataRM, 'Pause', 'No-Cursor', 'Reach')
@@ -39,8 +121,8 @@ ANOVAanalysis<- function(AllDataANOVA){
 }
 
 
-PrepdataforT<- function(adata, pasdata, paudata, ncdata, ncncdata){
-  #, ncIdata, ncncIdata
+PrepdataforT<- function(adata, pasdata, paudata, ncdata, ncncdata, ncIdata, ncncIdata){
+  #
   
   A_RM<-TCombine(adata)
   A_RM$Experiment <- rep('Active', nrow(A_RM))
@@ -57,20 +139,20 @@ PrepdataforT<- function(adata, pasdata, paudata, ncdata, ncncdata){
   ncnc_RM<-NoCursorsTCombine(ncncdata)
   ncnc_RM$Experiment <- rep('No-Cursor_No-Cursors', nrow(ncnc_RM))
   
-  # ncI_RM<-TCombine(ncIdata)
-  # ncI_RM$Experiment <- rep('No-CursorI', nrow(ncI_RM))
-  # 
-  # ncncI_RM<-NoCursorsTCombine(ncncIdata)
-  # ncncI_RM$Experiment <- rep('No-CursorI_No-Cursors', nrow(ncncI_RM))
+  ncI_RM<-TCombine(ncIdata)
+  ncI_RM$Experiment <- rep('No-CursorI', nrow(ncI_RM))
+
+  ncncI_RM<-NoCursorsTCombine(ncncIdata)
+  ncncI_RM$Experiment <- rep('No-CursorI_No-Cursors', nrow(ncncI_RM))
   
-  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM)
-  # , ncI_RM, ncncI_RM
+  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM, ncI_RM, ncncI_RM)
+  # 
   return(AllDataRM)
 }
 
-PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata) {
+PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata, ncIdata, ncncIdata) {
   
-  # , ncIdata, ncncIdata
+  # 
   
   A_RM<-ANOVAcombine(adata)
   A_RM$ID <- sprintf('ActLoc.%s',A_RM$ID)
@@ -92,16 +174,16 @@ PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata) {
   ncnc_RM$ID <- sprintf('NoCursor_No-Cursors.%s',ncnc_RM$ID)
   ncnc_RM$Experiment <- rep('No-Cursor_No-Cursors', nrow(ncnc_RM))
   
-  # ncI_RM<-ANOVAcombine(ncIdata)
-  # ncI_RM$ID <- sprintf('NoCursor.%s',ncI_RM$ID)
-  # ncI_RM$Experiment <- rep('No-CursorI', nrow(ncI_RM))
-  # 
-  # ncncI_RM<-NoCursorACombine(ncncIdata)
-  # ncncI_RM$ID <- sprintf('NoCursorI_No-Cursors.%s',ncncI_RM$ID)
-  # ncncI_RM$Experiment <- rep('No-CursorI_No-Cursors', nrow(ncncI_RM))
+  ncI_RM<-ANOVAcombine(ncIdata)
+  ncI_RM$ID <- sprintf('NoCursor.%s',ncI_RM$ID)
+  ncI_RM$Experiment <- rep('No-CursorI', nrow(ncI_RM))
+
+  ncncI_RM<-NoCursorACombine(ncncIdata)
+  ncncI_RM$ID <- sprintf('NoCursorI_No-Cursors.%s',ncncI_RM$ID)
+  ncncI_RM$Experiment <- rep('No-CursorI_No-Cursors', nrow(ncncI_RM))
   
-  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM)
-  #, ncI_RM, ncncI_RM
+  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM, ncI_RM, ncncI_RM)
+  #
   return(AllDataRM)
   
 }
