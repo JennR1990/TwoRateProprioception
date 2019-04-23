@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Allmeans<- function() {
   
   ActiveReach<- means(active_reaches)
@@ -79,6 +80,45 @@ means<- function (data) {
 return(Descriptives<- (data.frame(AlignedMean, AlignedMax, AlignedMin, InitialRotationMean, InitialRotationMax, InitialRotationMin, EndofIRotationMean, EndofIRotationMax, EndofIRotationMin, SecondRotationMean, SecondRotationMax, SecondRotationMin, ErrorClampMean, ErrorClampMax, ErrorClampMin, ErrorClampLateMean, ErrorClampLateMax, ErrorClampLateMin))*-1)
   }
 
+=======
+ppfits<- function (groups = c('active', 'passive', 'pause', 'nocursor', 'nocursor_NI')) {
+  pars<- data.frame()
+  counter<- 1
+  for (group in groups){
+  filename<- sprintf('data/%s_reaches.csv', group)
+  data<- read.csv(filename, stringsAsFactors = F, header = TRUE)
+  par<- getParticipantFits(data)
+  par$experiment<- rep(group, times = nrow(par))
+  
+  if (counter >1){
+    pars<- rbind(pars, par)
+  } else {
+    pars<- par
+  }
+  counter<- counter + 1
+  print(dim(pars))
+  # output<- sprintf('%s_participant_parameters.csv', group)
+  # write.csv(pars, output, quote = FALSE, row.names = FALSE)
+  }
+  return(pars)
+}
+
+#polynomial logistic regression
+
+pLogRegression <- function(data) {
+  
+  #df <- read.csv('data/Pilot/rebound.csv', stringsAsFactors = F)
+  
+  data$experiment <- as.factor(data$experiment)
+  
+
+    
+    print(summary(glm(formula = experiment ~ rs + ls + rf + lf, family = binomial(link = "logit"), 
+                      data = data)))
+
+  
+}
+>>>>>>> 83f30ad6c9552de32f4f3aaed7be3be0ed152204
 
 tanalyzedata<- function(AllDataRM){
   IndependentT(AllDataRM, 'Active', 'Passive', 'Reach')
