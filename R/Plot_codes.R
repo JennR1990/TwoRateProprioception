@@ -518,7 +518,9 @@ experiment2plots<- function (){
   Plotexp2CI(pause_reaches,nocursor_reaches)
   PlotallTapCI(passive_localization, active_localization)
   Reachmodel(pause_reaches[33:320,], 'Pause')
-  Reachmodel(nocursor_reaches[33:320,], 'No-Cursor')
+  #Reachmodel(nocursor_reaches[33:320,], 'No-Cursor')
+  Reachmodelnc(nocursor_reaches, nocursor_nocursors, 'No-Cursor')
+  
   dev.off()
 }
 
