@@ -1039,7 +1039,7 @@ getncTrialReachAngleAt <- function(trialdf, location='endpoint') {
 
 # OUTLIER REMOVAL ---------------------------------------------------------
 
-removeSDoutliers <- function(values, sds=1.5) {
+removeSDoutliers <- function(values, sds=2) {
   
   avg <- mean(values, na.rm=TRUE)
   std <- sd(values, na.rm=TRUE) * sds
