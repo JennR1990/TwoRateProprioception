@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 #regression for error clamp versus whatever you want
 
 plotRegressionWithCI <- function(X,Y,colors=c('#99999999','black')) {
@@ -26,9 +26,8 @@ plotRegressionWithCI <- function(X,Y,colors=c('#99999999','black')) {
 }
 
 
-##per participant fits for each group 
-=======
-<<<<<<< HEAD
+
+
 Allmeans<- function() {
   
   ActiveReach<- means(active_reaches)
@@ -110,8 +109,7 @@ means<- function (data) {
 return(Descriptives<- (data.frame(AlignedMean, AlignedMax, AlignedMin, InitialRotationMean, InitialRotationMax, InitialRotationMin, EndofIRotationMean, EndofIRotationMax, EndofIRotationMin, SecondRotationMean, SecondRotationMax, SecondRotationMin, ErrorClampMean, ErrorClampMax, ErrorClampMin, ErrorClampLateMean, ErrorClampLateMax, ErrorClampLateMin))*-1)
   }
 
-=======
->>>>>>> 5d0a03289c0bf06515b68bf561f5f4bfa9e27ec1
+##per participant fits for each group 
 ppfits<- function (groups = c('active', 'passive', 'pause', 'nocursor', 'nocursor_NI')) {
   pars<- data.frame()
   counter<- 1
@@ -149,7 +147,7 @@ pLogRegression <- function(data) {
 
   
 }
->>>>>>> 83f30ad6c9552de32f4f3aaed7be3be0ed152204
+
 
 tanalyzedata<- function(AllDataRM){
   IndependentT(AllDataRM, 'Active', 'Passive', 'Reach')
