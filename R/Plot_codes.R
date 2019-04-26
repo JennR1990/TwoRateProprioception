@@ -36,6 +36,29 @@ color5_trans <- rgb(1.0,0.4,0.0,0.2)     # transparent orange
 
 
 #Codes for actual Plots
+Plotexp1CI <- function (acd=dataset1, pad=dataset2){
+
+  PlotoutLineforexp1CI(acd)
+  PlotActiveLineReachesCI(acd)
+  PlotpassiveLineReachesCI(pad)
+
+}
+Plotexp2CI <- function (nld, ncd){
+
+  PlotoutLineforexp2CI(nld)
+  PlotPauseLineReachesCI(nld)
+  PlotnocursorLineReachesCI(ncd)
+
+}
+
+Plotexp3CI <- function (ncd, ncdI){
+  
+  PlotoutLineforexp3CI(ncd)
+  PlotnocursorLineReachesCI(ncdI, instruction = TRUE)
+  PlotnocursorLineReachesCI(ncd)
+  
+}
+
 PlotallreachesCI <- function (acd=dataset1, pad=dataset2, nld=dataset3, ncd=dataset4){
   #svglite(file='all_reaches_CI.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
   PlotoutLineforReachesCI(acd)
@@ -75,14 +98,66 @@ PlotallTapCI <- function (pl=dataset1, al=dataset2){
 #  }
 
 PlotoutLine<- function(dataset){
+  svglite(file='doc/paradigm-analysis.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
   dataset$Mean <- rowMeans(dataset[,2:length(dataset)], na.rm = TRUE)
   plot(dataset$Mean, ylim = c(-35, 35), xlab = "Trial", ylab = "Hand Direction [°]",axes=F, main = "Learning Curves", type = 'l', col= 'white')
+  rect(65,25,70,35, col = rgb(.75, .75, .75, .2), border = NULL)
+  rect(208,25,224,35, col = rgb(.75, .75, .75, .2), border = NULL)
+  rect(237,-25,240,-35, col = rgb(.75, .75, .75, .2), border = NULL)
+  rect(256,-5,288,5, col = rgb(.75, .75, .75, .2), border = NULL)
   lines(c(1,64,64,224,224,240,240),c(0,0,30,30,-30,-30,0),col=rgb(0.,0.,0.))
   lines(c(240,288),c(0,0),lty=2,col=rgb(0.,0.,0.))
   axis(2, at=c(-30,-15,0,15,30), cex.axis=0.75)
   axis(1, at=c(1,64,224,240,288), cex.axis=0.75)
+  dev.off()
+
 }
+
+PlotoutLineforexp1CI<- function(dataset){
+  color1       <- rgb(0.7,0.0,0.7)      # purple
+  color1_trans <- rgb(0.7,0.0,0.7,0.2)
+  color2       <- rgb(0.0,0.7,0.0)      # green
+  color2_trans <- rgb(0.0,0.7,0.0,0.2)  # transparent green
+  dataCIs<- trialCI(data = dataset)
+  dataset["distortion"][is.na(dataset["distortion"])] <- 0
+  dataset$Mean <- rowMeans(dataset[,2:length(dataset)], na.rm = TRUE)
+  plot(dataset$Mean, ylim = c(-35, 35), xlab = "Trial", ylab = "Hand Direction [°]",axes=F, main = "Reach Trials", type = 'l', col= 'white')
+  lines(c(1,64,64,224,224,240,240),c(0,0,30,30,-30,-30,0),col=rgb(0.,0.,0.))
+  lines(c(240,288),c(0,0),lty=2,col=rgb(0.,0.,0.))
+  legend(-10,-5,legend=c('Active Localization (N=32)','Passive Localization (N=32)'),col=c(rgb(1.0,0.4,0.0),rgb(0.7,0.0,0.7)),lty=c(1,1),lwd=c(2,2),bty='n')
+  axis(2, at=c(-30,-15,0,15,30), cex.axis=0.75)
+  axis(1, at=c(1,64,224,240,288), cex.axis=0.75, las = 2)
+}
+
+PlotoutLineforexp2CI<- function(dataset){
+  # color1       <- rgb(0.7,0.0,0.7)      # purple
+  # color1_trans <- rgb(0.7,0.0,0.7,0.2)
+  # color2       <- rgb(0.0,0.7,0.0)      # green
+  # color2_trans <- rgb(0.0,0.7,0.0,0.2)  # transparent green
+  dataCIs<- trialCI(data = dataset)
+  dataset["distortion"][is.na(dataset["distortion"])] <- 0
+  dataset$Mean <- rowMeans(dataset[,2:length(dataset)], na.rm = TRUE)
+  plot(dataset$Mean, ylim = c(-35, 35), xlab = "Trial", ylab = "Hand Direction [°]",axes=F, main = "Reach Trials", type = 'l', col= 'white')
+  lines(c(1,64,64,224,224,240,240),c(0,0,30,30,-30,-30,0),col=rgb(0.,0.,0.))
+  lines(c(240,288),c(0,0),lty=2,col=rgb(0.,0.,0.))
+  legend(-10,-5,legend=c('No Localization Group (N=32)', 'No-Cursor Group (N=32)'),col=c(rgb(0.63,0.71,0.81), rgb(0.0,0.7,0.0)),lty=c(1,1),lwd=c(2,2),bty='n')
+  axis(2, at=c(-30,-15,0,15,30), cex.axis=0.75)
+  axis(1, at=c(1,64,224,240,288), cex.axis=0.75, las = 2)
+}
+
+PlotoutLineforexp3CI<- function(dataset){
+
+  dataset["distortion"][is.na(dataset["distortion"])] <- 0
+  dataset$Mean <- rowMeans(dataset[,2:length(dataset)], na.rm = TRUE)
+  plot(dataset$Mean, ylim = c(-35, 35), xlab = "Trial", ylab = "Hand Direction [°]",axes=F, main = "Reach Trials", type = 'l', col= 'white')
+  lines(c(1,64,64,224,224,240,240),c(0,0,30,30,-30,-30,0),col=rgb(0.,0.,0.))
+  lines(c(240,288),c(0,0),lty=2,col=rgb(0.,0.,0.))
+  legend(-10,-5,legend=c( 'No-Cursor Group (N=32)', 'No-Cursor Alt Instructions (N=15)'),col=c(rgb(0.0,0.7,0.0), rgb(0.1,0.3,0.5)),lty=c(1,1),lwd=c(2,2),bty='n')
+  axis(2, at=c(-30,-15,0,15,30), cex.axis=0.75)
+  axis(1, at=c(1,64,224,240,288), cex.axis=0.75, las = 2)
+}
+
 
 PlotoutLineforReachesCI<- function(dataset){
   color1       <- rgb(0.7,0.0,0.7)      # purple
@@ -195,20 +270,27 @@ PlotActiveLineReachesCI<- function(dataset){
   
 }
 
-PlotnocursorLineReachesCI<- function(dataset){
+PlotnocursorLineReachesCI<- function(dataset, instruction = FALSE){
   color4       <- rgb(0.0,0.7,0.0)         # green
   color4_trans <- rgb(0.0,0.7,0.0,0.2)     # transparent green
+  color1       <- rgb(0.1,0.3,0.5)         # green
+  color1_trans <- rgb(0.1,0.3,0.5,0.2)     # transparent green
+  
+  
   dataCIs<- trialCI(data = dataset)
   dataCIs <- dataCIs*-1
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
   dataset$Mean <- rowMeans(dataset[,2:length(dataset)], na.rm = TRUE)
-  #plot(dataset$distortion*-1, ylim = c(-35, 35), xlab = "Trial", ylab = "Hand Direction [deg]", main = paste("Experiment", enum, "Reaches"), type = 'l')
-  
   x <- c(c(1:288), rev(c(1:288)))
   y<-c(dataCIs[33:320,1], rev(dataCIs[33:320,2]))
+  
+  if (instruction == TRUE){
+    polygon(x,y, col = color1_trans, border = NA)
+    lines(dataset$Mean[33:320]*-1, col = color1, lwd = 1.5)
+  } else {
   polygon(x,y, col = color4_trans, border = NA)
   lines(dataset$Mean[33:320]*-1, col = color4, lwd = 1.5)
-  
+  }
 }
 
 PlotpassiveLineReachesCI<- function(dataset){
@@ -302,12 +384,12 @@ t.interval = function(data, variance = var(data, na.rm = TRUE), conf.level = 0.9
 PlotoutlineTapCI<- function(dataset){
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
   dataset$Mean <- rowMeans(dataset[,2:length(dataset)], na.rm = TRUE)
-  plot(dataset$Mean, ylim = c(-35, 35), xlab = "Trial", ylab = "Hand Direction [°]",axes=F, main = "Active vs. Passive Proprioceptive Localizations", type = 'l', col = 'white')
+  plot(dataset$Mean, ylim = c(-35, 35), xlab = "Trial", ylab = "Hand Direction [°]",axes=F, main = "Hand Localization", type = 'l', col = 'white')
   lines(c(1,64,64,224,224,240,240),c(0,0,30,30,-30,-30,0),col=rgb(0.,0.,0.))
   lines(c(240,288),c(0,0),lty=2,col=rgb(0.,0.,0.))
-  legend(-5,-15,legend=c('Active Localizations (N=32)','Passive Localizations (N=32)'),col=c(rgb(1.0,0.4,0.0),rgb(0.7,0.0,0.7)),lty=c(1,1),lwd=c(2,2),bty='n')
+  legend(-8,-5,legend=c('Active Localizations (N=32)','Passive Localizations (N=32)'),col=c(rgb(1.0,0.4,0.0),rgb(0.7,0.0,0.7)),lty=c(1,1),lwd=c(2,2),bty='n')
   axis(2, at=c(-30,-15,0,15,30), cex.axis=0.75)
-  axis(1, at=c(1,64,224,240,288), cex.axis=0.75)
+  axis(1, at=c(1,64,224,240,288), cex.axis=0.75, las = 2)
   
 }
 
@@ -350,7 +432,7 @@ Reachmodelnc<- function(data, ncdata, name) {
   #reach_model<-tworatemodel(par=reach_par, distortions = data$distortion)
   reach_model1<- twoRateReachModel(par=reach_par, schedule = reaches$distortion)
   reach_model<- reach_model1[33:320,]
-  Plotmodel(data[33:320,], name)
+  Plotncmodel(data[33:320,], name)
   lines(reach_model$total*-1, col = c(rgb(.5,0.,.5)))
   lines(reach_model$slow*-1, col = rgb(0.,.5,1.))
   lines(reach_model$fast*-1, col = rgb(0.0,0.7,0.0))
@@ -378,16 +460,9 @@ Allreachmodels<- function (data1, data2, data3, data4) {
 
 Reachmodel<- function(data, name, grid = 'restricted') {
   grid <- grid
-  library(RateRate)
-  #svglite(file='reach_models_passive_pause.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
-  
   #layout(matrix(c(1,1,1,1,2,3,4,5), nrow=2, byrow=TRUE), heights=c(3,1))
-  #data$distortion<- data$distortion*-1
   reaches<- getreachesformodel(data)
-  #reach_par<- fittworatemodel(reaches = reaches$meanreaches, reaches$distortion)
   reach_par <- fitTwoRateReachModel(reaches=reaches$meanreaches, schedule=reaches$distortion, oneTwoRates=2, grid=grid, checkStability=TRUE)
-  #data$distortion<- data$distortion*-1
-  #reach_model<-tworatemodel(par=reach_par, distortions = data$distortion)
   reach_model<- twoRateReachModel(par=reach_par, schedule = reaches$distortion)
   Plotmodel(data, name)
   lines(reach_model$total*-1, col = c(rgb(.5,0.,.5)))
@@ -397,14 +472,67 @@ Reachmodel<- function(data, name, grid = 'restricted') {
 }
 
 Plotmodel<- function(dataset, name){
-  title<- sprintf('Two−Rate Model Applied to %s Reaches', name)
+  title<- sprintf('%s Reaches', name)
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
   dataset$Mean <- rowMeans(dataset[,2:ncol(dataset)], na.rm = TRUE)
-  plot(dataset$Mean*-1, ylim = c(-35, 35), xlab = "Trial",lwd= 2, ylab = "Hand Direction [deg]",col = c(rgb(0.8,0.8,0.8)), axes = FALSE, main = title, type = 'l')
+  plot(dataset$Mean*-1, ylim = c(-35, 35), xlab = "Trial",lwd= 2, ylab = "Hand Direction [°]",col = c(rgb(0.8,0.8,0.8)), axes = FALSE, main = title, type = 'l')
   lines(c(1,64,64,224,224,240,240),c(0,0,30,30,-30,-30,0),col=rgb(0.,0.,0.))
   lines(c(240,288),c(0,0),lty=2,col=rgb(0.,0.,0.))
-  legend(-5, -3,legend=c('Reach data', 'model','fast','slow'),col=c(rgb(0.44,0.51,0.57), rgb(.5,0.,.5),rgb(0.0,0.7,0.0),rgb(0.,.5,1.)),lty=c(1,1,1,1),lwd=c(2,2,2,2),bty='n')
-  axis(1, at=c(1,64,224,240,288), cex.axis=0.75)
+  legend(-10, 2,legend=c('Reach data', 'model','fast','slow'),col=c(rgb(0.44,0.51,0.57), rgb(.5,0.,.5),rgb(0.0,0.7,0.0),rgb(0.,.5,1.)),lty=c(1,1,1,1),lwd=c(2,2,2,2),bty='n')
+  axis(1, at=c(1,64,224,240,288), cex.axis=0.75, las = 2)
   axis(2, at=c(-30,-15,0,15,30), cex.axis=0.75)
   lines(dataset$Mean*-1,col = c(rgb(0.44,0.51,0.57)))
+}
+
+Plotncmodel<- function(dataset, name){
+  title<- sprintf('%s Reaches', name)
+  dataset["distortion"][is.na(dataset["distortion"])] <- 0
+  dataset$Mean <- rowMeans(dataset[,2:ncol(dataset)], na.rm = TRUE)
+  plot(dataset$Mean*-1, ylim = c(-35, 35), xlab = "Trial",lwd= 2, ylab = "Hand Direction [°]",col = c(rgb(0.8,0.8,0.8)), axes = FALSE, main = title, type = 'l')
+  lines(c(1,64,64,224,224,240,240),c(0,0,30,30,-30,-30,0),col=rgb(0.,0.,0.))
+  lines(c(240,288),c(0,0),lty=2,col=rgb(0.,0.,0.))
+  legend(-10, 2,legend=c('Reach data', ' no-cursor data', 'model','fast','slow'),col=c(rgb(0.44,0.51,0.57),rgb(0,0,0), rgb(.5,0.,.5),rgb(0.0,0.7,0.0),rgb(0.,.5,1.)),lty=c(1,1,1,1,1),lwd=c(2,2,2,2,2),bty='n', ncol = 2)
+  axis(1, at=c(1,64,224,240,288), cex.axis=0.75, las = 2)
+  axis(2, at=c(-30,-15,0,15,30), cex.axis=0.75)
+  lines(dataset$Mean*-1,col = c(rgb(0.44,0.51,0.57)))
+}
+
+experiment1plots<- function (){
+  
+  svglite(file='doc/experiment 1 Figures.svg', width=8, height=5, system_fonts=list(sans = "Arial"), pointsize = 10)
+  layout(matrix(c(1,2,3,4),nrow=2, ncol = 2, byrow=TRUE), widths=c(1.5, 1.5, 1.5, 1.5), heights=c(1,1,1,1))
+  par(oma= c(0,0,0,0))
+  Plotexp1CI(active_reaches,passive_reaches)
+  PlotallTapCI(passive_localization, active_localization)
+  Reachmodel(active_reaches, 'Active')
+  Reachmodel(passive_reaches, 'Passive')
+  dev.off()
+}
+
+
+experiment2plots<- function (){
+  
+  svglite(file='doc/experiment 2 Figures.svg', width=8, height=5, system_fonts=list(sans = "Arial"), pointsize = 10)
+  layout(matrix(c(1,2,3,4),nrow=2, ncol = 2, byrow=TRUE), widths=c(1.5, 1.5, 1.5, 1.5), heights=c(1,1,1,1))
+  par(oma= c(0,0,0,0))
+  Plotexp2CI(pause_reaches,nocursor_reaches)
+  PlotallTapCI(passive_localization, active_localization)
+  Reachmodel(pause_reaches[33:320,], 'Pause')
+  #Reachmodel(nocursor_reaches[33:320,], 'No-Cursor')
+  Reachmodelnc(nocursor_reaches, nocursor_nocursors, 'No-Cursor')
+  
+  dev.off()
+}
+
+experiment3plots<- function (){
+  
+  
+  svglite(file='doc/experiment 3 Figures.svg', width=8, height=5, system_fonts=list(sans = "Arial"), pointsize = 10)
+  layout(matrix(c(1,2,3,4),nrow=2, ncol = 2, byrow=TRUE), widths=c(1.5, 1.5, 1.5, 1.5), heights=c(1,1,1,1))
+  par(oma= c(0,0,0,0))
+  Plotexp3CI(nocursor_reaches, nocursorI_reaches)
+  PlotallTapCI(passive_localization, active_localization)
+  Reachmodelnc(nocursor_reaches, nocursor_nocursors, 'No-Cursor')
+  Reachmodelnc(nocursorI_reaches, nocursorI_nocursors, 'No-Cursor ALT Instruction')
+  dev.off()
 }
