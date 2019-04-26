@@ -16,11 +16,22 @@ PRRm[15]<- NA
 PRrm<- TCombine(passive_reaches[33:320,])
 PRrm<- PRrm[-13,]
 PRRm<-PRrm$EC_Late*-1
-PPec<- colMeans(Pause_pre_post_Prop[1:32, 2:32], na.rm = TRUE)
-plot(PPec~PRRm, col = rgb(1.0,0.4,0.0), xlab = 'Reaches', ylab = 'Localization', main = 'Localization ~ Reaches During Error Clamp', xlim = c(-12,25), ylim = c(-12,25))
+PPec<- colMeans(Pause[1:32, 2:32], na.rm = TRUE)
+plot(PPec~PRRm, col = rgb(0.7,0.0,0.7), xlab = 'Reaches', ylab = 'Localization', main = 'Localization ~ Reaches During Error Clamp', xlim = c(-12,25), ylim = c(-12,25))
 plotRegressionWithCI(PRRm,PPec,colors=c(rgb(0.7,0.0,0.7,0.2), rgb(0.7,0.0,0.7)))
-plotRegressionWithCI(ARRm,APrm$EC_Late,colors=c(rgb(1.0,0.4,0.0,0.2), rgb(1.0,0.4,0.0)))
-legend(-14,23,legend=c('Active Localization; R2 = .545','Passive Localization; R2 = .347'),col=c(rgb(1.0,0.4,0.0), rgb(0.7,0.0,0.7)),lty=c(1,1),lwd=c(2,2),bty='n')
+NCrm<- TCombine(nocursor_reaches[33:320,])
+NCRm<-NCrm$EC_Late*-1
+NCPec<- colMeans(NoCursor[1:32, 2:33], na.rm = TRUE)
+points(NCPec~NCRm, col = rgb(1.0,0.4,0.0))
+plotRegressionWithCI(NCRm,NCPec,colors=c(rgb(1.0,0.4,0.0,0.2), rgb(1.0,0.4,0.0)))
+
+
+NCIrm<- TCombine(nocursorI_reaches[33:320,])
+NCIRm<-NCIrm$EC_Late*-1
+NCIPec<- colMeans(NewNoC[1:32, 2:11], na.rm = TRUE)
+points(NCIPec~NCIRm, col = rgb(0.5,0.7,0.8))
+plotRegressionWithCI(NCIRm,NCIPec,colors=c(rgb(0.5,0.7,0.8,0.2), rgb(0.5,0.7,0.8)))
+legend(-14,23,legend=c('New No-Cursor', 'No-Cursor','No-Localization'),col=c(rgb(0.5,0.7,0.8), rgb(1.0,0.4,0.0), rgb(0.7,0.0,0.7)),lty=c(1,1,1),lwd=c(2,2,2),bty='n')
 
 
 
