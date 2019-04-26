@@ -1,5 +1,6 @@
 *.pdf
 *.html
+*.svg
 lit/*.pdf
 doc/
 data/*
@@ -34,3 +35,4 @@ vignettes/*.pdf
 rsconnect/
 .Rproj.user
 All_reach_models.svg
+reach_models_passive_pause.svg
