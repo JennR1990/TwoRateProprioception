@@ -98,14 +98,28 @@ Reachmodelnc(nocursorI_reaches, nocursorI_nocursors, 'No-Cursor')
 
 We begin with some ANOVA's and T-tests to check for significance
 ```{r}
-tanalyzedata(Ttestdata)
-library("ez")
-FullANOVA<-ANOVAanalysis(ANOVAdata)
+### Hand Localization Experiment
+#reach data
+FullANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'Active' | ANOVAdata$Experiment == 'passive' | ANOVAdata$Experiment == 'Pause'])
 FullANOVA
-tpanalyzedata(TtestPdata)
-library("ez")
+  IndependentT(AllDataRM, 'Active', 'Passive', 'Reach')
+    IndependentT(AllDataRM, 'Active', 'Pause', 'Reach')
+      IndependentT(AllDataRM, 'Pause', 'Passive', 'Reach')
+#Proprioceptive data
 FullPANOVA<-ANOVAanalysis(ANOVAPdata)
 FullPANOVA
+tpanalyzedata(TtestPdata)
+
+
+### Implicit Learning as the Slow Process Experiment
+
+FullANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor' | ANOVAdata$Experiment == 'passive' | ANOVAdata$Experiment == 'Pause'])
+FullANOVA
+  IndependentT(AllDataRM, 'Active', 'Passive', 'Reach')
+    IndependentT(AllDataRM, 'Active', 'Pause', 'Reach')
+      IndependentT(AllDataRM, 'Pause', 'Passive', 'Reach')
+
+
 ```
 Then we check to see if the data is more one-rate or two-rate on the group level
 ```{r}

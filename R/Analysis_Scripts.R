@@ -1,3 +1,31 @@
+#regression for error clamp versus whatever you want
+
+plotRegressionWithCI <- function(X,Y,colors=c('#99999999','black')) {
+  
+  # fit regression model
+  this.lm <- lm(Y ~ X, na.rm = TRUE)
+  
+  # where is the interesting data
+  pointlocs <- seq(min(X, na.rm = TRUE),max(X, na.rm = TRUE),.1)
+  
+  # get the confidence interval
+  y1 = predict( this.lm, newdata=data.frame(X=pointlocs), interval =
+                  "confidence" )[ , "upr" ]
+  y2 = predict( this.lm, newdata=data.frame(X=pointlocs), interval =
+                  "confidence" )[ , "lwr" ]
+  
+  # show the confidence interval
+  polygon(c(pointlocs,rev(pointlocs)),c(y1,rev(y2)), col=colors[1],
+          border=NA)
+  
+  # and show a regression line:
+  lines(range(X, na.rm = TRUE), predict(this.lm, newdata=data.frame(X=range(X, na.rm = TRUE))),
+        col=colors[2], lwd=2)
+  
+}
+
+
+##per participant fits for each group 
 ppfits<- function (groups = c('active', 'passive', 'pause', 'nocursor', 'nocursor_NI')) {
   pars<- data.frame()
   counter<- 1
@@ -77,8 +105,8 @@ ANOVAanalysis<- function(AllDataANOVA){
 }
 
 
-PrepdataforT<- function(adata, pasdata, paudata, ncdata, ncncdata){
-  #, ncIdata, ncncIdata
+PrepdataforT<- function(adata, pasdata, paudata, ncdata, ncncdata, ncIdata, ncncIdata){
+  #
   
   A_RM<-TCombine(adata)
   A_RM$Experiment <- rep('Active', nrow(A_RM))
@@ -95,20 +123,20 @@ PrepdataforT<- function(adata, pasdata, paudata, ncdata, ncncdata){
   ncnc_RM<-NoCursorsTCombine(ncncdata)
   ncnc_RM$Experiment <- rep('No-Cursor_No-Cursors', nrow(ncnc_RM))
   
-  # ncI_RM<-TCombine(ncIdata)
-  # ncI_RM$Experiment <- rep('No-CursorI', nrow(ncI_RM))
-  # 
-  # ncncI_RM<-NoCursorsTCombine(ncncIdata)
-  # ncncI_RM$Experiment <- rep('No-CursorI_No-Cursors', nrow(ncncI_RM))
+  ncI_RM<-TCombine(ncIdata)
+  ncI_RM$Experiment <- rep('No-CursorI', nrow(ncI_RM))
+
+  ncncI_RM<-NoCursorsTCombine(ncncIdata)
+  ncncI_RM$Experiment <- rep('No-CursorI_No-Cursors', nrow(ncncI_RM))
   
-  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM)
-  # , ncI_RM, ncncI_RM
+  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM, ncI_RM, ncncI_RM)
+  # 
   return(AllDataRM)
 }
 
-PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata) {
+PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata, ncIdata, ncncIdata) {
   
-  # , ncIdata, ncncIdata
+  # 
   
   A_RM<-ANOVAcombine(adata)
   A_RM$ID <- sprintf('ActLoc.%s',A_RM$ID)
@@ -130,16 +158,16 @@ PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata) {
   ncnc_RM$ID <- sprintf('NoCursor_No-Cursors.%s',ncnc_RM$ID)
   ncnc_RM$Experiment <- rep('No-Cursor_No-Cursors', nrow(ncnc_RM))
   
-  # ncI_RM<-ANOVAcombine(ncIdata)
-  # ncI_RM$ID <- sprintf('NoCursor.%s',ncI_RM$ID)
-  # ncI_RM$Experiment <- rep('No-CursorI', nrow(ncI_RM))
-  # 
-  # ncncI_RM<-NoCursorACombine(ncncIdata)
-  # ncncI_RM$ID <- sprintf('NoCursorI_No-Cursors.%s',ncncI_RM$ID)
-  # ncncI_RM$Experiment <- rep('No-CursorI_No-Cursors', nrow(ncncI_RM))
+  ncI_RM<-ANOVAcombine(ncIdata)
+  ncI_RM$ID <- sprintf('NoCursor.%s',ncI_RM$ID)
+  ncI_RM$Experiment <- rep('No-CursorI', nrow(ncI_RM))
+
+  ncncI_RM<-NoCursorACombine(ncncIdata)
+  ncncI_RM$ID <- sprintf('NoCursorI_No-Cursors.%s',ncncI_RM$ID)
+  ncncI_RM$Experiment <- rep('No-CursorI_No-Cursors', nrow(ncncI_RM))
   
-  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM)
-  #, ncI_RM, ncncI_RM
+  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM, ncI_RM, ncncI_RM)
+  #
   return(AllDataRM)
   
 }
