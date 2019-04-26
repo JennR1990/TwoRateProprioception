@@ -1,6 +1,7 @@
 *.pdf
 *.html
 *.svg
+*.xlsx
 lit/*.pdf
 doc/
 data/*
