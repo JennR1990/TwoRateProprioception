@@ -18,11 +18,16 @@ getallTapparticipants<- function(experiment) {
   } else if (experiment == 6) {
     participants<- c(1, 3:9)
     distortion <-  c(rep(0,64),rep(30,160), rep(-30,16), rep(NA, 48))
+  } else if (experiment == 7) {
+    participants<- c(1:2)
+    distortion <-  c(rep(0,64),rep(30,160), rep(-30,16), rep(NA, 48))
   }
   
   expangles<- data.frame(distortion)
   
   for (participant in participants){
+    print(participant)
+    print(experiment)
     partiangles<-getparticipantpropdata(participant = participant, experiment = experiment)
     #baselining only works for experiment 1&5, 2 & 4 only have 32 aligned in total 
     #so they would need different amount of trials
@@ -43,7 +48,7 @@ baselineTapbyaligned<- function(df, experiment) {
   
   #take an average of the aligned data where distortion = 0
   #subtract that from reach angles
-  if (experiment == 1| experiment == 5) {
+  if (experiment == 1| experiment == 5 | experiment == 7) {
     bias<-mean(df$Tapdeviations[32:64], na.rm = TRUE)
     df$Tapdeviations[1:288]<- df$Tapdeviations[1:288] - bias
   } else if (experiment == 2 | experiment == 4) {
@@ -78,11 +83,11 @@ getparticipantpropdata<- function(participant, experiment) {
 }
 
 getpropfilenames<- function (ppn, expn) {
-  
   if (expn == 1) {
+    print('hi')
     tasknumbers <- c(1:4)
     
-    expfolder <- '../Time Model/Time Model Variant 1 Selected Data/'
+    expfolder <- 'Time Model Variant 1 Selected Data/'
     
     ppfolder <- sprintf('time_model1_%d/',ppn)
     
@@ -140,6 +145,19 @@ getpropfilenames<- function (ppn, expn) {
     for (taskno in tasknumbers) {
       
       filenames <- c(filenames, sprintf('%s%s%d_%d__time_model4_Prop_selected.txt',expfolder,ppfolder,ppn,taskno))
+    }
+  } else if (expn == 7) {
+    tasknumbers <- c(1:4)
+    
+    expfolder <- '../Time Model Good Data/Time Model Terminal Raw Data/'
+    
+    ppfolder <- sprintf('time_model1_%d/',ppn)
+    filenames <- c()
+    
+    for (taskno in tasknumbers) {
+      
+      filenames <- c(filenames, sprintf('%s%s%d_%d__time_model_Prop_selected.txt',expfolder,ppfolder,ppn,taskno))
+      print(filenames)
     }
   }
   return(filenames) 
