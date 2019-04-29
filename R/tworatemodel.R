@@ -249,6 +249,9 @@ getallparticipants<- function(experiment) {
   } else if (experiment == 5) {
     participants<- c(1:32)
     distortion <-  c(rep(0,64),rep(30,160), rep(-30,16), rep(NA, 48))
+  } else if (experiment == 7) {
+    participants<- c(2)
+    distortion <-  c(rep(0,64),rep(30,160), rep(-30,16), rep(NA, 48))
   }
   
   expangles<- data.frame(distortion)
@@ -264,7 +267,7 @@ getallparticipants<- function(experiment) {
     print(experiment)
     if (experiment == 3) {
     expangles[,sprintf('p%d',participant)] <- baselinedangles$reachdeviations[1:480]
-    } else if (experiment %in% c(1,5)) {
+    } else if (experiment %in% c(1,5,7)) {
       expangles[,sprintf('p%d',participant)] <- baselinedangles$reachdeviations[1:288]  
     } else if (experiment %in% c(2,4)) {
       print(nrow(expangles))
@@ -285,7 +288,7 @@ baselinebyaligned<- function(df, experiment) {
   
   #take an average of the aligned data where distortion = 0
   #subtract that from reach angles
-  if (experiment == 1| experiment == 5) {
+  if (experiment == 1| experiment == 5| experiment == 7) {
     bias<-mean(df$reachdeviations[32:64], na.rm = TRUE)
     df$reachdeviations[1:288]<- df$reachdeviations[1:288] - bias
   } else if (experiment == 2 | experiment == 4) {
@@ -387,6 +390,18 @@ getfilenames<- function (ppn, expn) {
     for (taskno in tasknumbers) {
       
       filenames <- c(filenames, sprintf('%s%s%d_%d__time_model4_reach_selected.txt',expfolder,ppfolder,ppn,taskno))
+    }
+  } else if (expn == 7) {
+    tasknumbers <- c(1:4)
+    
+    expfolder <- '../Time Model Good Data/Time Model Terminal Raw Data/'
+    
+    ppfolder <- sprintf('time_model1_%d/',ppn)
+    filenames <- c()
+    
+    for (taskno in tasknumbers) {
+      
+      filenames <- c(filenames, sprintf('%s%s%d_%d__time_model_reach_selected.txt',expfolder,ppfolder,ppn,taskno))
     }
   }
   return(filenames) 
