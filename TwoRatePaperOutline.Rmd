@@ -44,12 +44,13 @@ downloadOSFdata()
 pause_reaches<- Loaddata(group='pause')
 active_reaches<- Loaddata(group='active')
 passive_reaches<- Loaddata()
+terminal_reaches<- Loaddata(group='terminal')
 nocursor_reaches<- Loaddata(group='nocursor')
 nocursorI_reaches<- Loaddata(group='nocursor', task = 'NI_reaches')
 passive_localization<- Loaddata(task = 'localization')
 active_localization<- Loaddata(group='active', task = 'localization')
+terminal_localization<- Loaddata(group='terminal', task = 'localization')
 nocursor_nocursors<- Loaddata(group='nocursor', task = 'nocursors')
-
 nocursorI_nocursors<- Loaddata(group='nocursor', task = 'nocursors_NI')
 
 
