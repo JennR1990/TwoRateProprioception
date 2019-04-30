@@ -52,8 +52,6 @@ active_localization<- Loaddata(group='active', task = 'localization')
 terminal_localization<- Loaddata(group='terminal', task = 'localization')
 nocursor_nocursors<- Loaddata(group='nocursor', task = 'nocursors')
 nocursorI_nocursors<- Loaddata(group='nocursor', task = 'nocursors_NI')
-
-
 ```
 
 ## Analysis
@@ -127,7 +125,7 @@ ANOVAPdata<- PrepdataforPropANOVA(active_localization,passive_localization)
 Ttestdata<- PrepdataforT(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors, nocursorI_reaches[33:320,], nocursorI_nocursors)  
 
 TtestPdata<- PrepdataforPropT(active_localization, passive_localization)
-Allmeans<- Allmeans()
+
 ```
 
 Here is a list of planned figures with their potential message:
@@ -173,6 +171,16 @@ Reachmodelnc(nocursorI_reaches, nocursorI_nocursors, 'No-Cursor')
 
 We begin with some ANOVA's and T-tests to check for significance
 ```{r}
+### Create Data to use for ANOVA's and t-tests
+
+ANOVAdata<- PrepdataforANOVA(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,],nocursor_nocursors,nocursorI_reaches[33:320,],nocursorI_nocursors)
+ANOVAPdata<- PrepdataforPropANOVA(active_localization,passive_localization)
+TtestPdata<- PrepdataforPropT(active_localization, passive_localization)
+Ttestdata<- PrepdataforT(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors, nocursorI_reaches[33:320,],nocursorI_nocursors)
+
+
+
+
 ### Hand Localization Experiment
 #reach data
 FullANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'Active' | ANOVAdata$Experiment == 'passive' | ANOVAdata$Experiment == 'Pause'])
@@ -195,6 +203,11 @@ FullANOVA
       IndependentT(AllDataRM, 'Pause', 'Passive', 'Reach')
 
 
+      
+### Random Descriptive Stats
+      Allmeans<- Allmeans()
+      
+      
 ```
 Then we check to see if the data is more one-rate or two-rate on the group level
 ```{r}
