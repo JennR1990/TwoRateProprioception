@@ -23,15 +23,11 @@ downloadOSFdata <- function(update=FALSE) {
              'passive_localization.csv' = 'https://osf.io/27v54/download',
              'passive_reaches.csv'      = 'https://osf.io/mq5av/download',
              'pause_reaches.csv'        = 'https://osf.io/q59b3/download',
-<<<<<<< HEAD
              'terminal_reaches.csv'     = 'https://osf.io/2vdxr/download',
-             'terminal_localization.csv'= 'https://osf.io/s3p2x/download')
-=======
+             'terminal_localization.csv'= 'https://osf.io/s3p2x/download',
              'NewNoC_pre_post_Prop.csv' = 'https://osf.io/ukbgr/download',
              'NoCursor_pre_post_Prop.csv' = 'https://osf.io/tjqrw/download',
              'Pause_pre_post_Prop.csv'  = 'https://osf.io/r3fvw/download')
->>>>>>> 02c9ef6622c512eca485d7001babf5e79d2fff35
-  
   # check if data directory exists and create if necessary:
   # (data should come from OSF, so is not on github)
   if (!dir.exists('data')) {
