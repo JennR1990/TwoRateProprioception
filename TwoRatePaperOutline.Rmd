@@ -153,20 +153,20 @@ Poneratevstworate(nocursorI_reaches, 'No-Cursor_I')
 
 
 ```{r real figures}
-svglite(file='Experiment_1_Figures.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
+svglite(file='doc/Experiment_1_Figures.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
 layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
 Plotexp1CI(active_reaches, passive_reaches, pause_reaches)
 PlotallTapCI(passive_localization, active_localization)
 Reachmodel(active_reaches, 'Active')
 Reachmodel(passive_reaches, 'Passive')
 dev.off()
-svglite(file='Experiment_1a_Figures.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
+svglite(file='doc/Experiment_1a_Figures.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
 layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
 RegressionPLot(1)
 dev.off()
 
 
-svglite(file='Experiment_2_Figures.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
+svglite(file='doc/Experiment_2_Figures.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
 layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
 Plotexp2CI(nocursor_reaches, nocursorI_reaches, pause_reaches)
 RegressionPLot(2)
