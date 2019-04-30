@@ -290,12 +290,6 @@ PrepdataforPropT<- function(adata, pasdata, paudata, ncdata, ncncdata){
   A_RM$Experiment <- rep('Active', nrow(A_RM))
   Pas_RM<-TCombine(pasdata)
   Pas_RM$Experiment <- rep('Passive', nrow(Pas_RM))
-  # Pau_RM<-TCombine(paudata)
-  # Pau_RM$Experiment <- rep('Pause', nrow(Pau_RM))
-  # nc_RM<-TCombine(ncdata)
-  # nc_RM$Experiment <- rep('No-Cursor', nrow(nc_RM))
-  # ncnc_RM<-NoCursorsTCombine(ncncdata)
-  # ncnc_RM$Experiment <- rep('No-Cursor_No-Cursors', nrow(ncnc_RM))
   AllDataRM<- rbind(A_RM, Pas_RM)
   return(AllDataRM)
 }
@@ -309,19 +303,6 @@ PrepdataforPropANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata) {
   Pas_RM<-ANOVAcombine(pasdata)
   Pas_RM$ID <- sprintf('PasLoc.%s',Pas_RM$ID)
   Pas_RM$Experiment <- rep('Passive', nrow(Pas_RM))
-  # 
-  # Pau_RM<-ANOVAcombine(paudata)
-  # Pau_RM$ID <- sprintf('Pause.%s',Pau_RM$ID)
-  # Pau_RM$Experiment <- rep('Pause', nrow(Pau_RM))
-  # 
-  # nc_RM<-ANOVAcombine(ncdata)
-  # nc_RM$ID <- sprintf('NoCursor.%s',nc_RM$ID)
-  # nc_RM$Experiment <- rep('No-Cursor', nrow(nc_RM))
-  # 
-  # ncnc_RM<-NoCursorACombine(ncncdata)
-  # ncnc_RM$ID <- sprintf('NoCursor_No-Cursors.%s',ncnc_RM$ID)
-  # ncnc_RM$Experiment <- rep('No-Cursor_No-Cursors', nrow(ncnc_RM))
-  
   AllDataRM<- rbind(A_RM, Pas_RM)
   
   return(AllDataRM)
@@ -483,24 +464,10 @@ bootstrapModelAICsjENN <- function(group='active', bootstraps=1) {
     oneRateMSE<-oneRateReachModelError(onerate_par, reaches = medReaches, distortions = distortion*-1)
     print(oneRateMSE<- mean((medReaches - onerate_model$output*-1)^2))
     print(twoRateMSE<- mean((medReaches - tworate_model$output*-1)^2))
-    
-    # twoRateFit <- fitTwoRateReachModel(reaches=medReaches, schedule=schedule, oneTwoRates=2, grid='restricted', checkStability=TRUE)
-    # oneRateFit <- fitTwoRateReachModel(reaches=medReaches, schedule=schedule, oneTwoRates=1, grid='restricted', checkStability=TRUE)
-    # 
-    # 
-    # twoRateMSE <- twoRateReachModelErrors(par=twoRateFit, reaches=medReaches, schedule=schedule)
-    # oneRateMSE <- twoRateReachModelErrors(par=oneRateFit, reaches=medReaches, schedule=schedule)
-    
-    
+
     twoRateAIC <- (2*4) + InOb*log(twoRateMSE) + C
     oneRateAIC <- (2*2) + InOb*log(oneRateMSE) + C
-    
-    # print(twoRateFit)
-    # print(twoRateMSE)
-    # print(twoRateAIC)
-    # print(oneRateFit)
-    # print(oneRateMSE)
-    # print(oneRateAIC)
+
     
     cat(sprintf('1-rate AIC: %0.2f  %s  2-rate AIC: %0.2f\n',oneRateAIC,c('>=', ' <')[as.numeric(oneRateAIC<twoRateAIC)+1],twoRateAIC))
     
@@ -549,13 +516,6 @@ bootstrapModelAICs <- function(data, bootstraps=1) {
     
     twoRateAIC <- (2*4) + InOb*log(twoRateMSE) + C
     oneRateAIC <- (2*2) + InOb*log(oneRateMSE) + C
-    
-    # print(twoRateFit)
-    # print(twoRateMSE)
-    # print(twoRateAIC)
-    # print(oneRateFit)
-    # print(oneRateMSE)
-    # print(oneRateAIC)
     
     cat(sprintf('1-rate AIC: %0.2f  %s  2-rate AIC: %0.2f\n',oneRateAIC,c('>=', ' <')[as.numeric(oneRateAIC<twoRateAIC)+1],twoRateAIC))
     
@@ -628,9 +588,3 @@ randomcodes<- function () {
   
   
 }
-
-
-
-# data$distortion<- data$distortion*-1
-# reach_model<-tworatemodel(par=reach_par, distortions = data$distortion)
-#cohensD(EC_Late[AllDataRM$Experiment == 'Active'],EC_Late[AllDataRM$Experiment == 'No-Cursor'], data = AllDataRM)
