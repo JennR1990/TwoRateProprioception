@@ -39,96 +39,23 @@ source('R/Analysis_Scripts.R')
 source('R/Plot_codes.R', encoding = 'UTF-8')
 source('R/Repeated_Measures_Combine.R')
 source('R/shared.R')
+library('ez')
 loadcolors()
 downloadOSFdata()
 pause_reaches<- Loaddata(group='pause')
+Pause<- Loaddata(group='pause', task = 'pre_post_Prop')
 active_reaches<- Loaddata(group='active')
 passive_reaches<- Loaddata()
-terminal_reaches<- Loaddata(group='terminal')
 nocursor_reaches<- Loaddata(group='nocursor')
 nocursorI_reaches<- Loaddata(group='nocursor', task = 'NI_reaches')
 passive_localization<- Loaddata(task = 'localization')
 active_localization<- Loaddata(group='active', task = 'localization')
-terminal_localization<- Loaddata(group='terminal', task = 'localization')
 nocursor_nocursors<- Loaddata(group='nocursor', task = 'nocursors')
+NoCursor<- Loaddata(group='NoCursor', task = 'pre_post_Prop')
 nocursorI_nocursors<- Loaddata(group='nocursor', task = 'nocursors_NI')
-
-
+NewNoC<- Loaddata(group='NewNoC', task = 'pre_post_Prop')
 ```
 
-## Analysis
-```{r}
-#Experiment 1:
-Ttestdata<- PrepdataforT(active_reaches, passive_reaches)
-ANOVAdata<- PrepdataforANOVA(active_reaches, passive_reaches)
-TtestPdata<- PrepdataforPropT(active_localization, passive_localization)
-ANOVAPdata<- PrepdataforPropANOVA(active_localization,passive_localization)
-tanalyzedata(Ttestdata)
-library("ez")
-FullANOVA<-ANOVAanalysis(ANOVAdata)
-FullANOVA
-tpanalyzedata(TtestPdata)
-library("ez")
-FullPANOVA<-ANOVAanalysis(ANOVAPdata)
-FullPANOVA
-
-#Experiment 2:
-ANOVAdata<- PrepdataforANOVA(pause_reaches[33:320,], nocursor_reaches[33:320,])
-ANOVAPdata<- PrepdataforPropANOVA(active_localization,passive_localization)
-Ttestdata<- PrepdataforT(pause_reaches[33:320,], nocursor_reaches[33:320,])
-TtestPdata<- PrepdataforPropT(active_localization, passive_localization)
-tanalyzedata(Ttestdata)
-library("ez")
-FullANOVA<-ANOVAanalysis(ANOVAdata)
-FullANOVA
-tpanalyzedata(TtestPdata)
-library("ez")
-FullPANOVA<-ANOVAanalysis(ANOVAPdata)
-FullPANOVA
-
-
-#Experiment 3
-ANOVAdata<- PrepdataforANOVA(nocursor_reaches[33:320,],nocursorI_reaches[33:320,])
-ANOVAPdata<- PrepdataforPropANOVA(active_localization,passive_localization)
-Ttestdata<- PrepdataforT(nocursor_reaches[33:320,],  nocursorI_reaches[33:320,])#, nocursorI_nocursors,nocursor_nocursors,
-TtestPdata<- PrepdataforPropT(active_localization, passive_localization)
-tanalyzedata(Ttestdata)
-library("ez")
-FullANOVA<-ANOVAanalysis(ANOVAdata)
-FullANOVA
-tpanalyzedata(TtestPdata)
-library("ez")
-FullPANOVA<-ANOVAanalysis(ANOVAPdata)
-FullPANOVA
-
-ANOVAdata<- PrepdataforANOVA(nocursor_nocursors,nocursorI_nocursors)
-ANOVAPdata<- PrepdataforPropANOVA(active_localization,passive_localization)
-Ttestdata<- PrepdataforT(nocursor_nocursors,  nocursorI_nocursors)#, nocursorI_nocursors,nocursor_nocursors,
-TtestPdata<- PrepdataforPropT(active_localization, passive_localization)
-tanalyzedata(Ttestdata)
-library("ez")
-FullANOVA<-ANOVAanalysis(ANOVAdata)
-FullANOVA
-tpanalyzedata(TtestPdata)
-library("ez")
-FullPANOVA<-ANOVAanalysis(ANOVAPdata)
-FullPANOVA
-
-
-
-
-ANOVAdata<- PrepdataforANOVA(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,],nocursorI_reaches[33:320,])
-ANOVAPdata<- PrepdataforPropANOVA(active_localization,passive_localization)
-Ttestdata<- PrepdataforT(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,],  nocursorI_reaches[33:320,])#, nocursorI_nocursors,nocursor_nocursors,
-
-nocursorI_nocursors<- Loaddata(group='nocursor', task = 'NI_nocursors')
-ANOVAdata<- PrepdataforANOVA(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors, nocursorI_reaches[33:320,], nocursorI_nocursors)  
-ANOVAPdata<- PrepdataforPropANOVA(active_localization,passive_localization)
-Ttestdata<- PrepdataforT(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors, nocursorI_reaches[33:320,], nocursorI_nocursors)  
-
-TtestPdata<- PrepdataforPropT(active_localization, passive_localization)
-Allmeans<- Allmeans()
-```
 
 Here is a list of planned figures with their potential message:
 library("svglite", lib.loc="~/R/win-library/3.4")
@@ -173,9 +100,16 @@ Reachmodelnc(nocursorI_reaches, nocursorI_nocursors, 'No-Cursor')
 
 We begin with some ANOVA's and T-tests to check for significance
 ```{r}
+### Create Data to use for ANOVA's and t-tests
+
+ANOVAdata<- PrepdataforANOVA(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,],nocursor_nocursors,nocursorI_reaches[33:320,],nocursorI_nocursors)
+ANOVAPdata<- PrepdataforPropANOVA(active_localization,passive_localization)
+TtestPdata<- PrepdataforPropT(active_localization, passive_localization)
+Ttestdata<- PrepdataforT(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors, nocursorI_reaches[33:320,],nocursorI_nocursors)
+
 ### Hand Localization Experiment
 #reach data
-FullANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'Active' | ANOVAdata$Experiment == 'passive' | ANOVAdata$Experiment == 'Pause'])
+FullANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'Active' | ANOVAdata$Experiment == 'Passive' | ANOVAdata$Experiment == 'Pause',])
 FullANOVA
   IndependentT(AllDataRM, 'Active', 'Passive', 'Reach')
     IndependentT(AllDataRM, 'Active', 'Pause', 'Reach')
@@ -188,29 +122,58 @@ tpanalyzedata(TtestPdata)
 
 ### Implicit Learning as the Slow Process Experiment
 
-FullANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor' | ANOVAdata$Experiment == 'passive' | ANOVAdata$Experiment == 'Pause'])
+FullANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor' | ANOVAdata$Experiment == 'No-CursorI' | ANOVAdata$Experiment == 'Pause',])
 FullANOVA
-  IndependentT(AllDataRM, 'Active', 'Passive', 'Reach')
-    IndependentT(AllDataRM, 'Active', 'Pause', 'Reach')
-      IndependentT(AllDataRM, 'Pause', 'Passive', 'Reach')
+  IndependentT(AllDataRM, 'No-Cursor', 'No-CursorI', 'Reach')
+    IndependentT(AllDataRM, 'No-CursorI', 'Pause', 'Reach')
+      IndependentT(AllDataRM, 'Pause', 'No-Cursor', 'Reach')
 
 
+      
+### Random Descriptive Stats
+      Allmeans<- Allmeans()
+      
+      
 ```
 Then we check to see if the data is more one-rate or two-rate on the group level
 ```{r}
 Active_AICS<- bootstrapModelAICs(active_reaches)
-Active_AIC<- bootstrapModelAICsjENN()
 Passive_AICS<- bootstrapModelAICs(passive_reaches)
-Passive_AIC<- bootstrapModelAICsjENN('passive')
 Pause_AICS<- bootstrapModelAICs(pause_reaches)
-Pause_AIC<- bootstrapModelAICsjENN('pause')
 NC_AICS<- bootstrapModelAICs(nocursor_reaches)
-NC_AIC<- bootstrapModelAICsjENN('nocursor')
 NCI_AICS<- bootstrapModelAICs(nocursorI_reaches)
 ```
 Check to see if the data is more one-rate or two-rate on the participant level
 ```{r}
+Poneratevstworate(active_reaches, 'Active')
+Poneratevstworate(passive_reaches)
+Poneratevstworate(pause_reaches, 'Pause')
+Poneratevstworate(nocursor_reaches, 'No-Cursor')
+Poneratevstworate(nocursorI_reaches, 'No-Cursor_I')
+```
 
+
+```{r real figures}
+svglite(file='doc/Experiment_1_Figures.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
+layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
+Plotexp1CI(active_reaches, passive_reaches, pause_reaches)
+PlotallTapCI(passive_localization, active_localization)
+Reachmodel(active_reaches, 'Active')
+Reachmodel(passive_reaches, 'Passive')
+dev.off()
+svglite(file='doc/Experiment_1a_Figures.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
+layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
+RegressionPLot(1)
+dev.off()
+
+
+svglite(file='doc/Experiment_2_Figures.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
+layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
+Plotexp2CI(nocursor_reaches, nocursorI_reaches, pause_reaches)
+RegressionPLot(2)
+Reachmodelnc(nocursor_reaches, nocursor_nocursors, 'No-Cursor')
+Reachmodelnc(nocursorI_reaches, nocursorI_nocursors, 'No-Cursor')
+dev.off()
 
 
 ```

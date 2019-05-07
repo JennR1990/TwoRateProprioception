@@ -1,61 +1,141 @@
 ##Figures we want to make often##
 
-loadcolors<- function(){
-color1       <- rgb(0.7,0.0,0.7)         # purple
-color1_trans <- rgb(0.7,0.0,0.7,0.2)     # transparent purple
-color2       <- rgb(0.63,0.71,0.81)      # blue-gray
-color2_trans <- rgb(0.63,0.71,0.81,0.2)  # transparent blue-gray
-color4       <- rgb(0.0,0.7,0.0)         # green
-color4_trans <- rgb(0.0,0.7,0.0,0.2)     # transparent green
-color5       <- rgb(1.0,0.4,0.0)         # orange
-color5_trans <- rgb(1.0,0.4,0.0,0.2)     # transparent orange
+loadcolors <- function() {
+  ##Active
+  colorA       <<- rgb(1.0, 0.4, 0.0)         # orange
+  colorA_trans <<- rgb(1.0, 0.4, 0.0, 0.2)     # transparent orange
+  
+  ## Passive
+  colorPA       <<- rgb(0.0, 0.7, 0.0)         # green
+  colorPA_trans <<- rgb(0.0, 0.7, 0.0, 0.2)     # transparent green
+  
+  
+  ## Pause
+  colorNL       <<- rgb(0.63, 0.71, 0.81)      # blue-gray
+  colorNL_trans <<- rgb(0.63, 0.71, 0.81, 0.2)  # transparent blue-gray
+  
+  
+  ##No-Cursor
+  colorNC       <<- rgb(0.0, 0.7, 0.0)         # green
+  colorNC_trans <<- rgb(0.0, 0.7, 0.0, 0.2)     # transparent green
+  
+  ##New No-Cursor
+  colorNNC       <<- rgb(0.1,0.3,0.5)         # purple
+  colorNNC_trans <<- rgb(0.1,0.3,0.5, 0.2)     # transparent purple
 }
 
 
-##individual traces with the average over that
-# PlotPausedata(pause_reaches)
-# PlotActivedata(active_reaches)
-# PlotPassivedata(passive_reaches)
-# Plotnocursordata(nocursor_reaches)
-##reaches overlayed with confidence intervals
-#PlotallreachesCI(active_reaches,passive_reaches, pause_reaches,nocursor_reaches)
 
 
-##localizations overlayed with confidence intervals
-#PlotallTapCI(passive_localization, active_localizations)
+RegressionPLot <- function(exp) {
+  if (exp == 1) {
+    PRrm <- TCombine(passive_reaches)
+    PRRm <- PRrm$EC_Late * -1
+    PPec <- TCombine(passive_localization)
+    PPec <- PPec$EC_Late
+    plot(
+      PPec ~ PRRm,
+      col = colorPA,
+      xlab = 'Reaches',
+      ylab = 'Localization',
+      main = 'Localization ~ Reaches During Error Clamp',
+      xlim = c(-12, 25),
+      ylim = c(-12, 25),
+      axes = FALSE
+    )
+    axis(2, at=c(-30,-20,-10,0,10,20,30), cex.axis=0.75)
+    axis(1, at=c(-30,-20-10,0,10,20,30), cex.axis=0.75)
+    plotRegressionWithCI(PRRm, PPec, colors = c(colorPA_trans, colorPA))
+    
+    
+    Arm <- TCombine(active_reaches)
+    ARm <- Arm$EC_Late * -1
+    APec <- TCombine(active_localization)
+    APec <- APec$EC_Late
+    points(APec ~ ARm, col = colorA)
+    plotRegressionWithCI(ARm, APec, colors = c(colorA_trans, colorA))
+    
+    PARrm <- TCombine(pause_reaches[33:320, ])
+    PARrm <- PARrm[-13, ]
+    PARRm <- PARrm$EC_Late * -1
+    PAPec <- colMeans(Pause[1:32, 2:32], na.rm = TRUE)
+    points(PAPec ~ PARRm, col = colorNL)
+    plotRegressionWithCI(PARRm, PAPec, colors = c(colorNL_trans, colorNL))
+    legend(
+      -14,
+      23,
+      legend = c(
+        'Passive Localization',
+        'Active Localization',
+        'No-Localization'
+      ),
+      col = c(rgb(0.5, 0.7, 0.8), rgb(1.0, 0.4, 0.0), rgb(0.7, 0.0, 0.7)),
+      lty = c(1, 1, 1),
+      lwd = c(2, 2, 2),
+      bty = 'n'
+    )
+    
+    
+    
+  } else if (exp == 2) {
+    PRrm <- TCombine(pause_reaches[33:320, ])
+    PRrm <- PRrm[-13, ]
+    PRRm <- PRrm$EC_Late * -1
+    PPec <- colMeans(Pause[1:32, 2:32], na.rm = TRUE)
+    plot(
+      PPec ~ PRRm,
+      col = rgb(0.7, 0.0, 0.7),
+      xlab = 'Reaches',
+      ylab = 'Localization',
+      main = 'Localization ~ Reaches During Error Clamp',
+      xlim = c(-12, 25),
+      ylim = c(-12, 25),
+      axes = FALSE
+    )
+    axis(2, at=c(-20,-10,0,10,20), cex.axis=0.75)
+    axis(1, at=c(-10,0,10,20,30), cex.axis=0.75)
+    plotRegressionWithCI(PRRm, PPec, colors = c(rgb(0.7, 0.0, 0.7, 0.2), rgb(0.7, 0.0, 0.7)))
+    NCrm <- TCombine(nocursor_reaches[33:320, ])
+    NCRm <- NCrm$EC_Late * -1
+    NCPec <- colMeans(NoCursor[1:32, 2:33], na.rm = TRUE)
+    points(NCPec ~ NCRm, col = rgb(1.0, 0.4, 0.0))
+    plotRegressionWithCI(NCRm, NCPec, colors = c(rgb(1.0, 0.4, 0.0, 0.2), rgb(1.0, 0.4, 0.0)))
+    NCIrm <- TCombine(nocursorI_reaches[33:320, ])
+    NCIRm <- NCIrm$EC_Late * -1
+    NCIPec <- colMeans(NewNoC[1:32, 2:11], na.rm = TRUE)
+    points(NCIPec ~ NCIRm, col = rgb(0.5, 0.7, 0.8))
+    plotRegressionWithCI(NCIRm, NCIPec, colors = c(rgb(0.5, 0.7, 0.8, 0.2), rgb(0.5, 0.7, 0.8)))
+    legend(
+      -14,
+      23,
+      legend = c('New No-Cursor', 'No-Cursor', 'No-Localization'),
+      col = c(rgb(0.5, 0.7, 0.8), rgb(1.0, 0.4, 0.0), rgb(0.7, 0.0, 0.7)),
+      lty = c(1, 1, 1),
+      lwd = c(2, 2, 2),
+      bty = 'n'
+    )
+    
+  }
+}
 
-##reach data avergaed for similar training and their model output
-#Reachmodel(pp_reaches)
-#Reachmodelnc(acnc_reaches,nocursor_nocursors)
-
-
-# > library("svglite", lib.loc="~/R/win-library/3.4")
-# > svglite(file='active_p_fig.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
-# > plot(Active_p, type='l')
-# > dev.off()
 
 
 #Codes for actual Plots
-Plotexp1CI <- function (acd=dataset1, pad=dataset2){
+Plotexp1CI <- function (acd, pad, nld ){
 
   PlotoutLineforexp1CI(acd)
   PlotActiveLineReachesCI(acd)
   PlotpassiveLineReachesCI(pad)
-
-}
-Plotexp2CI <- function (nld, ncd){
-
-  PlotoutLineforexp2CI(nld)
   PlotPauseLineReachesCI(nld)
-  PlotnocursorLineReachesCI(ncd)
 
 }
 
-Plotexp3CI <- function (ncd, ncdI){
-  
-  PlotoutLineforexp3CI(ncd)
+Plotexp2CI <- function (acd,ncd, ncdI, nld){
+  PlotoutLineforexp1aCI(acd)
+  #PlotoutLineforexp2CI(nld)
   PlotnocursorLineReachesCI(ncdI, instruction = TRUE)
   PlotnocursorLineReachesCI(ncd)
+  PlotPauseLineReachesCI(nld)
   
 }
 
@@ -76,26 +156,7 @@ PlotallTapCI <- function (pl=dataset1, al=dataset2){
   PlotpassiveLineTapCI(pl)
   #dev.off()
 }
-#  PlotallreachesCI <- function (dataset1, dataset2, dataset3, dataset4){
-#    datasets<- c(dataset1, dataset2, dataset3, dataset4)
-#    
-#    PlotoutLineforReachesCI(dataset1)
-# for (group in datasets) {
-#   if ('active_reaches' == group) {
-#     PlotActiveLineReachesCI(group)
-#   } else if ('passive_reaches' == group) {
-#     PlotpassiveLineReachesCI(group)
-#   } else if ('pause_reaches' == group) {
-#     PlotpauseLineReachesCI(group)
-#   }else if ('nocursor_reaches' == group) {
-#     PlotnocursorLineReachesCI(group)
-# #   }
-# # }
-# 
-# 
-# 
-# return(datasets)
-#  }
+
 
 PlotoutLine<- function(dataset){
   svglite(file='doc/paradigm-analysis.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
@@ -115,45 +176,37 @@ PlotoutLine<- function(dataset){
 }
 
 PlotoutLineforexp1CI<- function(dataset){
-  color1       <- rgb(0.7,0.0,0.7)      # purple
-  color1_trans <- rgb(0.7,0.0,0.7,0.2)
-  color2       <- rgb(0.0,0.7,0.0)      # green
-  color2_trans <- rgb(0.0,0.7,0.0,0.2)  # transparent green
   dataCIs<- trialCI(data = dataset)
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
   dataset$Mean <- rowMeans(dataset[,2:length(dataset)], na.rm = TRUE)
   plot(dataset$Mean, ylim = c(-35, 35), xlab = "Trial", ylab = "Hand Direction [°]",axes=F, main = "Reach Trials", type = 'l', col= 'white')
   lines(c(1,64,64,224,224,240,240),c(0,0,30,30,-30,-30,0),col=rgb(0.,0.,0.))
   lines(c(240,288),c(0,0),lty=2,col=rgb(0.,0.,0.))
-  legend(-10,-5,legend=c('Active Localization (N=32)','Passive Localization (N=32)'),col=c(rgb(1.0,0.4,0.0),rgb(0.7,0.0,0.7)),lty=c(1,1),lwd=c(2,2),bty='n')
+  legend(-10,-5,legend=c('Active Localization (N=32)','Passive Localization (N=32)','No Localization Group (N=32)'),col=c(rgb(1.0,0.4,0.0),rgb(0.7,0.0,0.7),rgb(0.63,0.71,0.81)),lty=c(1,1,1),lwd=c(2,2,2),bty='n')
+  axis(2, at=c(-30,-15,0,15,30), cex.axis=1)
+  axis(1, at=c(1,64,224,240,288), cex.axis=1, las = 2)
+}
+
+PlotoutLineforexp1aCI<- function(dataset){
+  dataCIs<- trialCI(data = dataset)
+  dataset["distortion"][is.na(dataset["distortion"])] <- 0
+  dataset$Mean <- rowMeans(dataset[,2:length(dataset)], na.rm = TRUE)
+  plot(dataset$Mean, ylim = c(-35, 35), xlab = "Trial", ylab = "Hand Direction [°]",axes=F, main = "Reach Trials", type = 'l', col= 'white')
+  lines(c(1,64,64,224,224,240,240),c(0,0,30,30,-30,-30,0),col=rgb(0.,0.,0.))
+  lines(c(240,288),c(0,0),lty=2,col=rgb(0.,0.,0.))
+  legend(-10,-5,legend=c('No-Cursor Group (N=32)', 'No-Cursor Alt Instructions (N=15)', 'No Localization Group (N=32)'),col=c(rgb(0.0,0.7,0.0), rgb(0.1,0.3,0.5), rgb(0.63,0.71,0.81)),lty=c(1,1,1),lwd=c(2,2,2),bty='n')
   axis(2, at=c(-30,-15,0,15,30), cex.axis=0.75)
   axis(1, at=c(1,64,224,240,288), cex.axis=0.75, las = 2)
 }
 
 PlotoutLineforexp2CI<- function(dataset){
-  # color1       <- rgb(0.7,0.0,0.7)      # purple
-  # color1_trans <- rgb(0.7,0.0,0.7,0.2)
-  # color2       <- rgb(0.0,0.7,0.0)      # green
-  # color2_trans <- rgb(0.0,0.7,0.0,0.2)  # transparent green
-  dataCIs<- trialCI(data = dataset)
-  dataset["distortion"][is.na(dataset["distortion"])] <- 0
-  dataset$Mean <- rowMeans(dataset[,2:length(dataset)], na.rm = TRUE)
-  plot(dataset$Mean, ylim = c(-35, 35), xlab = "Trial", ylab = "Hand Direction [°]",axes=F, main = "Reach Trials", type = 'l', col= 'white')
-  lines(c(1,64,64,224,224,240,240),c(0,0,30,30,-30,-30,0),col=rgb(0.,0.,0.))
-  lines(c(240,288),c(0,0),lty=2,col=rgb(0.,0.,0.))
-  legend(-10,-5,legend=c('No Localization Group (N=32)', 'No-Cursor Group (N=32)'),col=c(rgb(0.63,0.71,0.81), rgb(0.0,0.7,0.0)),lty=c(1,1),lwd=c(2,2),bty='n')
-  axis(2, at=c(-30,-15,0,15,30), cex.axis=0.75)
-  axis(1, at=c(1,64,224,240,288), cex.axis=0.75, las = 2)
-}
-
-PlotoutLineforexp3CI<- function(dataset){
 
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
   dataset$Mean <- rowMeans(dataset[,2:length(dataset)], na.rm = TRUE)
   plot(dataset$Mean, ylim = c(-35, 35), xlab = "Trial", ylab = "Hand Direction [°]",axes=F, main = "Reach Trials", type = 'l', col= 'white')
   lines(c(1,64,64,224,224,240,240),c(0,0,30,30,-30,-30,0),col=rgb(0.,0.,0.))
   lines(c(240,288),c(0,0),lty=2,col=rgb(0.,0.,0.))
-  legend(-10,-5,legend=c( 'No-Cursor Group (N=32)', 'No-Cursor Alt Instructions (N=15)'),col=c(rgb(0.0,0.7,0.0), rgb(0.1,0.3,0.5)),lty=c(1,1),lwd=c(2,2),bty='n')
+  legend(-10,-5,legend=c( 'No-Cursor Group (N=32)', 'No-Cursor Alt Instructions (N=15)', 'No Localization Group (N=32)'),col=c(rgb(0.0,0.7,0.0), rgb(0.1,0.3,0.5), rgb(0.63,0.71,0.81)),lty=c(1,1,1),lwd=c(2,2,2),bty='n')
   axis(2, at=c(-30,-15,0,15,30), cex.axis=0.75)
   axis(1, at=c(1,64,224,240,288), cex.axis=0.75, las = 2)
 }
@@ -498,11 +551,11 @@ Plotncmodel<- function(dataset, name){
 }
 
 experiment1plots<- function (){
-  
-  svglite(file='doc/experiment 1 Figures.svg', width=8, height=5, system_fonts=list(sans = "Arial"), pointsize = 10)
+  svglite(file='doc/Experiment_1_Figures.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
   layout(matrix(c(1,2,3,4),nrow=2, ncol = 2, byrow=TRUE), widths=c(1.5, 1.5, 1.5, 1.5), heights=c(1,1,1,1))
-  par(oma= c(0,0,0,0))
-  Plotexp1CI(active_reaches,passive_reaches)
+  #par(mai = c(1, 0.1, 0.1, 0.1))
+  par(mai = c(.32, 0.32, 0.22, 0.22))
+  Plotexp1CI(active_reaches, passive_reaches, pause_reaches)
   PlotallTapCI(passive_localization, active_localization)
   Reachmodel(active_reaches, 'Active')
   Reachmodel(passive_reaches, 'Passive')
@@ -512,27 +565,23 @@ experiment1plots<- function (){
 
 experiment2plots<- function (){
   
-  svglite(file='doc/experiment 2 Figures.svg', width=8, height=5, system_fonts=list(sans = "Arial"), pointsize = 10)
-  layout(matrix(c(1,2,3,4),nrow=2, ncol = 2, byrow=TRUE), widths=c(1.5, 1.5, 1.5, 1.5), heights=c(1,1,1,1))
-  par(oma= c(0,0,0,0))
-  Plotexp2CI(pause_reaches,nocursor_reaches)
-  PlotallTapCI(passive_localization, active_localization)
-  Reachmodel(pause_reaches[33:320,], 'Pause')
-  #Reachmodel(nocursor_reaches[33:320,], 'No-Cursor')
+  svglite(file='doc/Experiment_2_Figures.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
+  layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
+  par(mai = c(.32, 0.32, 0.22, 0.22))
+  Plotexp2CI(active_reaches,nocursor_reaches, nocursorI_reaches, pause_reaches)
+  RegressionPLot(2)
   Reachmodelnc(nocursor_reaches, nocursor_nocursors, 'No-Cursor')
-  
+  Reachmodelnc(nocursorI_reaches, nocursorI_nocursors, 'New No-Cursor')
   dev.off()
 }
 
-experiment3plots<- function (){
+experiment1aplots<- function (){
   
   
-  svglite(file='doc/experiment 3 Figures.svg', width=8, height=5, system_fonts=list(sans = "Arial"), pointsize = 10)
-  layout(matrix(c(1,2,3,4),nrow=2, ncol = 2, byrow=TRUE), widths=c(1.5, 1.5, 1.5, 1.5), heights=c(1,1,1,1))
-  par(oma= c(0,0,0,0))
-  Plotexp3CI(nocursor_reaches, nocursorI_reaches)
-  PlotallTapCI(passive_localization, active_localization)
-  Reachmodelnc(nocursor_reaches, nocursor_nocursors, 'No-Cursor')
-  Reachmodelnc(nocursorI_reaches, nocursorI_nocursors, 'No-Cursor ALT Instruction')
+  svglite(file='doc/Experiment_1a_Figures.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
+  layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
+  par(mai = c(.32, 0.32, 0.22, 0.22))
+  RegressionPLot(1)
   dev.off()
 }
+

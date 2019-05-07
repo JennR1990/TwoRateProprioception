@@ -13,6 +13,9 @@ PRRm<-PRrm$EC_Late*-1
 PRRm[15]<- NA
 
 
+
+
+
 PRrm<- TCombine(passive_reaches[33:320,])
 PRrm<- PRrm[-13,]
 PRRm<-PRrm$EC_Late*-1
@@ -72,7 +75,7 @@ which(cooksdP==max(cooksdP))
 plotRegressionWithCI <- function(X,Y,colors=c('#99999999','black')) {
   
   # fit regression model
-  this.lm <- lm(Y ~ X, na.rm = TRUE)
+  this.lm <- lm(Y ~ X)
   
   # where is the interesting data
   pointlocs <- seq(min(X, na.rm = TRUE),max(X, na.rm = TRUE),.1)

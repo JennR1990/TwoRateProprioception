@@ -29,7 +29,6 @@ downloadOSFdata <- function(update=FALSE) {
              'NoCursor_pre_post_Prop.csv' = 'https://osf.io/tjqrw/download',
              'Pause_pre_post_Prop.csv'  = 'https://osf.io/r3fvw/download')
 
-  
   # check if data directory exists and create if necessary:
   # (data should come from OSF, so is not on github)
   if (!dir.exists('data')) {
