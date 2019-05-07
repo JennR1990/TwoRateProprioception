@@ -244,7 +244,7 @@ getallparticipants<- function(experiment) {
     distortion <- as.numeric(c(temp$rotation))
     # distortion <-  c(rep(0,49),rep(-30,12), rep(-15,12), rep(0,12),rep(-15,12), rep(15,12), rep(0,12), rep(0,12), rep(15,12), rep(15,12), rep(-30,12), rep(-30,12), rep(0,12), rep(-30,12), rep(0,12), rep(30,12), rep(0,12), rep(0,12), rep(30,12), rep(-15,12), rep(-15,12), rep(30,12), rep(30,12), rep(15,12), rep(-15,12), rep(0,12), rep(-15,12), rep(-30,12), rep(30,12), rep(0,12), rep(0,12), rep(15,12), rep(30,12), rep(-30,12), rep(15,12), rep(0,12), rep(0,11))
   } else if (experiment == 4) {
-    participants<- c(1:32)
+    participants<- c(1:15)
     distortion <-  c(rep(0,96),rep(30,160), rep(-30,16), rep(NA, 48))
   } else if (experiment == 5) {
     participants<- c(1:32)
@@ -370,7 +370,7 @@ getfilenames<- function (ppn, expn) {
   } else if (expn == 4) {
     tasknumbers <- c(1:5)
     
-    expfolder <- '../Time Model Good Data/Time Model Variant 4 Selected Data/'
+    expfolder <- '../Time Model Good Data/Time Model - No Cursor New Instructions Selected Data/'
     
     ppfolder <- sprintf('time_model_nocursor_%d/',ppn)
     filenames <- c()
@@ -760,7 +760,7 @@ getallncparticipants<- function(experiment) {
     distortion <- as.numeric(c(temp$rotation))
     # distortion <-  c(rep(0,49),rep(-30,12), rep(-15,12), rep(0,12),rep(-15,12), rep(15,12), rep(0,12), rep(0,12), rep(15,12), rep(15,12), rep(-30,12), rep(-30,12), rep(0,12), rep(-30,12), rep(0,12), rep(30,12), rep(0,12), rep(0,12), rep(30,12), rep(-15,12), rep(-15,12), rep(30,12), rep(30,12), rep(15,12), rep(-15,12), rep(0,12), rep(-15,12), rep(-30,12), rep(30,12), rep(0,12), rep(0,12), rep(15,12), rep(30,12), rep(-30,12), rep(15,12), rep(0,12), rep(0,11))
   } else if (experiment == 4) {
-    participants<- c(1:32)
+    participants<- c(1:15)
     distortion <-  c(rep(0,32),rep(30,160), rep(-30,16), rep(NA, 48))
   } else if (experiment == 5) {
     participants<- c(1:32)
@@ -873,7 +873,7 @@ getncfilenames<- function (ppn, expn) {
   } else if (expn == 4) {
     tasknumbers <- c(2:5)
     
-    expfolder <- '../Time Model Good Data/Time Model Variant 4 Selected Data/'
+    expfolder <- '../Time Model Good Data/Time Model - No Cursor New Instructions Selected Data/'
     
     ppfolder <- sprintf('time_model_nocursor_%d/',ppn)
     filenames <- c()

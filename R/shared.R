@@ -18,19 +18,17 @@ downloadOSFdata <- function(update=FALSE) {
              'active_reaches.csv'       = 'https://osf.io/ejxy9/download',
              'nocursor_nocursors.csv'   = 'https://osf.io/5b8s9/download',
              'nocursor_reaches.csv'     = 'https://osf.io/vmnx7/download',
-             'nocursor_NI_nocursors.csv'   = 'https://osf.io/c5vpu/download',
-             'nocursor_NI_reaches.csv'     = 'https://osf.io/h4tqp/download',
+             'nocursor_NI_nocursors.csv'   = 'https://osf.io/y4k2x/download',
+             'nocursor_NI_reaches.csv'     = 'https://osf.io/grnxh/download',
              'passive_localization.csv' = 'https://osf.io/27v54/download',
              'passive_reaches.csv'      = 'https://osf.io/mq5av/download',
              'pause_reaches.csv'        = 'https://osf.io/q59b3/download',
-<<<<<<< HEAD
-             'terminal_reaches.csv'     = 'https://osf.io/2vdxr/download',
-             'terminal_localization.csv'= 'https://osf.io/s3p2x/download')
-=======
-             'NewNoC_pre_post_Prop.csv' = 'https://osf.io/ukbgr/download',
+             # 'terminal_reaches.csv'     = 'https://osf.io/2vdxr/download',
+             # 'terminal_localization.csv'= 'https://osf.io/s3p2x/download',
+             'NewNoC_pre_post_Prop.csv' = 'https://osf.io/r69v5/download',
              'NoCursor_pre_post_Prop.csv' = 'https://osf.io/tjqrw/download',
              'Pause_pre_post_Prop.csv'  = 'https://osf.io/r3fvw/download')
->>>>>>> 02c9ef6622c512eca485d7001babf5e79d2fff35
+
   
   # check if data directory exists and create if necessary:
   # (data should come from OSF, so is not on github)
