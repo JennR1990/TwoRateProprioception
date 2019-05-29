@@ -544,7 +544,7 @@ Plotncmodel<- function(dataset, name){
   plot(dataset$Mean*-1, ylim = c(-35, 35), xlab = "Trial",lwd= 2, ylab = "Hand Direction [°]",col = c(rgb(0.8,0.8,0.8)), axes = FALSE, main = title, type = 'l')
   lines(c(1,64,64,224,224,240,240),c(0,0,30,30,-30,-30,0),col=rgb(0.,0.,0.))
   lines(c(240,288),c(0,0),lty=2,col=rgb(0.,0.,0.))
-  legend(-10, 2,legend=c('Reach data', ' no-cursor data', 'model','fast','slow'),col=c(rgb(0.44,0.51,0.57),rgb(0,0,0), rgb(.5,0.,.5),rgb(0.0,0.7,0.0),rgb(0.,.5,1.)),lty=c(1,1,1,1,1),lwd=c(2,2,2,2,2),bty='n', ncol = 2)
+  legend(-10, 2,legend=c('Reach data', 'No-cursor data', 'model','fast','slow'),col=c(rgb(0.44,0.51,0.57),rgb(0,0,0), rgb(.5,0.,.5),rgb(0.0,0.7,0.0),rgb(0.,.5,1.)),lty=c(1,1,1,1,1),lwd=c(2,2,2,2,2),bty='n', ncol = 2)
   axis(1, at=c(1,64,224,240,288), cex.axis=0.75, las = 2)
   axis(2, at=c(-30,-15,0,15,30), cex.axis=0.75)
   lines(dataset$Mean*-1,col = c(rgb(0.44,0.51,0.57)))
