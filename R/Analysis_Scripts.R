@@ -77,7 +77,7 @@ Allmeans<- function() {
   NocursorNCIReach<- NCmeans(nocursorI_nocursors)
   NocursorNCIReach$Experiment<- "NocursorINC"
   Allmeans<- rbind(ActiveReach, ActiveProp, PassiveReach, PassiveProp, PauseReach, NocursorReach, NocursorNCReach, NocursorIReach, NocursorNCIReach)
-  write.csv(Allmeans, 'ana/All Experiments Descriptive Stats.csv', quote = FALSE, row.names = FALSE )
+  write.csv(Allmeans, 'ana/All Experiments Descriptive Stats_updated.csv', quote = FALSE, row.names = FALSE )
   
   return(Allmeans)
   

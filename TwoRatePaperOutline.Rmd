@@ -112,9 +112,9 @@ Ttestdata<- PrepdataforT(active_reaches, passive_reaches, pause_reaches[33:320,]
 #reach data
 FullANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'Active' | ANOVAdata$Experiment == 'Passive' | ANOVAdata$Experiment == 'Pause',])
 FullANOVA
-  IndependentT(AllDataRM, 'Active', 'Passive', 'Reach')
-    IndependentT(AllDataRM, 'Active', 'Pause', 'Reach')
-      IndependentT(AllDataRM, 'Pause', 'Passive', 'Reach')
+  IndependentT(Ttestdata, 'Active', 'Passive', 'Reach')
+    IndependentT(Ttestdata, 'Active', 'Pause', 'Reach')
+      IndependentT(Ttestdata, 'Pause', 'Passive', 'Reach')
 #Proprioceptive data
 FullPANOVA<-ANOVAanalysis(ANOVAPdata)
 FullPANOVA
@@ -125,9 +125,9 @@ tpanalyzedata(TtestPdata)
 
 FullANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor' | ANOVAdata$Experiment == 'No-CursorI' | ANOVAdata$Experiment == 'Pause',])
 FullANOVA
-  IndependentT(AllDataRM, 'No-Cursor', 'No-CursorI', 'Reach')
-    IndependentT(AllDataRM, 'No-CursorI', 'Pause', 'Reach')
-      IndependentT(AllDataRM, 'Pause', 'No-Cursor', 'Reach')
+  IndependentT(Ttestdata, 'No-Cursor', 'No-CursorI', 'Reach')
+    IndependentT(Ttestdata, 'No-CursorI', 'Pause', 'Reach')
+      IndependentT(Ttestdata, 'Pause', 'No-Cursor', 'Reach')
 
 
       
