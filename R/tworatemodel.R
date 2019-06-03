@@ -256,6 +256,7 @@ getallparticipants<- function(experiment) {
   
   expangles<- data.frame(distortion)
   
+  print(participants)
   for (participant in participants){
     
     partiangles<-getparticipantdata(participant = participant, experiment = experiment)
@@ -274,7 +275,7 @@ getallparticipants<- function(experiment) {
       expangles[,sprintf('p%d',participant)] <- baselinedangles$reachdeviations[1:320]
     }
   }
-  outputfilename<- sprintf('time_model%d_Reaches.csv', experiment)
+  outputfilename<- sprintf('time_model%d_Updated_Reaches.csv', experiment)
   
   write.csv(expangles, file = outputfilename,  row.names = F, quote = F)
 }
