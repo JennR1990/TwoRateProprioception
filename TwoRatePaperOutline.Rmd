@@ -1,10 +1,10 @@
 ---
 title: "Two Rate Proprioception Paper"
 output:
-  word_document: default
-  pdf_document: default
   html_document:
     df_print: paged
+  pdf_document: default
+  word_document: default
 ---
 
 # Overview
@@ -39,7 +39,10 @@ source('R/Analysis_Scripts.R')
 source('R/Plot_codes.R', encoding = 'UTF-8')
 source('R/Repeated_Measures_Combine.R')
 source('R/shared.R')
+source('R/tworatemodel.R')
 library('ez')
+library('RateRate')
+library('svglite')
 loadcolors()
 downloadOSFdata()
 
@@ -110,8 +113,8 @@ Ttestdata<- PrepdataforT(active_reaches, passive_reaches, pause_reaches[33:320,]
 
 ### Hand Localization Experiment
 #reach data
-FullANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'Active' | ANOVAdata$Experiment == 'Passive' | ANOVAdata$Experiment == 'Pause',])
-FullANOVA
+FullHLANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'Active' | ANOVAdata$Experiment == 'Passive' | ANOVAdata$Experiment == 'Pause',])
+FullHLANOVA
   IndependentT(Ttestdata, 'Active', 'Passive', 'Reach')
     IndependentT(Ttestdata, 'Active', 'Pause', 'Reach')
       IndependentT(Ttestdata, 'Pause', 'Passive', 'Reach')
@@ -123,14 +126,21 @@ tpanalyzedata(TtestPdata)
 
 ### Implicit Learning as the Slow Process Experiment
 
-FullANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor' | ANOVAdata$Experiment == 'No-CursorI' | ANOVAdata$Experiment == 'Pause',])
-FullANOVA
+FullILANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor' | ANOVAdata$Experiment == 'No-CursorI' | ANOVAdata$Experiment == 'Pause',])
+FullILANOVA
   IndependentT(Ttestdata, 'No-Cursor', 'No-CursorI', 'Reach')
     IndependentT(Ttestdata, 'No-CursorI', 'Pause', 'Reach')
       IndependentT(Ttestdata, 'Pause', 'No-Cursor', 'Reach')
-
-
+FullNCANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor_No-Cursors' | ANOVAdata$Experiment == 'No-CursorI_No-Cursors',])
+FullNCANOVA
+  IndependentT(Ttestdata, 'No-Cursor_No-Cursors', 'No-CursorI_No-Cursors', 'No-Cursors')
+  
+### Comparing Learning Rates Across Test Trials
       
+FullANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'Active' | ANOVAdata$Experiment == 'Passive' | ANOVAdata$Experiment == 'No-Cursor' | ANOVAdata$Experiment == 'No-CursorI' | ANOVAdata$Experiment == 'Pause',])
+FullANOVA
+      
+
 ### Random Descriptive Stats
       Allmeans<- Allmeans()
       

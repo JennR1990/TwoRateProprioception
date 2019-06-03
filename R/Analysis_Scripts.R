@@ -24,7 +24,7 @@ averagedprepost<- function (dataset = c('Pause', 'NoCursor', 'NewNoC')) {
 }
 
 
-# ----- My Sub header
+# My Sub header -----
 
 
 #regression for error clamp versus whatever you want
@@ -542,10 +542,11 @@ Poneratevstworate<- function (data, group = 'Passive') {
   Data1AIC <- 2*P1 + N*log(Data1MSE) + C
   Data2AIC <- 2*P2 + N*log(Data2MSE) + C
   count<-sum(Data1AIC<Data2AIC)
-  AICs<- c('One Rate Model'=Data1AIC,'Two Rate Model'=Data2AIC)
-  write.csv(AICs, sprintf("AICs for one and two rate reach data.csv"), row.names = TRUE, quote = FALSE)
+  #AICs<- c('One Rate Model'=Data1AIC,'Two Rate Model'=Data2AIC)
+  AICs<- cbind(Data1AIC, Data2AIC)
+  write.csv(AICs, sprintf("AICs for one and two rate %s reach data.csv", group), row.names = TRUE, quote = FALSE)
   #relativeLikelihoods <- exp((min(AICs) - AICs)/2)
-  return(sprintf('the number of participants with a higher AIC for two rates are %d',count))
+  #return(sprintf('the number of participants with a higher AIC for two rates are %d',count))
 }
 
 
