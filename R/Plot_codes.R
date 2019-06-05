@@ -227,19 +227,17 @@ PlotoutLineforReachesCI<- function(dataset){
   axis(2, at=c(-30,-15,0,15,30), cex.axis=0.75)
   axis(1, at=c(1,64,224,240,288), cex.axis=0.75)
 }
-
-PlotoutLineforPassiveReaches<- function(dataset){
-  color1       <- rgb(0.7,0.0,0.7)      # purple
-  color1_trans <- rgb(0.7,0.0,0.7,0.2)
-  color2       <- rgb(0.0,0.7,0.0)      # green
-  color2_trans <- rgb(0.0,0.7,0.0,0.2)  # transparent green
+'Passive Localization Group (N=32)'
+PlotoutLineforPassiveReaches<- function(dataset, exp, color){
+  labels<-list ('Active Localization Group (N=32)','Passive Localization Group (N=32)','No Localization Group (N=32)', 'No-Cursor Group (N=32)','Instructed No-Cursor Group (N=32)')
+  colorlist<- list(colorA, colorPA, colorNL, colorNC, colorNNC)
   dataCIs<- trialCI(data = dataset)
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
   dataset$Mean <- rowMeans(dataset[,2:length(dataset)], na.rm = TRUE)
   plot(dataset$Mean, ylim = c(-35, 35), xlab = "Trial", ylab = "Hand Direction [°]",axes=F, main = "Learning Curves", type = 'l', col= 'white')
   lines(c(1,64,64,224,224,240,240),c(0,0,30,30,-30,-30,0),col=rgb(0.,0.,0.))
   lines(c(240,288),c(0,0),lty=2,col=rgb(0.,0.,0.))
-  legend(-5,-15,legend=c('Passive Localization Group (N=32)'),col=c(rgb(0.7,0.0,0.7)),lty=c(1),lwd=c(2),bty='n')
+  legend(-5,-15,legend= labels[exp],col=unlist(colorlist[color]),lty=c(1),lwd=c(2),bty='n')
   axis(2, at=c(-30,-15,0,15,30), cex.axis=0.75)
   axis(1, at=c(1,64,224,240,288), cex.axis=0.75)
 }
@@ -291,20 +289,15 @@ PlotoutLineforPauseReaches<- function(dataset){
   axis(2, at=c(-30,-15,0,15,30), cex.axis=0.75)
   axis(1, at=c(1,64,224,240,288), cex.axis=0.75)
 }
-PlotPauseLineReachesCI<- function(dataset){
-  color2       <- rgb(0.63,0.71,0.81)      # blue-gray
-  color2_trans <- rgb(0.63,0.71,0.81,0.2)  # transparent blue-gray
+PlotReachesCI<- function(dataset, color, trans){
   dataCIs<- trialCI(data = dataset)
   dataCIs <- dataCIs*-1
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
   dataset$Mean <- rowMeans(dataset[,2:length(dataset)], na.rm = TRUE)
-  #plot(dataset$distortion*-1, ylim = c(-35, 35), xlab = "Trial", ylab = "Hand Direction [deg]", main = paste("Experiment", enum, "Reaches"), type = 'l')
-  
   x <- c(c(1:288), rev(c(1:288)))
   y<-c(dataCIs[33:320,1], rev(dataCIs[33:320,2]))
-  polygon(x,y, col = color2_trans, border = NA)
-  lines(dataset$Mean[33:320]*-1, col = color2, lwd = 1.5)
-  
+  polygon(x,y, col = translist[trans], border = NA)
+  lines(dataset$Mean[33:320]*-1, col = colorlist[color], lwd = 1.5)
 }
 
 PlotActiveLineReachesCI<- function(dataset){

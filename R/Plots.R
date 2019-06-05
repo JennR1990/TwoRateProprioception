@@ -122,7 +122,7 @@ RegressionPLot <- function(exp) {
     PPec <- colMeans(Pause[1:32, 2:32], na.rm = TRUE)
     plot(
       PPec ~ PRRm,
-      col = rgb(0.7, 0.0, 0.7),
+      col = colorNL,
       xlab = 'Reaches',
       ylab = 'Localization',
       main = 'Localization ~ Reaches During Error Clamp',
@@ -156,6 +156,32 @@ RegressionPLot <- function(exp) {
   }
 }
 
+PlotReachesCI<- function(dataset, color, trans){
+  colorlist<- list(colorA, colorPA, colorNL, colorNC, colorNNC)
+  translist<- list(colorA_trans, colorPA_trans, colorNL_trans, colorNC_trans, colorNNC_trans)
+  dataCIs<- trialCI(data = dataset)
+  dataCIs <- dataCIs*-1
+  dataset["distortion"][is.na(dataset["distortion"])] <- 0
+  dataset$Mean <- rowMeans(dataset[,2:length(dataset)], na.rm = TRUE)
+  x <- c(c(1:288), rev(c(1:288)))
+  y<-c(dataCIs[,1], rev(dataCIs[,2]))
+  polygon(x,y, col = translist[trans], border = NA)
+  lines(dataset$Mean*-1, col = colorlist[color], lwd = 1.5)
+}
+
+PlotoutLine<- function(dataset, exp, color){
+  labels<-list ('Active Localization Group (N=32)','Passive Localization Group (N=32)','No Localization Group (N=32)', 'No-Cursor Group (N=32)','Instructed No-Cursor Group (N=32)')
+  colorlist<- list(colorA, colorPA, colorNL, colorNC, colorNNC)
+  dataCIs<- trialCI(data = dataset)
+  dataset["distortion"][is.na(dataset["distortion"])] <- 0
+  dataset$Mean <- rowMeans(dataset[,2:length(dataset)], na.rm = TRUE)
+  plot(dataset$Mean, ylim = c(-35, 35), xlab = "Trial", ylab = "Hand Direction [°]",axes=F, main = "Learning Curves", type = 'l', col= 'white')
+  lines(c(1,64,64,224,224,240,240),c(0,0,30,30,-30,-30,0),col=rgb(0.,0.,0.))
+  lines(c(240,288),c(0,0),lty=2,col=rgb(0.,0.,0.))
+  legend(-5,-15,legend= labels[exp],col=unlist(colorlist[color]),lty=c(1),lwd=c(2),bty='n')
+  axis(2, at=c(-30,-15,0,15,30), cex.axis=0.75)
+  axis(1, at=c(1,64,224,240,288), cex.axis=0.75)
+}
 
 Reachmodel<- function(data, name, grid = 'restricted') {
   grid <- grid
@@ -383,8 +409,8 @@ PlotpassiveLineReachesCI<- function(dataset){
 
 
 PlotPausedata<- function (data) {
-  PlotoutLineforPauseReaches(pause_reaches)
-  PlotPauseLineReachesCI(pause_reaches)
+  PlotoutLine(pause_reaches,3,3)
+  PlotReachesCI(pause_reaches,3,3)
   PauseR<- pause_reaches[33:320,]*-1
   participants <- 2:33
   for (pn in participants) {
@@ -393,8 +419,8 @@ PlotPausedata<- function (data) {
   PlotPauseLineReachesCI(pause_reaches)
 }
 PlotActivedata<- function (data) {
-  PlotoutLineforactiveReaches(active_reaches)
-  PlotActiveLineReachesCI(active_reaches)
+  PlotoutLine(active_reaches,1,1)
+  PlotReachesCI(active_reaches,1,1)
   activeR<- active_reaches*-1
   participants <- 2:33
   for (pn in participants) {
@@ -403,21 +429,21 @@ PlotActivedata<- function (data) {
   PlotActiveLineReachesCI(active_reaches)
 }
 PlotPassivedata<- function (data) {
-  PlotoutLineforPassiveReaches(passive_reaches)
-  PlotpassiveLineReachesCI(passive_reaches)
+  PlotoutLine(passive_reaches,2,2)
+  PlotReachesCI(passive_reaches,2,2)
   PassiveR<- passive_reaches*-1
   participants <- 2:33
   for (pn in participants) {
     lines(PassiveR[,pn], col = rgb(0.0,0.7,0.0,0.06))
   }
-  PlotpassiveLineReachesCI(passive_reaches)
+  PlotReachesCI(passive_reaches,2,2)
 }
 Plotnocursordata<- function (data) {
-  PlotoutLinefornocursorReaches(data)
-  PlotnocursorLineReachesCI(data)
+  PlotoutLine(data[33:320,],4,4)
+  PlotReachesCI(data[33:320,],4,4)
   nocursorR<- data[33:320,]*-1
   str(nocursorR)
-  participants <- 2:11
+  participants <- 2:17
   for (pn in participants) {
     lines(nocursorR[,pn], col = rgb(0.0,0.7,0.0,0.6))
   }
