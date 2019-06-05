@@ -244,7 +244,7 @@ getallparticipants<- function(experiment) {
     distortion <- as.numeric(c(temp$rotation))
     # distortion <-  c(rep(0,49),rep(-30,12), rep(-15,12), rep(0,12),rep(-15,12), rep(15,12), rep(0,12), rep(0,12), rep(15,12), rep(15,12), rep(-30,12), rep(-30,12), rep(0,12), rep(-30,12), rep(0,12), rep(30,12), rep(0,12), rep(0,12), rep(30,12), rep(-15,12), rep(-15,12), rep(30,12), rep(30,12), rep(15,12), rep(-15,12), rep(0,12), rep(-15,12), rep(-30,12), rep(30,12), rep(0,12), rep(0,12), rep(15,12), rep(30,12), rep(-30,12), rep(15,12), rep(0,12), rep(0,11))
   } else if (experiment == 4) {
-    participants<- c(1:15)
+    participants<- c(1:16)
     distortion <-  c(rep(0,96),rep(30,160), rep(-30,16), rep(NA, 48))
   } else if (experiment == 5) {
     participants<- c(1:32)
@@ -761,7 +761,7 @@ getallncparticipants<- function(experiment) {
     distortion <- as.numeric(c(temp$rotation))
     # distortion <-  c(rep(0,49),rep(-30,12), rep(-15,12), rep(0,12),rep(-15,12), rep(15,12), rep(0,12), rep(0,12), rep(15,12), rep(15,12), rep(-30,12), rep(-30,12), rep(0,12), rep(-30,12), rep(0,12), rep(30,12), rep(0,12), rep(0,12), rep(30,12), rep(-15,12), rep(-15,12), rep(30,12), rep(30,12), rep(15,12), rep(-15,12), rep(0,12), rep(-15,12), rep(-30,12), rep(30,12), rep(0,12), rep(0,12), rep(15,12), rep(30,12), rep(-30,12), rep(15,12), rep(0,12), rep(0,11))
   } else if (experiment == 4) {
-    participants<- c(1:15)
+    participants<- c(1:16)
     distortion <-  c(rep(0,32),rep(30,160), rep(-30,16), rep(NA, 48))
   } else if (experiment == 5) {
     participants<- c(1:32)
