@@ -102,7 +102,7 @@ RegressionPLot <- function(exp) {
     plotRegressionWithCI(NCRm, NCPec, colors = c(rgb(1.0, 0.4, 0.0, 0.2), rgb(1.0, 0.4, 0.0)))
     NCIrm <- TCombine(nocursorI_reaches[33:320, ])
     NCIRm <- NCIrm$EC_Late * -1
-    NCIPec <- colMeans(NewNoC[1:32, 2:11], na.rm = TRUE)
+    NCIPec <- colMeans(NewNoC[1:32, 2:17], na.rm = TRUE)
     points(NCIPec ~ NCIRm, col = rgb(0.5, 0.7, 0.8))
     plotRegressionWithCI(NCIRm, NCIPec, colors = c(rgb(0.5, 0.7, 0.8, 0.2), rgb(0.5, 0.7, 0.8)))
     legend(
