@@ -36,7 +36,7 @@ By comparing the trial-by-trial changes in the four paradigms, we can investigat
 Preparing Data for Figures and Analysis:
 ```{r}
 source('R/Analysis_Scripts.R')
-source('R/Plot_codes.R', encoding = 'UTF-8')
+source('R/Plots.R', encoding = 'UTF-8')
 source('R/Repeated_Measures_Combine.R')
 source('R/shared.R')
 source('R/tworatemodel.R')
@@ -68,11 +68,11 @@ library("svglite", lib.loc="~/R/win-library/3.4")
 PlotoutLine(active_reaches)
 - Fig 3: A,B,C,D) one subplot for each group showing reach deviations in the four main phases: individual traces, 95% confidence intervals, median (show quality of the data)
 ```{r}
-PlotPausedata(pause_reaches) #individual traces for pause data
-PlotActivedata(active_reaches)
-PlotPassivedata(passive_reaches)
-Plotnocursordata(nocursor_reaches)
-Plotnocursordata(nocursorI_reaches)
+PlotIndividualdata(pause_reaches[33:320,],3) #individual traces for pause data
+PlotIndividualdata(active_reaches,1)
+PlotIndividualdata(passive_reaches,2)
+PlotIndividualdata(nocursor_reaches[33:320,],4)
+PlotIndividualdata(nocursorI_reaches[33:320,],5)
 ```
 - Fig 4: A,B,C,D) one subplot for each group showing the median reach deviations in the four main phases, plus the two-rate model fit and it's fast and slow process (show quality of the fits)
 ```{r}
@@ -86,7 +86,7 @@ Reachmodel(passive_reaches, 'Passive')
 ```
 - Fig 5: comparing reach deviations over time, (show differences between the groups, or should this go in a previous figure? seems it would get cluttered)
 ```{r}
-PlotallreachesCI(active_reaches,passive_reaches, pause_reaches,nocursor_reaches)
+PlotallreachesCI(active_reaches,passive_reaches, pause_reaches[33:320,],nocursor_reaches[33:320,],nocursorI_reaches[33:320,])
 ```
 - Fig 6: A) localization throughout for the two localization groups, B) localization shift in the pause and no-cursor group, C) speed of localization shift, D/E) localization shift with the two processes for each group (show the incredible speed of localization shifts and how non-matching the slow but also the fast process are)
 ```{r}
@@ -167,7 +167,7 @@ Poneratevstworate(nocursorI_reaches, 'No-Cursor_I')
 ```{r real figures}
 svglite(file='doc/Experiment_1_Figures.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
 layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
-Plotexp1CI(active_reaches, passive_reaches, pause_reaches)
+Plotexp1CI(active_reaches, passive_reaches, pause_reaches[33:320,])
 PlotallTapCI(passive_localization, active_localization)
 Reachmodel(active_reaches, 'Active')
 Reachmodel(passive_reaches, 'Passive')
@@ -180,7 +180,7 @@ dev.off()
 
 svglite(file='doc/Experiment_2_Figures.svg', width=8, height=5, system_fonts=list(sans = "Arial"))
 layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
-Plotexp2CI(pause_reaches,nocursor_reaches, nocursorI_reaches, pause_reaches)
+Plotexp2CI(pause_reaches[33:320,],nocursor_reaches[33:320,], nocursorI_reaches[33:320,], pause_reaches[33:320,])
 RegressionPLot(2)
 Reachmodelnc(nocursor_reaches, nocursor_nocursors, 'No-Cursor')
 Reachmodelnc(nocursorI_reaches, nocursorI_nocursors, 'No-Cursor')
