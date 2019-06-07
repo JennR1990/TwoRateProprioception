@@ -1,61 +1,4 @@
-###Compare pre- post localization
-#layout(c(1,2,3))
-averagedprepost<- function (dataset = c('Pause', 'NoCursor', 'NewNoC')) {
-  svglite(file='doc/Pre_Post_Data.svg', width=6, height=9, system_fonts=list(sans = "Arial"))
-  layout(c(1,2,3), heights = c(2,2,2))
-
-  exp = list('No-Localization Task','No-Cursor Task', 'New No-Cursor Task')
-  counter<- 1
-  
-  for (data in dataset) {
-    filename<- sprintf('data/%s_pre_post_Prop.csv', data)
-    df<- read.csv(filename, sep = ',', header = TRUE)
-    pre<- mean(unlist(df[56:64, 2:ncol(df)]), na.rm = TRUE)
-    post<- mean(unlist(df[65:73, 2:ncol(df)]), na.rm = TRUE)
-    stuff<- c(pre, post)
-    print(stuff)
-    barplot(stuff, ylim = c(-1.5,1.5), names = c('Pre', 'Post'), col= c('mediumorchid3', 'red'))
-    text(.75,pre+.1, labels = pre)
-    text(2,post+.1, labels = post)
-    title( main = exp[counter] )
-    counter<- counter + 1
-  }
-  dev.off()
-}
-
-
-# My Sub header -----
-
-
-#regression for error clamp versus whatever you want
-
-plotRegressionWithCI <- function(X,Y,colors=c('#99999999','black')) {
-  
-  # fit regression model
-  this.lm <- lm(Y ~ X)
-  
-  # where is the interesting data
-  pointlocs <- seq(min(X, na.rm = TRUE),max(X, na.rm = TRUE),.1)
-  
-  # get the confidence interval
-  y1 = predict( this.lm, newdata=data.frame(X=pointlocs), interval =
-                  "confidence" )[ , "upr" ]
-  y2 = predict( this.lm, newdata=data.frame(X=pointlocs), interval =
-                  "confidence" )[ , "lwr" ]
-  
-  # show the confidence interval
-  polygon(c(pointlocs,rev(pointlocs)),c(y1,rev(y2)), col=colors[1],
-          border=NA)
-  
-  # and show a regression line:
-  lines(range(X, na.rm = TRUE), predict(this.lm, newdata=data.frame(X=range(X, na.rm = TRUE))),
-        col=colors[2], lwd=2)
-  
-}
-
-
-
-
+# Descriptive statistics about the data -----
 Allmeans<- function() {
   
   ActiveReach<- means(active_reaches)
@@ -137,14 +80,24 @@ means<- function (data) {
 return(Descriptives<- (data.frame(AlignedMean, AlignedMax, AlignedMin, InitialRotationMean, InitialRotationMax, InitialRotationMin, EndofIRotationMean, EndofIRotationMax, EndofIRotationMin, SecondRotationMean, SecondRotationMax, SecondRotationMin, ErrorClampMean, ErrorClampMax, ErrorClampMin, ErrorClampLateMean, ErrorClampLateMax, ErrorClampLateMin))*-1)
   }
 
+
+##Looking at per-participant fits-----
+
+
+
 ##per participant fits for each group 
-ppfits<- function (groups = c('active', 'passive', 'pause', 'nocursor', 'nocursor_NI')) {
+ppfits<- function (groups = c('active', 'passive', 'pause', 'nocursor', 'nocursor_NI'), rate = 2) {
   pars<- data.frame()
   counter<- 1
   for (group in groups){
   filename<- sprintf('data/%s_reaches.csv', group)
   data<- read.csv(filename, stringsAsFactors = F, header = TRUE)
+  
+  if (rate == 2){
   par<- getParticipantFits(data)
+  } else {
+  par<- getoneParticipantFits(data)
+  }
   par$experiment<- rep(group, times = nrow(par))
   
   if (counter >1){
@@ -160,6 +113,7 @@ ppfits<- function (groups = c('active', 'passive', 'pause', 'nocursor', 'nocurso
   return(pars)
 }
 
+##How do the different parameters predict the experiments, or can they? -----
 #polynomial logistic regression
 
 pLogRegression <- function(data) {
@@ -176,20 +130,6 @@ pLogRegression <- function(data) {
   
 }
 
-
-tanalyzedata<- function(AllDataRM){
-  IndependentT(AllDataRM, 'Active', 'Passive', 'Reach')
-  IndependentT(AllDataRM, 'Pause', 'No-Cursor', 'Reach')
-  IndependentT(AllDataRM, 'Active', 'No-Cursor', 'Reach')
-  IndependentT(AllDataRM, 'Passive', 'No-Cursor', 'Reach')
-  IndependentT(AllDataRM, 'Active', 'Pause', 'Reach')
-  IndependentT(AllDataRM, 'Passive', 'Pause', 'Reach')
-  PairedT(AllDataRM, 'Active', 'Reach')
-  PairedT(AllDataRM, 'Passive', 'Reach')
-  PairedT(AllDataRM, 'Pause', 'Reach')
-  PairedT(AllDataRM, 'No-Cursor', 'Reach')
-}
-
 tpanalyzedata<- function(AllDataRM){
   IndependentT(AllDataRM, 'Active', 'Passive', 'Localization')
   # IndependentT(AllDataRM, 'Pause', 'No-Cursor')
@@ -203,7 +143,7 @@ tpanalyzedata<- function(AllDataRM){
   # PairedT(AllDataRM, 'No-Cursor')
 }
 
-#adata, pasdata, paudata, ncdata
+
 ANOVAanalysis<- function(AllDataANOVA){
   AllDataANOVA$ID<- as.factor(AllDataANOVA$ID)
   AllDataANOVA$Experiment<- as.factor(AllDataANOVA$Experiment)
@@ -378,106 +318,6 @@ prepdatagetonefits<- function (data){
   return(pars)
 }
 
-
-GroupAICS<- function(data, bootstraps=1) {
-  
-  reaches <- as.matrix(data[,2:33])
-  distortion<- data[,1]
-  
-  onerateAICs <- c()
-  tworateAICs <- c()
-  
-  for (boots in c(1:bootstraps)) {
-    LC <- apply(reaches[,sample(c(1:32),32,replace=TRUE)],1,median,na.rm=TRUE)
-    
-    distortion<- distortion*-1
-    onerate_par<- fitoneratemodel(reaches = LC, distortions = distortion)
-    tworate_par<- fittworatemodel(reaches = LC, distortions = distortion)
-    print(onerate_par)
-    print(tworate_par)
-
-    distortion<- distortion*-1
-    onerate_model<- oneratemodel(par = onerate_par, distortions = distortion)
-    tworate_model<- tworatemodel(par = tworate_par, distortions = distortion)
-    
-    onerateMSE<- mean((LC - onerate_model$output)^2)
-    tworateMSE<- mean((LC - tworate_model$output)^2)
-    N<- 5
-    P1 <- 2
-    P2 <- 4
-    C <- N*(log(2*pi)+1)
-    onerateAIC <- 2*P1 + N*log(onerateMSE) + C
-    tworateAIC <- 2*P2 + N*log(tworateMSE) + C
-
-
-    onerateAICs <- c(onerateAICs, onerateAIC)
-    tworateAICs <- c(tworateAICs, tworateAIC)
-    
-    
-    # relativeLikelihoodsone <- exp((min(onerateAICs) - onerateAICs)/2)
-    # relativeLikelihoodstwo <- exp((min(tworateAICs) - tworateAICs)/2)
-    # print(relativeLikelihoodsone)
-    # print(relativeLikelihoodstwo)
-  }
-  
-  return(data.frame(onerateAICs,tworateAICs))
-  
-}
-
-bootstrapModelAICsjENN <- function(group='active', bootstraps=1) {
-  
-  
-  
-  df <- read.csv(sprintf('data/%s_reaches.csv', group), stringsAsFactors = FALSE)
-  distortion <- df$distortion
-  
-  reaches <- as.matrix(df[,2:dim(df)[2]])
-  
-  N <- dim(df)[2] - 1
-  # prep for AICs:
-  
-  # the median length of a phase is 40 trials,
-  # and there are 7.2 of those in 288 trials
-  InOb <- 5
-  # # the mean length is 55 though:
-  # N <- 4
-  
-  # this is then used for C:
-  C <- InOb*(log(2*pi)+1)
-  
-  for (bootstrap in c(1:bootstraps)) {
-    
-    medReaches <- apply(reaches[,sample(c(1:N),N,replace=TRUE)], 1, median, na.rm=TRUE)
-    distortion<- distortion
-
-    
-    onerate_par<- fitoneratemodel(reaches = medReaches, distortions = distortion)
-    tworate_par<- fittworatemodel(reaches = medReaches, distortions = distortion)
-    
-    
-    distortion<- distortion
-    onerate_model<- oneratemodel(par = onerate_par, distortions = distortion)
-    tworate_model<- tworatemodel(par = tworate_par, distortions = distortion)
-    
-    
-    twoRateMSE<-twoRateReachModelError(tworate_par, reaches = medReaches, distortions = distortion*-1)
-    oneRateMSE<-oneRateReachModelError(onerate_par, reaches = medReaches, distortions = distortion*-1)
-    print(oneRateMSE<- mean((medReaches - onerate_model$output*-1)^2))
-    print(twoRateMSE<- mean((medReaches - tworate_model$output*-1)^2))
-
-    twoRateAIC <- (2*4) + InOb*log(twoRateMSE) + C
-    oneRateAIC <- (2*2) + InOb*log(oneRateMSE) + C
-
-    
-    cat(sprintf('1-rate AIC: %0.2f  %s  2-rate AIC: %0.2f\n',oneRateAIC,c('>=', ' <')[as.numeric(oneRateAIC<twoRateAIC)+1],twoRateAIC))
-    
-  }
-  
-}
-
-
-
-
 bootstrapModelAICs <- function(data, bootstraps=1) {
   #group='active'# add this to the function call when i use the commented line below
   
@@ -527,10 +367,14 @@ bootstrapModelAICs <- function(data, bootstraps=1) {
 Poneratevstworate<- function (data, group = 'Passive') {
   ##Getting AICS for one-rate model vs. two-rate model
   #need to run one rate model
-  par1<- prepdatagetonefits(data)
+
+  #par1<- getoneParticipantFits(data)
+  
   write.csv(par1, sprintf("One Rate Parameters for %s Reaches.csv", group), row.names = TRUE, quote = FALSE)
   #need to run two rate model
-  par2<- prepdatagetfits(data)
+  
+  
+  #par2<- prepdatagetfits(data)
   write.csv(par2, sprintf("Two Rate Parameters for %s Reaches.csv", group), row.names = TRUE, quote = FALSE)
 
   Data1MSE<- par1$MSE
@@ -542,11 +386,12 @@ Poneratevstworate<- function (data, group = 'Passive') {
   Data1AIC <- 2*P1 + N*log(Data1MSE) + C
   Data2AIC <- 2*P2 + N*log(Data2MSE) + C
   count<-sum(Data1AIC<Data2AIC)
+  print(sprintf('the number of participants with a higher AIC for two rates are %d',count))
   #AICs<- c('One Rate Model'=Data1AIC,'Two Rate Model'=Data2AIC)
   AICs<- cbind(Data1AIC, Data2AIC)
   write.csv(AICs, sprintf("AICs for one and two rate %s reach data.csv", group), row.names = TRUE, quote = FALSE)
   #relativeLikelihoods <- exp((min(AICs) - AICs)/2)
-  #return(sprintf('the number of participants with a higher AIC for two rates are %d',count))
+  
 }
 
 

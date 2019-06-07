@@ -189,7 +189,7 @@ PlotoutLine <- function(dataset, exp, color) {
       'Passive Localization Group (N=32)',
       'No Localization Group (N=32)',
       'No-Cursor Group (N=32)',
-      'Instructed No-Cursor Group (N=32)',
+      'Instructed No-Cursor Group (N=16)',
       'Active Localizations (N=32)',
       'Passive Localizations (N=32)'
     )
@@ -460,3 +460,31 @@ PlotIndividualdata <- function (data, exp) {
   }
   PlotData(data, exp, exp)
 }
+
+
+## This plots the pre and post localization data from the pause, and two no-cursor paradigms -----
+###Compare pre- post localization
+#layout(c(1,2,3))
+averagedprepost<- function (dataset = c('Pause', 'NoCursor', 'NewNoC')) {
+  svglite(file='doc/Pre_Post_Data.svg', width=6, height=9, system_fonts=list(sans = "Arial"))
+  layout(c(1,2,3), heights = c(2,2,2))
+  
+  exp = list('No-Localization Task','No-Cursor Task', 'New No-Cursor Task')
+  counter<- 1
+  
+  for (data in dataset) {
+    filename<- sprintf('data/%s_pre_post_Prop.csv', data)
+    df<- read.csv(filename, sep = ',', header = TRUE)
+    pre<- mean(unlist(df[56:64, 2:ncol(df)]), na.rm = TRUE)
+    post<- mean(unlist(df[65:73, 2:ncol(df)]), na.rm = TRUE)
+    stuff<- c(pre, post)
+    print(stuff)
+    barplot(stuff, ylim = c(-1.5,1.5), names = c('Pre', 'Post'), col= c('mediumorchid3', 'red'))
+    text(.75,pre+.1, labels = pre)
+    text(2,post+.1, labels = post)
+    title( main = exp[counter] )
+    counter<- counter + 1
+  }
+  dev.off()
+}
+

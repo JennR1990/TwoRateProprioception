@@ -22,6 +22,7 @@ getParticipantFits <- function(data) {
     print(participant)
     reaches <- data[,participant]
     
+    #pars<- fitTwoRateReachModel(reaches = reaches, schedule = distortions)
     pars <- fittworatemodel(reaches, distortions)
     
     participantfits$participant[ppno] <- participant
@@ -40,7 +41,7 @@ getParticipantFits <- function(data) {
 
 fittworatemodel<- function(reaches, distortions) {
   #this function will take the dataframe made in the last function (dogridsearch) and use the list of parameters to make a new model then compare to output and get a new mse. 
-  pargrid <- dogridsearch(reaches = reaches, distortions = distortions, nsteps = 7, topn = 5)
+  pargrid <- dogridsearch(reaches = reaches, distortions = distortions, nsteps = 6, topn = 6)
   cat('optimize best fits...\n')
   for (gridpoint in c(1:nrow(pargrid))) { #for each row 
     par<-unlist(pargrid[gridpoint,1:4]) 
