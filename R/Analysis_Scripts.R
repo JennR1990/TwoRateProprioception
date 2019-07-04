@@ -318,7 +318,9 @@ prepdatagetonefits<- function (data){
   return(pars)
 }
 
-ModelAICs <- function(df, group) {
+ModelAICs <- function(data, group, grid = 'restricted') {
+  
+  df<- getreachesformodel(data)
   #group='active'# add this to the function call when i use the commented line below
   #df <- read.csv(sprintf('data/%s_reaches.csv', group), stringsAsFactors = FALSE)
   
@@ -327,8 +329,8 @@ ModelAICs <- function(df, group) {
   #Reaches <- as.matrix(df[,2:dim(df)[2]])
   Reaches<- df$meanreaches
   
-  twoRateFit <- fitTwoRateReachModel(reaches=Reaches, schedule=schedule, oneTwoRates=2, grid='restricted', checkStability=TRUE)
-  oneRateFit <- fitTwoRateReachModel(reaches=Reaches, schedule=schedule, oneTwoRates=1, grid='restricted', checkStability=TRUE)
+  twoRateFit <- fitTwoRateReachModel(reaches=Reaches, schedule=schedule, oneTwoRates=2, grid=grid, checkStability=TRUE)
+  oneRateFit <- fitTwoRateReachModel(reaches=Reaches, schedule=schedule, oneTwoRates=1, grid=grid, checkStability=TRUE)
   #twoRateFit<- fittworatemodel(Reaches, schedule)
   #oneRateFit<- fitoneratemodel(Reaches, schedule)
   
@@ -408,7 +410,7 @@ bootstrapModelAICs <- function(data, group) {
   return(AICs)
 }
 
-getParticipantFits1 <- function(data) {
+getParticipantFits1 <- function(data, grid='restricted') {
   
   participants <- colnames(data)[2:dim(data)[2]]
   distortions <- data$distortion
@@ -422,7 +424,8 @@ getParticipantFits1 <- function(data) {
     print(participant)
     reaches <- data[,participant]
     
-    pars<- fitTwoRateReachModel(reaches = reaches, schedule = distortions)
+    #pars<- fitTwoRateReachModel(reaches = reaches, schedule = distortions)
+    pars<- fitTwoRateReachModel(reaches=reaches, schedule=distortions, oneTwoRates=2, grid=grid, checkStability=TRUE)
     #pars <- fittworatemodel(reaches, distortions)
     
     participantfits$participant[ppno] <- participant
@@ -437,7 +440,7 @@ getParticipantFits1 <- function(data) {
   return(participantfits)
 }
 
-getoneParticipantFits1 <- function(data) {
+getoneParticipantFits1 <- function(data, grid='restricted') {
   
   participants <- colnames(data)[2:dim(data)[2]]
   distortions <- data$distortion
@@ -452,7 +455,7 @@ getoneParticipantFits1 <- function(data) {
     reaches <- data[,participant]
     
     #pars <- fitOneRateReachModel(reaches, distortions)
-    pars <- fitTwoRateReachModel(reaches=reaches, schedule=distortions, oneTwoRates=1, grid='restricted', checkStability=TRUE)
+    pars <- fitTwoRateReachModel(reaches=reaches, schedule=distortions, oneTwoRates=1, grid=grid, checkStability=TRUE)
     
     participantfits$participant[ppno] <- participant
     participantfits$rs[ppno] <- pars['rs']
@@ -466,17 +469,17 @@ getoneParticipantFits1 <- function(data) {
 
 
 
-Poneratevstworate<- function (data, group = 'Passive') {
+Poneratevstworate<- function (data, group = 'Passive',  grid = 'restricted') {
   ##Getting AICS for one-rate model vs. two-rate model
   #need to run one rate model
 
-  par1<- getoneParticipantFits1(data)
+  par1<- getoneParticipantFits1(data, grid = grid)
   
   #write.csv(par1, sprintf("ana/AICs/One Rate Parameters for %s Reaches.csv", group), row.names = TRUE, quote = FALSE)
   #need to run two rate model
   
   
-  par2<- getParticipantFits1(data)
+  par2<- getParticipantFits1(data, grid = grid)
   #write.csv(par2, sprintf("ana/AICs/Two Rate Parameters for %s Reaches.csv", group), row.names = TRUE, quote = FALSE)
 
   Data1MSE<- par1$MSE

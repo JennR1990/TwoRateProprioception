@@ -147,20 +147,23 @@ FullANOVA
       
 ```
 Then we check to see if the data is more one-rate or two-rate on the group level
+All of the data sets, when taken as a group, appear to be more two-rate than one rate. 
+This makes sense since the size of the rebound is pretty large in at least the first 3 groups.
 ```{r}
-Active_AICS<- bootstrapModelAICs(active_reaches,1, 'Active')
-Passive_AICS<- bootstrapModelAICs(passive_reaches,1, 'Passive')
-Pause_AICS<- bootstrapModelAICs(pause_reaches,1, 'Pause')
-NC_AICS<- bootstrapModelAICs(nocursor_reaches,1, 'No-Cursor')
-NCI_AICS<- bootstrapModelAICs(nocursorI_reaches, 1,'No-Cursor_I')
+Active_AICS<- ModelAICs(active_reaches, 'Active')
+Passive_AICS<- ModelAICs(passive_reaches, 'Passive')
+Pause_AICS<- ModelAICs(pause_reaches, 'Pause')
+NC_AICS<- ModelAICs(nocursor_reaches, 'No-Cursor')
+NCI_AICS<- ModelAICs(nocursorI_reaches,'No-Cursor_I')
 ```
 Check to see if the data is more one-rate or two-rate on the participant level
+The results are somewhat different on a perparticipant level. 
 ```{r}
-Poneratevstworate(active_reaches, 'Active')
-Poneratevstworate(passive_reaches)
-Poneratevstworate(pause_reaches, 'Pause')
-Poneratevstworate(nocursor_reaches, 'No-Cursor')
-Poneratevstworate(nocursorI_reaches, 'No-Cursor_I')
+Poneratevstworate(active_reaches, 'Active') #16 one rate people
+Poneratevstworate(passive_reaches) #28 one rate people
+Poneratevstworate(pause_reaches, 'Pause') #26 one rate people
+Poneratevstworate(nocursor_reaches, 'No-Cursor') # 28 one rate people
+Poneratevstworate(nocursorI_reaches, 'No-Cursor_I') #15 one rate people
 ```
 
 
