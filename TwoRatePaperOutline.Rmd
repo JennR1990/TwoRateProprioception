@@ -148,11 +148,11 @@ FullANOVA
 ```
 Then we check to see if the data is more one-rate or two-rate on the group level
 ```{r}
-Active_AICS<- bootstrapModelAICs(active_reaches)
-Passive_AICS<- bootstrapModelAICs(passive_reaches)
-Pause_AICS<- bootstrapModelAICs(pause_reaches)
-NC_AICS<- bootstrapModelAICs(nocursor_reaches)
-NCI_AICS<- bootstrapModelAICs(nocursorI_reaches)
+Active_AICS<- bootstrapModelAICs(active_reaches,1, 'Active')
+Passive_AICS<- bootstrapModelAICs(passive_reaches,1, 'Passive')
+Pause_AICS<- bootstrapModelAICs(pause_reaches,1, 'Pause')
+NC_AICS<- bootstrapModelAICs(nocursor_reaches,1, 'No-Cursor')
+NCI_AICS<- bootstrapModelAICs(nocursorI_reaches, 1,'No-Cursor_I')
 ```
 Check to see if the data is more one-rate or two-rate on the participant level
 ```{r}

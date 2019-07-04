@@ -318,7 +318,7 @@ prepdatagetonefits<- function (data){
   return(pars)
 }
 
-bootstrapModelAICs <- function(data, bootstraps=1) {
+bootstrapModelAICs <- function(data, bootstraps=1, group) {
   #group='active'# add this to the function call when i use the commented line below
   
   library(RateRate)
@@ -360,22 +360,27 @@ bootstrapModelAICs <- function(data, bootstraps=1) {
     cat(sprintf('1-rate AIC: %0.2f  %s  2-rate AIC: %0.2f\n',oneRateAIC,c('>=', ' <')[as.numeric(oneRateAIC<twoRateAIC)+1],twoRateAIC))
     
   }
-  return(data.frame(twoRateAIC, oneRateAIC))
+  AICs<- data.frame(twoRateAIC, oneRateAIC)
+  write.csv(AICs, sprintf("ana/AICs/Group AICs for %s Reaches.csv", group), row.names = TRUE, quote = FALSE)
+  
+  return(AICs)
 }
+
+
 
 
 Poneratevstworate<- function (data, group = 'Passive') {
   ##Getting AICS for one-rate model vs. two-rate model
   #need to run one rate model
 
-  #par1<- getoneParticipantFits(data)
+  par1<- getoneParticipantFits(data)
   
-  write.csv(par1, sprintf("One Rate Parameters for %s Reaches.csv", group), row.names = TRUE, quote = FALSE)
+  write.csv(par1, sprintf("ana/AICs/One Rate Parameters for %s Reaches.csv", group), row.names = TRUE, quote = FALSE)
   #need to run two rate model
   
   
-  #par2<- prepdatagetfits(data)
-  write.csv(par2, sprintf("Two Rate Parameters for %s Reaches.csv", group), row.names = TRUE, quote = FALSE)
+  par2<- prepdatagetfits(data)
+  write.csv(par2, sprintf("ana/AICs/Two Rate Parameters for %s Reaches.csv", group), row.names = TRUE, quote = FALSE)
 
   Data1MSE<- par1$MSE
   Data2MSE<- par2$MSE
@@ -389,7 +394,7 @@ Poneratevstworate<- function (data, group = 'Passive') {
   print(sprintf('the number of participants with a higher AIC for two rates are %d',count))
   #AICs<- c('One Rate Model'=Data1AIC,'Two Rate Model'=Data2AIC)
   AICs<- cbind(Data1AIC, Data2AIC)
-  write.csv(AICs, sprintf("AICs for one and two rate %s reach data.csv", group), row.names = TRUE, quote = FALSE)
+  write.csv(AICs, sprintf("ana/AICs/AICs for one and two rate %s reach data.csv", group), row.names = TRUE, quote = FALSE)
   #relativeLikelihoods <- exp((min(AICs) - AICs)/2)
   
 }
