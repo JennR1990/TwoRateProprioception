@@ -410,6 +410,12 @@ bootstrapModelAICs <- function(data, group) {
   return(AICs)
 }
 
+# Poneratevstworate(active_reaches, 'Active') #16 one rate people
+# Poneratevstworate(passive_reaches) #28 one rate people
+# Poneratevstworate(pause_reaches, 'Pause') #26 one rate people
+# Poneratevstworate(nocursor_reaches, 'No-Cursor') # 28 one rate people
+# Poneratevstworate(nocursorI_reaches, 'No-Cursor_I') #15 one rate people
+
 getParticipantFits1 <- function(data, grid='restricted') {
   
   participants <- colnames(data)[2:dim(data)[2]]
