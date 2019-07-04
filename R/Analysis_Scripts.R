@@ -318,13 +318,55 @@ prepdatagetonefits<- function (data){
   return(pars)
 }
 
+ModelAICs <- function(df, group) {
+  #group='active'# add this to the function call when i use the commented line below
+  #df <- read.csv(sprintf('data/%s_reaches.csv', group), stringsAsFactors = FALSE)
+  
+  schedule <- df$distortion
+  
+  #Reaches <- as.matrix(df[,2:dim(df)[2]])
+  Reaches<- df$meanreaches
+  
+  twoRateFit <- fitTwoRateReachModel(reaches=Reaches, schedule=schedule, oneTwoRates=2, grid='restricted', checkStability=TRUE)
+  oneRateFit <- fitTwoRateReachModel(reaches=Reaches, schedule=schedule, oneTwoRates=1, grid='restricted', checkStability=TRUE)
+  #twoRateFit<- fittworatemodel(Reaches, schedule)
+  #oneRateFit<- fitoneratemodel(Reaches, schedule)
+  
+  
+  print(oneRateFit)
+  print(twoRateFit)
+  
+  twoRateMSE <- twoRateReachModelErrors(par=twoRateFit, reaches=Reaches, schedule=schedule)
+  oneRateMSE <- twoRateReachModelErrors(par=oneRateFit, reaches=Reaches, schedule=schedule)
+  #twoRateMSE <- twoRateReachModelError(par=twoRateFit, reaches=Reaches, distortions =schedule)
+  #oneRateMSE <- oneRateReachModelError(par=oneRateFit, reaches=Reaches, distortions =  schedule)
+  
+  #preparing the AIC stuff
+  N <- dim(df)[2] - 1
+  # the median length of a phase is 40 trials,
+  # and there are 7.2 of those in 288 trials
+  InOb <- 6
+  # this is then used for C:
+  C <- InOb*(log(2*pi)+1)
+  twoRateAIC <- (2*4) + InOb*log(twoRateMSE) + C
+  oneRateAIC <- (2*2) + InOb*log(oneRateMSE) + C
+  
+  cat(sprintf('1-rate AIC: %0.2f  %s  2-rate AIC: %0.2f\n',oneRateAIC,c('>=', ' <')[as.numeric(oneRateAIC<twoRateAIC)+1],twoRateAIC))
+  
+  
+  AICs<- data.frame(twoRateAIC, oneRateAIC)
+  #write.csv(AICs, sprintf("ana/AICs/Group AICs for %s Reaches.csv", group), row.names = TRUE, quote = FALSE)
+  
+  return(AICs)
+}
+
 bootstrapModelAICs <- function(data, group) {
   #group='active'# add this to the function call when i use the commented line below
   
-  library(RateRate)
+
   
   #df <- read.csv(sprintf('data/%s_reaches.csv', group), stringsAsFactors = FALSE)
-  df<-data
+
   schedule <- df$distortion
   
   Reaches <- as.matrix(df[,2:dim(df)[2]])
@@ -366,6 +408,61 @@ bootstrapModelAICs <- function(data, group) {
   return(AICs)
 }
 
+getParticipantFits1 <- function(data) {
+  
+  participants <- colnames(data)[2:dim(data)[2]]
+  distortions <- data$distortion
+  
+  participantfits <- data.frame(matrix(NA, ncol=6, nrow=length(participants)))
+  colnames(participantfits) <- c('participant', 'rs', 'ls', 'rf', 'lf', 'MSE')
+  
+  for (ppno in c(1:length(participants))) {
+    
+    participant <- participants[ppno]
+    print(participant)
+    reaches <- data[,participant]
+    
+    pars<- fitTwoRateReachModel(reaches = reaches, schedule = distortions)
+    #pars <- fittworatemodel(reaches, distortions)
+    
+    participantfits$participant[ppno] <- participant
+    participantfits$rs[ppno] <- pars['rs']
+    participantfits$ls[ppno] <- pars['ls']
+    participantfits$rf[ppno] <- pars['rf']
+    participantfits$lf[ppno] <- pars['lf']
+    participantfits$MSE[ppno] <- twoRateReachModelErrors(pars, reaches, distortions)
+    
+  }
+  
+  return(participantfits)
+}
+
+getoneParticipantFits1 <- function(data) {
+  
+  participants <- colnames(data)[2:dim(data)[2]]
+  distortions <- data$distortion
+  
+  participantfits <- data.frame(matrix(NA, ncol=4, nrow=length(participants)))
+  colnames(participantfits) <- c('participant', 'rs', 'ls', 'MSE')
+  
+  for (ppno in c(1:length(participants))) {
+    
+    participant <- participants[ppno]
+    print(participant)
+    reaches <- data[,participant]
+    
+    #pars <- fitOneRateReachModel(reaches, distortions)
+    pars <- fitTwoRateReachModel(reaches=reaches, schedule=distortions, oneTwoRates=1, grid='restricted', checkStability=TRUE)
+    
+    participantfits$participant[ppno] <- participant
+    participantfits$rs[ppno] <- pars['rs']
+    participantfits$ls[ppno] <- pars['ls']
+    participantfits$MSE[ppno] <- twoRateReachModelErrors(pars, reaches, distortions)
+    
+  }
+  
+  return(participantfits)
+}
 
 
 
@@ -373,18 +470,18 @@ Poneratevstworate<- function (data, group = 'Passive') {
   ##Getting AICS for one-rate model vs. two-rate model
   #need to run one rate model
 
-  par1<- getoneParticipantFits(data)
+  par1<- getoneParticipantFits1(data)
   
-  write.csv(par1, sprintf("ana/AICs/One Rate Parameters for %s Reaches.csv", group), row.names = TRUE, quote = FALSE)
+  #write.csv(par1, sprintf("ana/AICs/One Rate Parameters for %s Reaches.csv", group), row.names = TRUE, quote = FALSE)
   #need to run two rate model
   
   
-  par2<- prepdatagetfits(data)
-  write.csv(par2, sprintf("ana/AICs/Two Rate Parameters for %s Reaches.csv", group), row.names = TRUE, quote = FALSE)
+  par2<- getParticipantFits1(data)
+  #write.csv(par2, sprintf("ana/AICs/Two Rate Parameters for %s Reaches.csv", group), row.names = TRUE, quote = FALSE)
 
   Data1MSE<- par1$MSE
   Data2MSE<- par2$MSE
-  N<- 5
+  N<- 6
   P1 <- 2
   P2 <- 4
   C <- N*(log(2*pi)+1)
@@ -394,7 +491,7 @@ Poneratevstworate<- function (data, group = 'Passive') {
   print(sprintf('the number of participants with a higher AIC for two rates are %d',count))
   #AICs<- c('One Rate Model'=Data1AIC,'Two Rate Model'=Data2AIC)
   AICs<- cbind(Data1AIC, Data2AIC)
-  write.csv(AICs, sprintf("ana/AICs/AICs for one and two rate %s reach data.csv", group), row.names = TRUE, quote = FALSE)
+  #write.csv(AICs, sprintf("ana/AICs/AICs for one and two rate %s reach data.csv", group), row.names = TRUE, quote = FALSE)
   #relativeLikelihoods <- exp((min(AICs) - AICs)/2)
   
 }

@@ -22,15 +22,15 @@ getParticipantFits <- function(data) {
     print(participant)
     reaches <- data[,participant]
     
-    #pars<- fitTwoRateReachModel(reaches = reaches, schedule = distortions)
-    pars <- fittworatemodel(reaches, distortions)
+    pars<- fitTwoRateReachModel(reaches = reaches, schedule = distortions)
+    #pars <- fittworatemodel(reaches, distortions)
     
     participantfits$participant[ppno] <- participant
     participantfits$rs[ppno] <- pars['rs']
     participantfits$ls[ppno] <- pars['ls']
     participantfits$rf[ppno] <- pars['rf']
     participantfits$lf[ppno] <- pars['lf']
-    participantfits$MSE[ppno] <- twoRateReachModelError(pars, reaches, distortions)
+    participantfits$MSE[ppno] <- twoRateReachModelErrors(pars, reaches, distortions)
     
   }
   
