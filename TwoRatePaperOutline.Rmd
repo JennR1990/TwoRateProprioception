@@ -43,6 +43,7 @@ source('R/tworatemodel.R')
 library('ez')
 library('RateRate')
 library('svglite')
+library('effsize')
 loadcolors()
 downloadOSFdata()
 
@@ -116,6 +117,12 @@ Ttestdata<- PrepdataforT(active_reaches, passive_reaches, pause_reaches[33:320,]
 #reach data
 FullHLANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'Active' | ANOVAdata$Experiment == 'Passive' | ANOVAdata$Experiment == 'Pause',])
 FullHLANOVA
+FullH1LANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'Active' | ANOVAdata$Experiment == 'Passive',])
+FullH1LANOVA
+FullH2LANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'Passive' | ANOVAdata$Experiment == 'Pause',])
+FullH2LANOVA
+FullH3LANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'Active' | ANOVAdata$Experiment == 'Pause',])
+FullH3LANOVA
   IndependentT(Ttestdata, 'Active', 'Passive', 'Reach')
     IndependentT(Ttestdata, 'Active', 'Pause', 'Reach')
       IndependentT(Ttestdata, 'Pause', 'Passive', 'Reach')
@@ -123,12 +130,16 @@ FullHLANOVA
 FullPANOVA<-ANOVAanalysis(ANOVAPdata)
 FullPANOVA
 tpanalyzedata(TtestPdata)
+PairedT(TtestPdata, 'Active', 'localization')
+PairedT(TtestPdata, 'Passive', 'localization')
 
 
 ### Implicit Learning as the Slow Process Experiment
 
 FullILANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor' | ANOVAdata$Experiment == 'No-CursorI' | ANOVAdata$Experiment == 'Pause',])
 FullILANOVA
+FullI1LANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor' | ANOVAdata$Experiment == 'No-CursorI' ,])
+FullI1LANOVA
   IndependentT(Ttestdata, 'No-Cursor', 'No-CursorI', 'Reach')
     IndependentT(Ttestdata, 'No-CursorI', 'Pause', 'Reach')
       IndependentT(Ttestdata, 'Pause', 'No-Cursor', 'Reach')
