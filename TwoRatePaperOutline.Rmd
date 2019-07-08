@@ -140,6 +140,10 @@ FullILANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor' | ANOVA
 FullILANOVA
 FullI1LANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor' | ANOVAdata$Experiment == 'No-CursorI' ,])
 FullI1LANOVA
+FullI2LANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'Pause' | ANOVAdata$Experiment == 'No-CursorI' ,])
+FullI2LANOVA
+FullI3LANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor' | ANOVAdata$Experiment == 'Pause' ,])
+FullI3LANOVA
   IndependentT(Ttestdata, 'No-Cursor', 'No-CursorI', 'Reach')
     IndependentT(Ttestdata, 'No-CursorI', 'Pause', 'Reach')
       IndependentT(Ttestdata, 'Pause', 'No-Cursor', 'Reach')
