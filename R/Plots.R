@@ -182,6 +182,37 @@ PlotData <- function(dataset, color, trans, rotate = -1) {
   lines(dataset$Mean * rotate, col = colorlist[color], lwd = 1.5)
 }
 
+Plotschedule <- function(dataset) {
+  dataset["distortion"][is.na(dataset["distortion"])] <- 0
+  plot(
+    dataset$p1,
+    ylim = c(-35, 35),
+    xlab = "Trial",
+    ylab = "Hand Direction [°]",
+    axes = F,
+    main = "Schedule",
+    type = 'l',
+    col = 'white'
+  )
+  rect(65,0,68,30, col = 'grey',border = NA)
+  text(65,15,'R1', srt = 90)
+  rect(208,0,224,30, col = 'grey',border = NA)
+  text(216,15,'R1_late', srt = 90)
+  rect(237,-30,240,0, col = 'grey',border = NA)
+  text(237,-15,'R2', srt = 90)
+  rect(256,-15,288,15, col = 'grey',border = NA)
+  text(272,5,'EC', srt = 90)
+  lines(c(1, 64, 64, 224, 224, 240, 240),
+        c(0, 0, 30, 30, -30, -30, 0),
+        col = rgb(0., 0., 0.))
+  lines(c(240, 288),
+        c(0, 0),
+        lty = 2,
+        col = rgb(0., 0., 0.))
+
+  axis(2, at = c(-30, -15, 0, 15, 30), cex.axis = 0.75)
+  axis(1, at = c(1, 64, 224, 240, 288), cex.axis = 0.75)
+}
 PlotoutLine <- function(dataset, exp, color) {
   labels <-
     list (
@@ -229,6 +260,9 @@ PlotoutLine <- function(dataset, exp, color) {
   axis(2, at = c(-30, -15, 0, 15, 30), cex.axis = 0.75)
   axis(1, at = c(1, 64, 224, 240, 288), cex.axis = 0.75)
 }
+
+
+
 
 trialCI <- function(data) {
   AllCIs <- data.frame()
