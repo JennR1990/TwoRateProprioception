@@ -314,7 +314,10 @@ Reachmodel <- function(data, name, grid = 'restricted') {
   lines(reach_model$total * -1, col = c(rgb(.5, 0., .5)))
   lines(reach_model$slow * -1, col = rgb(0., .5, 1.))
   lines(reach_model$fast * -1, col = rgb(0.0, 0.7, 0.0))
-  return(reach_par)
+  MSE<- twoRateReachModelErrors(reach_par, reaches = reaches$meanreaches,schedule = reaches$distortion )
+  pars<-c(reach_par,MSE)
+  names(pars)[5]<-"MSE"
+  return(pars)
 }
 
 Reachmodelnc <- function(data, ncdata, name) {
