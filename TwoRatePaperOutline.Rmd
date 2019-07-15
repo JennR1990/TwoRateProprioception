@@ -1,10 +1,10 @@
 ---
 title: "Two Rate Proprioception Paper"
 output:
+  word_document: default
   html_document:
     df_print: paged
   pdf_document: default
-  word_document: default
 ---
 
 # Overview
@@ -44,6 +44,7 @@ library('ez')
 library('RateRate')
 library('svglite')
 library('effsize')
+library('SMCL')
 loadcolors()
 downloadOSFdata()
 
