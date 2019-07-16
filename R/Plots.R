@@ -156,6 +156,204 @@ RegressionPLot <- function(exp) {
   }
 }
 
+RegressionPLotR1 <- function() {
+  PRrm <- TCombine(passive_reaches)
+  PRRm <- PRrm$R1_Late * -1
+  PPec <- TCombine(passive_localization)
+  PPec <- PPec$R1_Late
+  plot(
+    PPec ~ PRRm,
+    col = colorPA,
+    xlab = 'Reaches',
+    ylab = 'Localization',
+    main = 'Localization ~ Reaches During End of 1st Rotation',
+    xlim = c(15, 40),
+    ylim = c(-15, 40),
+    axes = FALSE
+  )
+  axis(2,
+       at = c( -15, 0, 15, 25, 35),
+       cex.axis = 0.75)
+  axis(1,
+       at = c( 15, 25, 35),
+       cex.axis = 0.75)
+  lm<-plotRegressionWithCI(PRRm, PPec, colors = c(colorPA_trans, colorPA))
+  slopes<-lm$coefficients[2]
+  
+  Arm <- TCombine(active_reaches)
+  Arm <- Arm[-21,]
+  ARm <- Arm$R1_Late * -1
+  APec <- TCombine(active_localization)
+  APec<- APec[-21,]
+  APec <- APec$R1_Late
+  points(APec ~ ARm, col = colorA)
+  gm<-plotRegressionWithCI(ARm, APec, colors = c(colorA_trans, colorA))
+  slopes<-c(slopes,gm$coefficients[2])
+  legend(
+    16,
+    32,
+    legend = c(
+      'Passive Localization',
+      'Active Localization'
+    ),
+    col = c(colorPA, colorA),
+    lty = c(1, 1),
+    lwd = c(2, 2),
+    bty = 'n'
+  )
+  names(slopes)<- c('Passive', 'Active')
+  return(slopes)
+}
+RegressionPLotR1E <- function() {
+  PRrm <- TCombine(passive_reaches)
+  PRRm <- PRrm$R1_Early * -1
+  PPec <- TCombine(passive_localization)
+  PPec <- PPec$R1_Early
+  plot(
+    PPec ~ PRRm,
+    col = colorPA,
+    xlab = 'Reaches',
+    ylab = 'Localization',
+    main = 'Localization ~ Reaches During End of 1st Rotation',
+    xlim = c(0, 40),
+    ylim = c(-15, 40),
+    axes = FALSE
+  )
+  axis(2,
+       at = c( -15, 0, 15, 25, 35),
+       cex.axis = 0.75)
+  axis(1,
+       at = c( 0, 15, 25, 35),
+       cex.axis = 0.75)
+  lm<-plotRegressionWithCI(PRRm, PPec, colors = c(colorPA_trans, colorPA))
+  slopes<-lm$coefficients[2]
+  
+  Arm <- TCombine(active_reaches)
+  #Arm <- Arm[-21,]
+  ARm <- Arm$R1_Early * -1
+  APec <- TCombine(active_localization)
+  #APec<- APec[-21,]
+  APec <- APec$R1_Early
+  points(APec ~ ARm, col = colorA)
+  gm<-plotRegressionWithCI(ARm, APec, colors = c(colorA_trans, colorA))
+  slopes<-c(slopes,gm$coefficients[2])
+  legend(
+    0,
+    32,
+    legend = c(
+      'Passive Localization',
+      'Active Localization'
+    ),
+    col = c(colorPA, colorA),
+    lty = c(1, 1),
+    lwd = c(2, 2),
+    bty = 'n'
+  )
+  names(slopes)<- c('Passive', 'Active')
+  return(slopes)
+}
+
+RegressionPLot3P <- function() {
+
+  PPec <- TCombine(passive_localization)
+  loc <- c(PPec$R2,PPec$Aligned,PPec$R1_Late)
+  pert<- c(rep(-30, 32),rep(0, 32),rep(30, 32))
+   plot(
+    loc ~ pert,
+    col = colorPA,
+    xlab = 'Perturbation',
+    ylab = 'Localization',
+    main = 'Localization ~ Perturbation Size',
+    xlim = c(-35, 35),
+    ylim = c(-35, 35),
+    axes = FALSE
+  )
+  axis(2,
+       at = c( -30,-15, 0, 15, 30),
+       cex.axis = 0.75)
+  axis(1,
+       at = c( -30,-15, 0, 15, 30),
+       cex.axis = 0.75)
+  lm<-plotRegressionWithCI(pert, loc, colors = c(colorPA_trans, colorPA))
+  slopes<-lm$coefficients[2]
+  
+
+  APec <- TCombine(active_localization)
+  loca <- c(APec$R2,APec$Aligned,APec$R1_Late)
+  perta<- c(rep(-30, 32),rep(0, 32),rep(30, 32))
+
+  points(loca ~ perta, col = colorA)
+  gm<-plotRegressionWithCI(perta, loca, colors = c(colorA_trans, colorA))
+  slopes<-c(slopes,gm$coefficients[2])
+  legend(
+    -30,
+    32,
+    legend = c(
+      'Passive Localization',
+      'Active Localization'
+    ),
+    col = c(colorPA, colorA),
+    lty = c(1, 1),
+    lwd = c(2, 2),
+    bty = 'n'
+  )
+  names(slopes)<- c('Passive', 'Active')
+  return(slopes)
+}
+
+RegressionPLotchange <- function() {
+  
+  PPec <- TCombine(passive_localization)
+  a<-PPec$Aligned
+  b<-PPec$R1_Late
+  c<-PPec$R1_Late - PPec$R2
+  loc <- c(a,b,c)
+  pert<- c(rep(0, 32),rep(30, 32),rep(60, 32))
+  plot(
+    loc ~ pert,
+    col = colorPA,
+    xlab = 'Pertubation Change',
+    ylab = 'Localization Change',
+    main = 'Change in Localization ~ Size of Perturbation Change ',
+    xlim = c(0, 60),
+    ylim = c(-35, 35),
+    axes = FALSE
+  )
+  axis(2,
+       at = c( -30,-15, 0, 15, 30),
+       cex.axis = 0.75)
+  axis(1,
+       at = c( 0, 15, 30, 45, 60),
+       cex.axis = 0.75)
+  lm<-plotRegressionWithCI(pert, loc, colors = c(colorPA_trans, colorPA))
+  slopes<-lm$coefficients[2]
+  
+  
+  
+  APec <- TCombine(active_localization)
+  loca <- c(APec$Aligned,APec$R1_Late,APec$R1_Late - APec$R2)
+  perta<- c(rep(0, 32),rep(30, 32),rep(60, 32))
+  
+  points(loca ~ perta, col = colorA)
+  gm<-plotRegressionWithCI(perta, loca, colors = c(colorA_trans, colorA))
+  slopes<-c(slopes,gm$coefficients[2])
+  
+  legend(
+    -2,
+    32,
+    legend = c(
+      'Passive Localization',
+      'Active Localization'
+    ),
+    col = c(colorPA, colorA),
+    lty = c(1, 1),
+    lwd = c(2, 2),
+    bty = 'n'
+  )
+  names(slopes)<- c('Passive', 'Active')
+  return(slopes)
+}
+
 
 # Below are the codes to make the above functions run: these make the subplots inside the main plots -----
 
@@ -473,7 +671,7 @@ plotRegressionWithCI <-
       col = colors[2],
       lwd = 2
     )
-    
+    return(this.lm)
   }
 
 
