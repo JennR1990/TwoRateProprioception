@@ -166,16 +166,15 @@ RegressionPLotR1 <- function() {
     col = colorPA,
     xlab = 'Reaches',
     ylab = 'Localization',
-    main = 'Localization ~ Reaches During End of 1st Rotation',
-    xlim = c(15, 40),
-    ylim = c(-15, 40),
-    axes = FALSE
+    xlim = c(10, 40),
+    ylim = c(-5, 25),
+    axes = FALSE, asp = 1
   )
   axis(2,
-       at = c( -15, 0, 15, 25, 35),
+       at = c( -5, 0, 5, 15, 25),
        cex.axis = 0.75)
   axis(1,
-       at = c( 15, 25, 35),
+       at = c( 15, 20,30,40),
        cex.axis = 0.75)
   lm<-plotRegressionWithCI(PRRm, PPec, colors = c(colorPA_trans, colorPA))
   slopes<-lm$coefficients[2]
@@ -189,18 +188,18 @@ RegressionPLotR1 <- function() {
   points(APec ~ ARm, col = colorA)
   gm<-plotRegressionWithCI(ARm, APec, colors = c(colorA_trans, colorA))
   slopes<-c(slopes,gm$coefficients[2])
-  legend(
-    16,
-    32,
-    legend = c(
-      'Passive Localization',
-      'Active Localization'
-    ),
-    col = c(colorPA, colorA),
-    lty = c(1, 1),
-    lwd = c(2, 2),
-    bty = 'n'
-  )
+  # legend(
+  #   16,
+  #   32,
+  #   legend = c(
+  #     'Passive Localization',
+  #     'Active Localization'
+  #   ),
+  #   col = c(colorPA, colorA),
+  #   lty = c(1, 1),
+  #   lwd = c(2, 2),
+  #   bty = 'n'
+  # )
   names(slopes)<- c('Passive', 'Active')
   return(slopes)
 }
@@ -214,16 +213,15 @@ RegressionPLotR1E <- function() {
     col = colorPA,
     xlab = 'Reaches',
     ylab = 'Localization',
-    main = 'Localization ~ Reaches During End of 1st Rotation',
-    xlim = c(0, 40),
-    ylim = c(-15, 40),
-    axes = FALSE
+    xlim = c(3, 35),
+    ylim = c(-5, 20),
+    axes = FALSE, asp = 1
   )
   axis(2,
-       at = c( -15, 0, 15, 25, 35),
+       at = c(  0, 10, 20),
        cex.axis = 0.75)
   axis(1,
-       at = c( 0, 15, 25, 35),
+       at = c( 5,10, 20, 30),
        cex.axis = 0.75)
   lm<-plotRegressionWithCI(PRRm, PPec, colors = c(colorPA_trans, colorPA))
   slopes<-lm$coefficients[2]
@@ -237,18 +235,18 @@ RegressionPLotR1E <- function() {
   points(APec ~ ARm, col = colorA)
   gm<-plotRegressionWithCI(ARm, APec, colors = c(colorA_trans, colorA))
   slopes<-c(slopes,gm$coefficients[2])
-  legend(
-    0,
-    32,
-    legend = c(
-      'Passive Localization',
-      'Active Localization'
-    ),
-    col = c(colorPA, colorA),
-    lty = c(1, 1),
-    lwd = c(2, 2),
-    bty = 'n'
-  )
+  # legend(
+  #   0,
+  #   32,
+  #   legend = c(
+  #     'Passive Localization',
+  #     'Active Localization'
+  #   ),
+  #   col = c(colorPA, colorA),
+  #   lty = c(1, 1),
+  #   lwd = c(2, 2),
+  #   bty = 'n'
+  # )
   names(slopes)<- c('Passive', 'Active')
   return(slopes)
 }
@@ -263,13 +261,12 @@ RegressionPLot3P <- function() {
     col = colorPA,
     xlab = 'Perturbation',
     ylab = 'Localization',
-    main = 'Localization ~ Perturbation Size',
-    xlim = c(-35, 35),
-    ylim = c(-35, 35),
-    axes = FALSE
+    xlim = c(-30, 30),
+    ylim = c(-20, 20),
+    axes = FALSE, asp = 1
   )
   axis(2,
-       at = c( -30,-15, 0, 15, 30),
+       at = c(-20, -10,0,10, 20),
        cex.axis = 0.75)
   axis(1,
        at = c( -30,-15, 0, 15, 30),
@@ -285,18 +282,18 @@ RegressionPLot3P <- function() {
   points(loca ~ perta, col = colorA)
   gm<-plotRegressionWithCI(perta, loca, colors = c(colorA_trans, colorA))
   slopes<-c(slopes,gm$coefficients[2])
-  legend(
-    -30,
-    32,
-    legend = c(
-      'Passive Localization',
-      'Active Localization'
-    ),
-    col = c(colorPA, colorA),
-    lty = c(1, 1),
-    lwd = c(2, 2),
-    bty = 'n'
-  )
+  # legend(
+  #   -30,
+  #   32,
+  #   legend = c(
+  #     'Passive Localization',
+  #     'Active Localization'
+  #   ),
+  #   col = c(colorPA, colorA),
+  #   lty = c(1, 1),
+  #   lwd = c(2, 2),
+  #   bty = 'n'
+  # )
   names(slopes)<- c('Passive', 'Active')
   return(slopes)
 }
@@ -314,13 +311,12 @@ RegressionPLotchange <- function() {
     col = colorPA,
     xlab = 'Pertubation Change',
     ylab = 'Localization Change',
-    main = 'Change in Localization ~ Size of Perturbation Change ',
     xlim = c(0, 60),
-    ylim = c(-35, 35),
+    ylim = c(-10, 30),
     axes = FALSE
   )
   axis(2,
-       at = c( -30,-15, 0, 15, 30),
+       at = c( -10, 0, 10 ,20, 30),
        cex.axis = 0.75)
   axis(1,
        at = c( 0, 15, 30, 45, 60),
@@ -337,19 +333,19 @@ RegressionPLotchange <- function() {
   points(loca ~ perta, col = colorA)
   gm<-plotRegressionWithCI(perta, loca, colors = c(colorA_trans, colorA))
   slopes<-c(slopes,gm$coefficients[2])
-  
-  legend(
-    -2,
-    32,
-    legend = c(
-      'Passive Localization',
-      'Active Localization'
-    ),
-    col = c(colorPA, colorA),
-    lty = c(1, 1),
-    lwd = c(2, 2),
-    bty = 'n'
-  )
+  # 
+  # legend(
+  #   -2,
+  #   32,
+  #   legend = c(
+  #     'Passive Localization',
+  #     'Active Localization'
+  #   ),
+  #   col = c(colorPA, colorA),
+  #   lty = c(1, 1),
+  #   lwd = c(2, 2),
+  #   bty = 'n'
+  # )
   names(slopes)<- c('Passive', 'Active')
   return(slopes)
 }

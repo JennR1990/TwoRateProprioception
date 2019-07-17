@@ -155,3 +155,14 @@ fitPropModel<- function(reachdata, locadata) {
 
 }
 
+plotpropmodel<- function (){
+  
+  
+  par<- fitPropModel(reachdata, locadata)
+  plot(localizations, type = 'l', ylim = c(-15,15))
+  output<- PropModel(par, schedule)
+  lines(output, col = "blue")
+  
+  
+}
+
