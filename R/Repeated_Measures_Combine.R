@@ -11,7 +11,7 @@ TCombine<- function(data) {
     r4<- unlist(data[68,participant])
     R1_Early<- mean(unlist(data[65:68,participant]), na.rm = TRUE)
     R1_second<-mean(unlist(data[69:72,participant]), na.rm = TRUE) 
-    R1_Late<- mean(unlist(data[209:224,participant]), na.rm = TRUE)
+    R1_Late<- mean(unlist(data[221:224,participant]), na.rm = TRUE)
     R2<- mean(unlist(data[237:240,participant]), na.rm = TRUE)
     EC<- mean(unlist(data[241:244,participant]), na.rm = TRUE)
     EC1<- mean(unlist(data[241,participant]), na.rm = TRUE)
@@ -34,7 +34,7 @@ TCombine<- function(data) {
 ANOVAcombine<- function(data) {
   ParticipantARM<- data.frame()
   participants <- names(data)[2:dim(data)[2]]
-  epochs <- list('R1_early'=c(65,4), 'R1_late'=c(209,16), 'R2D2'=c(237,4), 'EC'=c(273,16))
+  epochs <- list('R1_early'=c(65,4), 'R1_late'=c(221,4), 'R2D2'=c(237,4), 'EC'=c(273,16))
   Reaches<- c()
   Time<- c()
   ID<- c()
@@ -71,7 +71,7 @@ NoCursorsTCombine<- function(data) {
     r4<- unlist(data[36,participant])
     R1_Early<- mean(unlist(data[33:36,participant]), na.rm = TRUE)
     R1_second<- mean(unlist(data[37:40,participant]), na.rm = TRUE)
-    R1_Late<- mean(unlist(data[177:192,participant]), na.rm = TRUE)
+    R1_Late<- mean(unlist(data[189:192,participant]), na.rm = TRUE)
     R2<- mean(unlist(data[205:208,participant]), na.rm = TRUE)
     EC<- mean(unlist(data[209:212,participant]), na.rm = TRUE)
     EC_Late<- mean(unlist(data[241:256,participant]), na.rm = TRUE)
@@ -92,7 +92,7 @@ NoCursorsTCombine<- function(data) {
 NoCursorACombine<- function(data) {
   ParticipantARM<- data.frame()
   participants <- names(data)[2:dim(data)[2]]
-  epochs <- list('R1_early'=c(33,4), 'R1_late'=c(177,16), 'R2D2'=c(205,4), 'EC'=c(241,16))
+  epochs <- list('R1_early'=c(33,4), 'R1_late'=c(189,4), 'R2D2'=c(205,4), 'EC'=c(241,16))
   Reaches<- c()
   Time<- c()
   ID<- c()
