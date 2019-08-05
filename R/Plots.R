@@ -27,21 +27,21 @@ loadcolors <- function() {
 
 
 Plotexp1CI <- function (acd, pad, nld) {
-  PlotoutLine(acd, 1:3, 1:3)
+  PlotoutLine(acd, 1:3, 1:3, "Training Trials")
   PlotData(acd, 1, 1)
   PlotData(pad, 2, 2)
   PlotData(nld, 3, 3)
 }
 
 Plotexp2CI <- function (acd, ncd, ncdI, nld) {
-  PlotoutLine(acd, 3:5, 3:5)
+  PlotoutLine(acd, 3:5, 3:5, "Training Trials")
   PlotData(nld, 3, 3)
   PlotData(ncd, 4, 4)
   PlotData(ncdI, 5, 5)
 }
 
 PlotallTapCI <- function (pl = dataset1, al = dataset2) {
-  PlotoutLine(pl, 6:7, 1:2)
+  PlotoutLine(pl, 6:7, 1:2, "Hand Localizations")
   PlotData(al, 1, 1, 1)
   PlotData(pl, 2, 2, 1)
 }
@@ -52,7 +52,7 @@ PlotallreachesCI <-
             nld = dataset3,
             ncd = dataset4,
             ncdI = dataset5) {
-    PlotoutLine(acd, 1:5, 1:5)
+    PlotoutLine(acd, 1:5, 1:5, "Training Trials")
     PlotData(acd, 1, 1)
     PlotData(pad, 2, 2)
     PlotData(nld, 3, 3)
@@ -105,7 +105,7 @@ RegressionPLot <- function(exp) {
       legend = c(
         'Passive Localization',
         'Active Localization',
-        'No-Localization'
+        'Pause'
       ),
       col = c(colorPA, colorA, colorNL),
       lty = c(1, 1, 1),
@@ -146,7 +146,7 @@ RegressionPLot <- function(exp) {
     legend(
       -14,
       23,
-      legend = c('New No-Cursor', 'No-Cursor', 'No-Localization'),
+      legend = c('New No-Cursor', 'No-Cursor', 'Pause'),
       col = c(colorNNC, colorNC, colorNL),
       lty = c(1, 1, 1),
       lwd = c(2, 2, 2),
@@ -263,6 +263,7 @@ RegressionPLot3P <- function() {
     ylab = 'Change in Hand Localization [°]',
     xlim = c(-30, 30),
     ylim = c(-20, 20),
+    main = 'Size of Perturbation Vs. Localizations',
     axes = FALSE, asp = 1
   )
   axis(2,
@@ -313,6 +314,7 @@ RegressionPLotchange <- function() {
     ylab = 'Change in Hand Localization [°]',
     xlim = c(0, 60),
     ylim = c(-10, 30),
+    main = 'Change in Perturbation Vs. Localizations',
     axes = FALSE
   )
   axis(2,
@@ -389,13 +391,13 @@ Plotschedule <- function(dataset) {
     col = 'white'
   )
   rect(65,0,68,30, col = 'grey',border = NA)
-  text(65,15,'R1', srt = 90)
+  text(67,33,'R1', adj = .5)
   rect(221,0,224,30, col = 'grey',border = NA)
-  text(222,15,'R1_late', srt = 90)
+  text(223,33,'R1_late', adj = .5)
   rect(237,-30,240,0, col = 'grey',border = NA)
-  text(237,-15,'R2', srt = 90)
+  text(239,-33,'R2', adj = .5)
   rect(273,-15,288,15, col = 'grey',border = NA)
-  text(279,5,'EC', srt = 90)
+  text(280,18,'EC', adj = .5)
   lines(c(1, 64, 64, 224, 224, 240, 240),
         c(0, 0, 30, 30, -30, -30, 0),
         col = rgb(0., 0., 0.))
@@ -407,14 +409,14 @@ Plotschedule <- function(dataset) {
   axis(2, at = c(-30, -15, 0, 15, 30), cex.axis = 0.75)
   axis(1, at = c(1, 64, 224, 240, 288), cex.axis = 0.75)
 }
-PlotoutLine <- function(dataset, exp, color) {
+PlotoutLine <- function(dataset, exp, color,title) {
   labels <-
     list (
       'Active Localization Group (N=32)',
       'Passive Localization Group (N=32)',
-      'No Localization Group (N=32)',
+      'Pause Group (N=32)',
       'No-Cursor Group (N=32)',
-      'Instructed No-Cursor Group (N=16)',
+      'No-Cursor Instructed Group (N=16)',
       'Active Localizations (N=32)',
       'Passive Localizations (N=32)'
     )
@@ -431,7 +433,7 @@ PlotoutLine <- function(dataset, exp, color) {
     xlab = "Trial",
     ylab = "Hand Direction [°]",
     axes = F,
-    main = "Learning Curves",
+    main = title,
     type = 'l',
     col = 'white'
   )
@@ -444,7 +446,7 @@ PlotoutLine <- function(dataset, exp, color) {
         col = rgb(0., 0., 0.))
   legend(
     -5,
-    -15,
+    -10,
     legend = c(label),
     col = c(unlist(colors)),
     lty = c(1),
@@ -497,18 +499,19 @@ Reachmodel <- function(data, name, grid = 'restricted') {
   reach_par <-
     fitTwoRateReachModel(
       reaches = reaches$meanreaches,
-      schedule = reaches$distortion,
+      schedule = reaches$schedule,
       oneTwoRates = 2,
       grid = grid,
       checkStability = TRUE
     )
+  print(reach_par)
   reach_model <-
-    twoRateReachModel(par = reach_par, schedule = reaches$distortion)
+    twoRateReachModel(par = reach_par, schedule = reaches$schedule)
   Plotmodel(data, name)
   lines(reach_model$total * -1, col = c(rgb(.5, 0., .5)))
   lines(reach_model$slow * -1, col = rgb(0., .5, 1.))
   lines(reach_model$fast * -1, col = rgb(0.0, 0.7, 0.0))
-  MSE<- twoRateReachModelErrors(reach_par, reaches = reaches$meanreaches,schedule = reaches$distortion )
+  MSE<- twoRateReachModelErrors(reach_par, reaches = reaches$meanreaches,schedule = reaches$schedule )
   RMSE<- sqrt(MSE)
   pars<-c(reach_par,MSE, RMSE)
   names(pars)[5]<-"MSE"
@@ -521,13 +524,13 @@ Reachmodelnc <- function(data, ncdata, name) {
   reach_par <-
     fitTwoRateReachModel(
       reaches = reaches$meanreaches,
-      schedule = reaches$distortion,
+      schedule = reaches$schedule,
       oneTwoRates = 2,
       grid = 'skewed',
       checkStability = TRUE
     )
   reach_model1 <-
-    twoRateReachModel(par = reach_par, schedule = reaches$distortion)
+    twoRateReachModel(par = reach_par, schedule = reaches$schedule)
   reach_model <- reach_model1[33:320, ]
   Plotncmodel(data[33:320, ], name)
   lines(reach_model$total * -1, col = c(rgb(.5, 0., .5)))
@@ -541,7 +544,7 @@ Reachmodelnc <- function(data, ncdata, name) {
 
 
 Plotmodel <- function(dataset, name) {
-  title <- sprintf('%s Reaches', name)
+  title <- sprintf('%s Testing Trial', name)
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
   dataset$Mean <- rowMeans(dataset[, 2:ncol(dataset)], na.rm = TRUE)
   plot(
@@ -564,7 +567,7 @@ Plotmodel <- function(dataset, name) {
         col = rgb(0., 0., 0.))
   legend(
     -10,
-    2,
+    -10,
     legend = c('Reach data', 'model', 'fast', 'slow'),
     col = c(
       rgb(0.44, 0.51, 0.57),
@@ -587,7 +590,7 @@ Plotmodel <- function(dataset, name) {
 }
 
 Plotncmodel <- function(dataset, name) {
-  title <- sprintf('%s Reaches', name)
+  title <- sprintf('%s Testing Trial', name)
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
   dataset$Mean <- rowMeans(dataset[, 2:ncol(dataset)], na.rm = TRUE)
   plot(
@@ -610,7 +613,7 @@ Plotncmodel <- function(dataset, name) {
         col = rgb(0., 0., 0.))
   legend(
     -10,
-    2,
+    -10,
     legend = c('Reach data', 'No-cursor data', 'model', 'fast', 'slow'),
     col = c(
       rgb(0.44, 0.51, 0.57),
@@ -692,7 +695,7 @@ plotRegressionWithCI <-
 
 ## This one plots the invidual traces of each participant over the group average. ----
 
-PlotIndividualdata <- function (data, exp) {
+PlotIndividualdata <- function (data, exp, title) {
   labels <-
     list (
       'Active Localization Group (N=32)',
@@ -701,7 +704,7 @@ PlotIndividualdata <- function (data, exp) {
       'No-Cursor Group (N=32)',
       'Instructed No-Cursor Group (N=32)'
     )
-  PlotoutLine(data, exp, exp)
+  PlotoutLine(data, exp, exp, title)
   PlotData(data, exp, exp)
   subdata <- data * -1
   participants <- 2:ncol(data)

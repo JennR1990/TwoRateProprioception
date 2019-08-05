@@ -70,11 +70,11 @@ library("svglite", lib.loc="~/R/win-library/3.4")
 PlotoutLine(active_reaches)
 - Fig 3: A,B,C,D) one subplot for each group showing reach deviations in the four main phases: individual traces, 95% confidence intervals, median (show quality of the data)
 ```{r}
-PlotIndividualdata(pause_reaches[33:320,],3) #individual traces for pause data
-PlotIndividualdata(active_reaches,1)
-PlotIndividualdata(passive_reaches,2)
-PlotIndividualdata(nocursor_reaches[33:320,],4)
-PlotIndividualdata(nocursorI_reaches[33:320,],5)
+PlotIndividualdata(pause_reaches[33:320,],3, "Individual Pause Data") #individual traces for pause data
+PlotIndividualdata(active_reaches,1, "Individual Active Data")
+PlotIndividualdata(passive_reaches,2, "Individual Passive Data")
+PlotIndividualdata(nocursor_reaches[33:320,],4, "Individual No-Cursor Data")
+PlotIndividualdata(nocursorI_reaches[33:320,],5, "Individual No-Cursor_I Data")
 ```
 - Fig 4: A,B,C,D) one subplot for each group showing the median reach deviations in the four main phases, plus the two-rate model fit and it's fast and slow process (show quality of the fits)
 ```{r}
@@ -185,8 +185,7 @@ NCI_AICS<- ModelAICs(nocursorI_reaches,'No-Cursor_I')
 
 Figures for the manuscript
 ```{r real figures}
-svglite(file='doc/schedule.svg', width=6, height=8, system_fonts=list(sans = "Arial"))
-layout(matrix(c(1,2), nrow=2, byrow=TRUE), heights=c(2,2))
+svglite(file='doc/schedule.svg', width=8, height=4, system_fonts=list(sans = "Arial"))
 Plotschedule(active_reaches)
 dev.off()
 
@@ -198,20 +197,20 @@ Reachmodel(active_reaches, 'Active')
 Reachmodel(passive_reaches, 'Passive')
 dev.off()
 
-
-svglite(file='doc/Experiment_1a_Figures.svg', width=5, height=4, system_fonts=list(sans = "Arial"))
-#layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
-RegressionPLot(1)
-RegressionPLot(2)
+svglite(file='doc/prop vs. reaches correlations and prop model.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
+layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
+RegressionPLot3P()
+RegressionPLotchange()
+fitPropModel(active_reaches, active_localization, colorA, 'Active Localizations')
+fitPropModel(passive_reaches, passive_localization, colorPA, 'Passive Localizations')
 dev.off()
-
 
 svglite(file='doc/Experiment_2_Figures.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
 layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
 Plotexp2CI(pause_reaches[33:320,],nocursor_reaches[33:320,], nocursorI_reaches[33:320,], pause_reaches[33:320,])
+Reachmodel(pause_reaches[33:320,], 'Pause')
 Reachmodelnc(nocursor_reaches, nocursor_nocursors, 'No-Cursor')
-Reachmodelnc(nocursorI_reaches, nocursorI_nocursors, 'No-Cursor')
-Reachmodel(pause_reaches, 'Pause')
+Reachmodelnc(nocursorI_reaches, nocursorI_nocursors, 'No-Cursor Instructed')
 dev.off()
 
 svglite(file='doc/correlations.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
@@ -221,15 +220,13 @@ RegressionPLotR1()
 RegressionPLot3P()
 RegressionPLotchange()
 dev.off()
-
-
-svglite(file='doc/prop vs. reaches correlations and prop model.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
-layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
-RegressionPLot3P()
-RegressionPLotchange()
-fitPropModel(active_reaches, active_localization, colorA)
-fitPropModel(passive_reaches, passive_localization, colorPA)
+svglite(file='doc/Experiment_1a_Figures.svg', width=5, height=4, system_fonts=list(sans = "Arial"))
+#layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
+RegressionPLot(1)
+RegressionPLot(2)
 dev.off()
+
+
 
 ```
 ## Two-Rate model
