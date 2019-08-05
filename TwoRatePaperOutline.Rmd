@@ -80,12 +80,12 @@ PlotIndividualdata(nocursorI_reaches[33:320,],5)
 ```{r}
 #Allpars<-Allreachmodels(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,])
 
-Reachmodel(pause_reaches[33:320,], 'Pause')
-Reachmodel(nocursor_reaches[33:320,], 'No-Cursor')
-Reachmodel(nocursor_nocursors, 'No-Cursors')
-Reachmodel(nocursorI_reaches[33:320,], 'No-Cursor', grid = 'skewed')
-Reachmodel(active_reaches, 'Active')
-Reachmodel(passive_reaches, 'Passive')
+PausePars<-Reachmodel(pause_reaches[33:320,], 'Pause')
+NoCPars<-Reachmodel(nocursor_reaches[33:320,], 'No-Cursor')
+#Reachmodel(nocursor_nocursors, 'No-Cursors')
+NoCIPars<-Reachmodel(nocursorI_reaches[33:320,], 'No-Cursor', grid = 'skewed')
+ActivePars<-Reachmodel(active_reaches, 'Active')
+PassivePars<-Reachmodel(passive_reaches, 'Passive')
 ```
 - Fig 5: comparing reach deviations over time, (show differences between the groups, or should this go in a previous figure? seems it would get cluttered)
 ```{r}
@@ -149,8 +149,11 @@ FullI3LANOVA
     IndependentT(Ttestdata, 'No-CursorI', 'Pause', 'Reach')
       IndependentT(Ttestdata, 'Pause', 'No-Cursor', 'Reach')
 FullNCANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor_No-Cursors' | ANOVAdata$Experiment == 'No-CursorI_No-Cursors',])
+
 FullNCANOVA
   IndependentT(Ttestdata, 'No-Cursor_No-Cursors', 'No-CursorI_No-Cursors', 'No-Cursors')
+  PairedT(Ttestdata, 'No-Cursor_No-Cursors', 'No-Cursors')
+  PairedT(Ttestdata, 'No-CursorI_No-Cursors', 'No-Cursors')
   
 ### Comparing Learning Rates Across Test Trials
       
@@ -159,6 +162,12 @@ FullANOVA
       
 
 ### Random Descriptive Stats
+ActivePropMeans<- colMeans(TtestPdata[TtestPdata$Experiment == 'Active',1:ncol(TtestPdata)-1], na.rm = TRUE)
+PassivePropMeans<- colMeans(TtestPdata[TtestPdata$Experiment == 'Passive',1:ncol(TtestPdata)-1], na.rm = TRUE)
+NoCursorMeans<- colMeans(Ttestdata[Ttestdata$Experiment == 'No-Cursor',1:ncol(Ttestdata)-1], na.rm = TRUE)
+NoCursorNCMeans<- colMeans(Ttestdata[Ttestdata$Experiment == 'No-Cursor_No-Cursors',1:ncol(Ttestdata)-1], na.rm = TRUE)
+NoCursorIMeans<- colMeans(Ttestdata[Ttestdata$Experiment == 'No-CursorI',1:ncol(Ttestdata)-1], na.rm = TRUE)
+NoCursorNCIMeans<- colMeans(Ttestdata[Ttestdata$Experiment == 'No-CursorI_No-Cursors',1:ncol(Ttestdata)-1], na.rm = TRUE)
       Allmeans<- Allmeans()
       
       
@@ -188,18 +197,21 @@ PlotallTapCI(passive_localization, active_localization)
 Reachmodel(active_reaches, 'Active')
 Reachmodel(passive_reaches, 'Passive')
 dev.off()
+
+
 svglite(file='doc/Experiment_1a_Figures.svg', width=5, height=4, system_fonts=list(sans = "Arial"))
 #layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
 RegressionPLot(1)
+RegressionPLot(2)
 dev.off()
 
 
 svglite(file='doc/Experiment_2_Figures.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
 layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
 Plotexp2CI(pause_reaches[33:320,],nocursor_reaches[33:320,], nocursorI_reaches[33:320,], pause_reaches[33:320,])
-RegressionPLot(2)
 Reachmodelnc(nocursor_reaches, nocursor_nocursors, 'No-Cursor')
 Reachmodelnc(nocursorI_reaches, nocursorI_nocursors, 'No-Cursor')
+Reachmodel(pause_reaches, 'Pause')
 dev.off()
 
 svglite(file='doc/correlations.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
@@ -210,6 +222,14 @@ RegressionPLot3P()
 RegressionPLotchange()
 dev.off()
 
+
+svglite(file='doc/prop vs. reaches correlations and prop model.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
+layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
+RegressionPLot3P()
+RegressionPLotchange()
+fitPropModel(active_reaches, active_localization, colorA)
+fitPropModel(passive_reaches, passive_localization, colorPA)
+dev.off()
 
 ```
 ## Two-Rate model

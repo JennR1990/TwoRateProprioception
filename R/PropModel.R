@@ -118,7 +118,7 @@ gridsearch<- function(localizations, schedule, nsteps=7, topn=4) {
 
 
 
-fitPropModel<- function(reachdata, locadata) {
+fitPropModel<- function(reachdata, locadata, color) {
   
   localizations<-rowMeans(locadata[,2:ncol(locadata)], na.rm=TRUE)
   meanreaches<-rowMeans(reachdata[241:288,2:ncol(reachdata)], na.rm=TRUE)
@@ -146,23 +146,24 @@ fitPropModel<- function(reachdata, locadata) {
   } 
   # get lowest MSE, and pars that go with that
   bestpar <- order(pargrid[,2])[1]
-  plot(localizations, type = 'l', ylim = c(-15,15))
+  plot(localizations, type = 'l', lwd = 2, ylim = c(-15,15), axes = FALSE, ylab = 'Change in Hand Localizations [°]', xlab = "Trial", col = color)
+  axis(
+    1,
+    at = c(1, 64, 224, 240, 288),
+    cex.axis = 0.75,
+    las = 2
+  )
+  axis(2, at = c(-15, -10,-5,0, 5,10,15), cex.axis = 0.75)
   output<- PropModel(unlist(pargrid[bestpar]), schedule)
-  lines(output, col = "blue")
-  legend(100, 2, legend = c('real data', 'prediction'), col = 'black', 'blue')
+  lines(output, col = "black", lwd = 2)
+  proportion<- sprintf('RMSE = %f', unlist(pargrid[bestpar]))
+  print(proportion)
+  legend(5, -7, legend = c('Localization Data', 'Model Prediction'), col = c(color, "black"), lty = 1, lwd = 2, bty = 'n')
+  text(144, 0, labels = proportion)
   # return(those pars)
   return(unlist(pargrid[bestpar]))
 
 }
 
-plotpropmodel<- function (){
-  
-  
-  par<- fitPropModel(reachdata, locadata)
-  plot(localizations, type = 'l', ylim = c(-15,15))
-  output<- PropModel(par, schedule)
-  lines(output, col = "blue")
-  
-  
-}
+
 

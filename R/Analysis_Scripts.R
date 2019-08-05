@@ -318,7 +318,11 @@ PairedT<- function(data, exp1, task) {
   print('Did they eventually decay back to baseline?')
   print(t.test(data$Aligned[data$Experiment == exp1],data$EC_Late[data$Experiment == exp1], paired = TRUE)) 
   print(cohen.d(data$Aligned[data$Experiment == exp1],data$EC_Late[data$Experiment == exp1], paired = TRUE, na.rm = TRUE)) 
-  print(etaSquaredTtest(data$Aligned[data$Experiment == exp1],data$EC_Late[data$Experiment == exp1], na.rm = TRUE)) 
+  print(etaSquaredTtest(data$Aligned[data$Experiment == exp1],data$EC_Late[data$Experiment == exp1], na.rm = TRUE))
+  print('Were the error clamp trials similar to the 1st rotation?')
+  print(t.test(data$R1_Late[data$Experiment == exp1],data$EC_Late[data$Experiment == exp1], paired = TRUE)) 
+  print(cohen.d(data$R1_Late[data$Experiment == exp1],data$EC_Late[data$Experiment == exp1], paired = TRUE, na.rm = TRUE)) 
+  print(etaSquaredTtest(data$R1_Late[data$Experiment == exp1],data$EC_Late[data$Experiment == exp1], na.rm = TRUE))
   
 }
 
@@ -536,6 +540,20 @@ Poneratevstworate<- function (data, group = 'Passive',  grid = 'restricted') {
   AICs<- cbind(Data1AIC, Data2AIC)
   #write.csv(AICs, sprintf("ana/AICs/AICs for one and two rate %s reach data.csv", group), row.names = TRUE, quote = FALSE)
   #relativeLikelihoods <- exp((min(AICs) - AICs)/2)
+  
+}
+
+
+GetRMSEs<- function (){
+  
+  groups<- list('Pause', 'Active', 'Passive', 'NoC', 'NoCI','Average', 'Test Average')
+  RMSEs<-c(PausePars[6],ActivePars[6],PassivePars[6],NoCPars[6],NoCIPars[6])
+  RMSEs<- c(RMSEs, mean(RMSEs), mean(RMSEs[2:5]))
+  names(RMSEs)<- groups
+  
+  
+  
+  
   
 }
 

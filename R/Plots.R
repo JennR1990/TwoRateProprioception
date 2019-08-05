@@ -259,8 +259,8 @@ RegressionPLot3P <- function() {
    plot(
     loc ~ pert,
     col = colorPA,
-    xlab = 'Perturbation',
-    ylab = 'Localization',
+    xlab = 'Size of Perturbation [°]',
+    ylab = 'Change in Hand Localization [°]',
     xlim = c(-30, 30),
     ylim = c(-20, 20),
     axes = FALSE, asp = 1
@@ -269,7 +269,7 @@ RegressionPLot3P <- function() {
        at = c(-20, -10,0,10, 20),
        cex.axis = 0.75)
   axis(1,
-       at = c( -30,-15, 0, 15, 30),
+       at = c( -30, 0,  30),
        cex.axis = 0.75)
   lm<-plotRegressionWithCI(pert, loc, colors = c(colorPA_trans, colorPA))
   slopes<-lm$coefficients[2]
@@ -282,18 +282,18 @@ RegressionPLot3P <- function() {
   points(loca ~ perta, col = colorA)
   gm<-plotRegressionWithCI(perta, loca, colors = c(colorA_trans, colorA))
   slopes<-c(slopes,gm$coefficients[2])
-  # legend(
-  #   -30,
-  #   32,
-  #   legend = c(
-  #     'Passive Localization',
-  #     'Active Localization'
-  #   ),
-  #   col = c(colorPA, colorA),
-  #   lty = c(1, 1),
-  #   lwd = c(2, 2),
-  #   bty = 'n'
-  # )
+  legend(
+    -30,
+    22,
+    legend = c(
+      'Passive Localization',
+      'Active Localization'
+    ),
+    col = c(colorPA, colorA),
+    lty = c(1, 1),
+    lwd = c(2, 2),
+    bty = 'n'
+  )
   names(slopes)<- c('Passive', 'Active')
   return(slopes)
 }
@@ -309,8 +309,8 @@ RegressionPLotchange <- function() {
   plot(
     loc ~ pert,
     col = colorPA,
-    xlab = 'Pertubation Change',
-    ylab = 'Localization Change',
+    xlab = 'Change in Size of Pertubation [°]',
+    ylab = 'Change in Hand Localization [°]',
     xlim = c(0, 60),
     ylim = c(-10, 30),
     axes = FALSE
@@ -319,7 +319,7 @@ RegressionPLotchange <- function() {
        at = c( -10, 0, 10 ,20, 30),
        cex.axis = 0.75)
   axis(1,
-       at = c( 0, 15, 30, 45, 60),
+       at = c( 0, 30,  60),
        cex.axis = 0.75)
   lm<-plotRegressionWithCI(pert, loc, colors = c(colorPA_trans, colorPA))
   slopes<-lm$coefficients[2]
@@ -333,19 +333,19 @@ RegressionPLotchange <- function() {
   points(loca ~ perta, col = colorA)
   gm<-plotRegressionWithCI(perta, loca, colors = c(colorA_trans, colorA))
   slopes<-c(slopes,gm$coefficients[2])
-  # 
-  # legend(
-  #   -2,
-  #   32,
-  #   legend = c(
-  #     'Passive Localization',
-  #     'Active Localization'
-  #   ),
-  #   col = c(colorPA, colorA),
-  #   lty = c(1, 1),
-  #   lwd = c(2, 2),
-  #   bty = 'n'
-  # )
+
+  legend(
+    0,
+    32,
+    legend = c(
+      'Passive Localization',
+      'Active Localization'
+    ),
+    col = c(colorPA, colorA),
+    lty = c(1, 1),
+    lwd = c(2, 2),
+    bty = 'n'
+  )
   names(slopes)<- c('Passive', 'Active')
   return(slopes)
 }
@@ -390,12 +390,12 @@ Plotschedule <- function(dataset) {
   )
   rect(65,0,68,30, col = 'grey',border = NA)
   text(65,15,'R1', srt = 90)
-  rect(208,0,224,30, col = 'grey',border = NA)
-  text(216,15,'R1_late', srt = 90)
+  rect(221,0,224,30, col = 'grey',border = NA)
+  text(222,15,'R1_late', srt = 90)
   rect(237,-30,240,0, col = 'grey',border = NA)
   text(237,-15,'R2', srt = 90)
-  rect(256,-15,288,15, col = 'grey',border = NA)
-  text(272,5,'EC', srt = 90)
+  rect(273,-15,288,15, col = 'grey',border = NA)
+  text(279,5,'EC', srt = 90)
   lines(c(1, 64, 64, 224, 224, 240, 240),
         c(0, 0, 30, 30, -30, -30, 0),
         col = rgb(0., 0., 0.))
@@ -509,8 +509,10 @@ Reachmodel <- function(data, name, grid = 'restricted') {
   lines(reach_model$slow * -1, col = rgb(0., .5, 1.))
   lines(reach_model$fast * -1, col = rgb(0.0, 0.7, 0.0))
   MSE<- twoRateReachModelErrors(reach_par, reaches = reaches$meanreaches,schedule = reaches$distortion )
-  pars<-c(reach_par,MSE)
+  RMSE<- sqrt(MSE)
+  pars<-c(reach_par,MSE, RMSE)
   names(pars)[5]<-"MSE"
+  names(pars)[6]<-"RMSE"
   return(pars)
 }
 
@@ -631,6 +633,23 @@ Plotncmodel <- function(dataset, name) {
   axis(2, at = c(-30, -15, 0, 15, 30), cex.axis = 0.75)
   lines(dataset$Mean * -1, col = c(rgb(0.44, 0.51, 0.57)))
 }
+
+
+plotpropmodel<- function (reachdata, locadata){
+  
+  localizations<-rowMeans(locadata[,2:ncol(locadata)], na.rm=TRUE)
+  schedule<- reachdata$distortion
+  
+  
+  par<- fitPropModel(reachdata, locadata)
+  plot(localizations, type = 'l', ylim = c(-15,15))
+  output<- PropModel(par, schedule)
+  lines(output, col = "blue")
+  
+  
+}
+
+
 
 
 ## this code runs the linear regression between the two pieces of data you give it and it also plots it for you----
