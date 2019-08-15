@@ -1,0 +1,240 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Two-Rate Proprioception - How Quickly Does Proprioception Recalibrate And Is It Related To The Two-Rate Model Of Motor Learning},
+            pdfauthor={Jennifer E. Ruttle; Bernard Marius 't Hart; Denise Y.P. Henriques},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Two-Rate Proprioception - How Quickly Does Proprioception Recalibrate
+And Is It Related To The Two-Rate Model Of Motor Learning}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Jennifer E. Ruttle \\ Bernard Marius 't Hart \\ Denise Y.P. Henriques}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+    \date{}
+    \predate{}\postdate{}
+  
+
+\begin{document}
+\maketitle
+
+\section{Overview}\label{overview}
+
+We have previously found that proprioception recalibrates within 6
+trials, whereas visuomotor adaptation takes longer to saturate
+{[}\protect\hyperlink{ref-Ruttle2016}{1},\protect\hyperlink{ref-Ruttle2018}{2}{]}.
+
+In this project we set out to investigate 1) exactly how quickly
+proprioception recalibrates, 2) to disentangle it from the updating of
+predicted sensory consequences, and 3) to see if it matches implicit
+learning that should follow the slow process
+{[}\protect\hyperlink{ref-McDougle2015}{3}{]} in the two-rate model
+{[}\protect\hyperlink{ref-Smith2006}{4}{]}.
+
+\subsection{Trial types}\label{trial-types}
+
+To do all this we use a trial-by-trial approach, that is: one
+reach-training trial is followed by one of various ``measurement''
+trials: passive localization, active localization or no-cursor reaches
+(all of them explained below). As a control we also had people pause for
+a short bit instead. There wer four groups of participants and each did
+one of the four ``measurement'' trials exclusively. With one exception,
+the pause and no-cursor group also did a set of localization trials
+before and after the regular paradigm also done by the other groups.
+
+\begin{itemize}
+\tightlist
+\item
+  reach training
+\item
+  passive localization (only proprioception)
+\item
+  active localization (proprioception + prediction)
+\item
+  no-cursor reach (classic measure of motor learning)
+\item
+  pause (control)
+\item
+  error-clamp
+\end{itemize}
+
+By comparing the trial-by-trial changes in the four paradigms, we can
+investigate the time-course of all these processes in more depth than we
+previously have.
+
+\subsection{Figures}\label{figures}
+
+Here is a list of planned figures with their intended meaning:
+
+\begin{itemize}
+\tightlist
+\item
+  Fig 1: A) setup, B) reach training + targets, C) localization +
+  points, D) no-cursor + targets (illustrate the hardware and trial
+  types)
+\item
+  Fig 2: paradigm, four phases (aligned, rotated, reversed,
+  error-clamped), plus extra localization phases (illustrate the main
+  paradigm\ldots{} add expected model fit?)
+\item
+  Fig 3: A,B,C,D) one subplot for each group showing reach deviations in
+  the four main phases: individual traces, 95\% confidence intervals,
+  median (show quality of the data)
+\item
+  Fig 4: A,B,C,D) one subplot for each group showing the median reach
+  deviations in the four main phases, plus the two-rate model fit and
+  it's fast and slow process (show quality of the fits)
+\item
+  Fig 5: comparing reach deviations over time, (show differences between
+  the groups, or should this go in a previous figure? seems it would get
+  cluttered)
+\item
+  Fig 6: A) localization throughout for the two localization groups, B)
+  localization shift in the pause and no-cursor group, C) speed of
+  localization shift, D/E) localization shift with the two processes for
+  each group (show the incredible speed of localization shifts and how
+  non-matching the slow but also the fast process are)
+\item
+  Fig 7: alternative models of localization? (20\% model works
+  reasonably well\ldots{} even better than giving localization it's own
+  two- or one-rate model)
+\item
+  Fig 8: A) time course of no-cursor changes (no-cursor could reflect a
+  watered down version of the slow process?)
+\end{itemize}
+
+\subsection{Two-Rate model}\label{two-rate-model}
+
+In the two-rate model, the motor output X at trial t, \(X_t\) is simply
+the added output of the slow and fast process at trial t:
+
+\begin{equation}
+\label{tworate-total}
+X_t = S_t + F_t
+\end{equation}
+
+The output of the slow process on the next trial (t+1) is determined by
+the error on the previous trial multiplied by a learning rate L, and the
+output on the previous trial multiplied by a retention rate R:
+
+\begin{equation}
+\label{tworate-slow}
+S_{t+1} = (L^s \cdot E_t) + (R^s \cdot S_t)
+\end{equation}
+
+Similarly, the fast process has it's own learning rate and retention
+rate:
+
+\begin{equation}
+\label{tworate-fast}
+F_{t+1} = (L^f \cdot E_t) + (R^f \cdot F_t)
+\end{equation}
+
+The four parameters \(L^s\), \(R^s\), \(L^f\) and \(R^f\) will be fit to
+match the data optimally according to a least-squared error algorithm.
+They should each fall within the range {[}0,1{]}. To ensure that the
+fast process learns faster than the slow process but also forgets faster
+than the slow process the model is further constrained by requiring that
+\(L^s < L^f\) and \(R^s > R^f\).
+
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+\hypertarget{refs}{}
+\hypertarget{ref-Ruttle2016}{}
+1. Ruttle JE, Cressman EK, 't Hart BM, Henriques DYP. Time course of
+reach adaptation and proprioceptive recalibration during visuomotor
+learning. PLOS ONE. Public Library of Science; 2016;11: 1--16.
+doi:\href{https://doi.org/10.1371/journal.pone.0163695}{10.1371/journal.pone.0163695}
+
+\hypertarget{ref-Ruttle2018}{}
+2. Ruttle JE, 't Hart BM, Henriques DYP. The fast contribution of
+visual-proprioceptive discrepancy to reach aftereffects and
+proprioceptive recalibration. PLOS ONE. Public Library of Science;
+2018;13: 1--16.
+doi:\href{https://doi.org/10.1371/journal.pone.0200621}{10.1371/journal.pone.0200621}
+
+\hypertarget{ref-McDougle2015}{}
+3. McDougle SD, Bond KM, Taylor JA. Explicit and implicit processes
+constitute the fast and slow processes of sensorimotor learning. Journal
+of Neuroscience. Society for Neuroscience; 2015;35: 9568--9579.
+doi:\href{https://doi.org/10.1523/JNEUROSCI.5061-14.2015}{10.1523/JNEUROSCI.5061-14.2015}
+
+\hypertarget{ref-Smith2006}{}
+4. Smith MA, Ghazizadeh A, Shadmehr R. Interacting adaptive processes
+with different timescales underlie short-term motor learning. PLOS
+Biology. Public Library of Science; 2006;4.
+doi:\href{https://doi.org/10.1371/journal.pbio.0040179}{10.1371/journal.pbio.0040179}
+
+
+\end{document}

@@ -7,10 +7,16 @@ author:
 - Denise Y.P. Henriques
 csl: lit/plos-one.csl
 output:
+<<<<<<< HEAD:TwoRateProprioception.Rmd
+  word_document: default
+  pdf_document: default
+  html_notebook: default
+=======
   html_notebook: default
   word_document: default
   pdf_document: default
   html_document: null
+>>>>>>> bc0aca84b7292c5aca7ce5dc592b06333d6d64b1:TwoRateProprioception_Notes.Rmd
 link-citations: yes
 bibliography: lit/bibliography.bib
 ---
@@ -23,7 +29,7 @@ In this project we set out to investigate 1) exactly how quickly proprioception 
 
 ## Trial types
 
-To do all this we use a trial-by-trial approach, that is: one reach-training trial is followed by one of various "measurement" trials: passive localization, active localization or no-cursor reaches (all of them explained below). As a control we also had people pause for a short bit instead. There wer four groups of participants and each did one of the four "measurement" trials exclusively. With one exception, the pause and no-cursor group also did a set of localization trials before and after the regular paradigm also done by the other groups.
+To do all this we use a trial-by-trial approach, that is: one reach-training trial is followed by one of various "measurement" trials: passive localization, active localization or no-cursor reaches (all of them explained below). As a control we also had people pause for a short bit instead. There were four groups of participants and each did one of the four "measurement" trials exclusively. With one exception, the pause and no-cursor group also did a set of localization trials before and after the regular paradigm also done by the other groups.
 
 The first of each pair of trials is always one of these, both appear for every participant:
 - reach training
@@ -41,21 +47,104 @@ By comparing the trial-by-trial changes in the four paradigms, we can investigat
 
 ## Figures
 
-Here is a list of planned figures with their potential message:
+Preparing Data for Figures and Analysis:
+```{r}
+source('C:/Users/jeruttle/Jenn Dropbox/Jennifer Ruttle/TwoRateProprioception/R/Analysis_Scripts.R')
+source('C:/Users/jeruttle/Jenn Dropbox/Jennifer Ruttle/TwoRateProprioception/R/Plot_codes.R', encoding = 'UTF-8')
+source('C:/Users/jeruttle/Jenn Dropbox/Jennifer Ruttle/TwoRateProprioception/R/Repeated_Measures_Combine.R')
+source('C:/Users/jeruttle/Jenn Dropbox/Jennifer Ruttle/TwoRateProprioception/R/shared.R')
+loadcolors()
+downloadOSFdata()
+pause_reaches<- Loaddata(group='pause')
+active_reaches<- Loaddata(group='active')
+passive_reaches<- Loaddata()
+nocursor_reaches<- Loaddata(group='nocursor')
+passive_localization<- Loaddata(task = 'localization')
+active_localization<- Loaddata(group='active', task = 'localization')
+nocursor_nocursors<- Loaddata(group='nocursor', task = 'nocursors')
+ANOVAdata<- PrepdataforANOVA(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors)
+ANOVAPdata<- PrepdataforPropANOVA(active_localization,passive_localization)
+Ttestdata<- PrepdataforT(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursor_nocursors)
+TtestPdata<- PrepdataforPropT(active_localization, passive_localization)
+```
 
+Here is a list of planned figures with their potential message:
+library("svglite", lib.loc="~/R/win-library/3.4")
 - Fig 1: A) setup, B) reach training + targets, C) localization + points, D) no-cursor + targets (illustrate the hardware and trial types, not done in R)
 - Fig 2: paradigm, four phases (aligned, rotated, reversed, error-clamped), plus extra localization phases (illustrate the main paradigm... add expected model fit?)
 - Fig 3: A,B,C,D) one subplot for each group showing reach deviations in the four main phases: individual traces, 95% confidence intervals, median (show quality of the data)
+```{r}
+PlotPausedata(pause_reaches) #individual traces for pause data
+PlotActivedata(active_reaches)
+PlotPassivedata(passive_reaches)
+Plotnocursordata(nocursor_reaches)
+```
 - Fig 4: A,B,C,D) one subplot for each group showing the median reach deviations in the four main phases, plus the two-rate model fit and it's fast and slow process (show quality of the fits)
+```{r}
+#Allpars<-Allreachmodels(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,])
+Reachmodel(pause_reaches[33:320,], 'Pause')
+Reachmodel(nocursor_reaches[33:320,], 'No-Cursor')
+Reachmodel(active_reaches, 'Active')
+Reachmodel(passive_reaches, 'Passive')
+```
 - Fig 5: comparing reach deviations over time, (show differences between the groups, or should this go in a previous figure? seems it would get cluttered)
+```{r}
+PlotallreachesCI(active_reaches,passive_reaches, pause_reaches,nocursor_reaches)
+```
 - Fig 6: A) localization throughout for the two localization groups, B) localization shift in the pause and no-cursor group, C) speed of localization shift, D/E) localization shift with the two processes for each group (show the incredible speed of localization shifts and how non-matching the slow but also the fast process are)
+```{r}
+PlotallTapCI(passive_localization, active_localization) #has no model output
+```
 - Fig 7: alternative models of localization? (20% model works reasonably well... even better than giving localization it's own two- or one-rate model)
+
 - Fig 8: A) time course of no-cursor changes (no-cursor could reflect a watered down version of the slow process?)
+```{r}
+Reachmodelnc(nocursor_reaches, nocursor_nocursors, 'No-Cursor')
+```
+
+## Analysis of data
+
+We begin with some ANOVA's and T-tests to check for significance
+```{r}
+tanalyzedata(Ttestdata)
+library("ez")
+FullANOVA<-ANOVAanalysis(ANOVAdata)
+tpanalyzedata(TtestPdata)
+library("ez")
+FullPANOVA<-ANOVAanalysis(ANOVAPdata)
+```
+Then we check to see if the data is more one-rate or two-rate
+```{r}
+Active_AICS<- bootstrapModelAICs(active_reaches)
+Passive_AICS<- bootstrapModelAICs(passive_reaches)
+Pause_AICS<- bootstrapModelAICs(pause_reaches)
+NC_AICS<- bootstrapModelAICs(nocursor_reaches)
+```
 
 ## Two-Rate model
 
 In the two-rate model, the motor output X at trial t, $X_t$ is simply the added output of the slow and fast process at trial t:
 
+<<<<<<< HEAD:TwoRateProprioception.Rmd
+\begin{equation}
+\label{tworate-total}
+X_t = S_t + F_t
+\end{equation}
+
+The output of the slow process on the next trial (t+1) is determined by the error on the previous trial multiplied by a learning rate L, and the output on the previous trial multiplied by a retention rate R:
+
+\begin{equation}
+\label{tworate-slow}
+S_{t+1} = (L^s \cdot E_t) + (R^s \cdot S_t)
+\end{equation}
+
+Similarly, the fast process has it's own learning rate and retention rate:
+
+\begin{equation}
+\label{tworate-fast}
+F_{t+1} = (L^f \cdot E_t) + (R^f \cdot F_t)
+\end{equation}
+=======
 [1] $X_t = S_t + F_t$ \label{tworate-total}
 
 The output of the slow process on the next trial (t+1) is determined by the error on the previous trial multiplied by a learning rate L, and the output on the previous trial multiplied by a retention rate R:
@@ -65,6 +154,7 @@ The output of the slow process on the next trial (t+1) is determined by the erro
 Similarly, the fast process has it's own learning rate and retention rate:
 
 [3] $F_{t+1} = L^f \cdot E_t + R^f \cdot F_t$ \label{tworate-fast}
+>>>>>>> bc0aca84b7292c5aca7ce5dc592b06333d6d64b1:TwoRateProprioception_Notes.Rmd
 
 The four parameters $L^s$, $R^s$, $L^f$ and $R^f$ will be fit so that $X_t$ matches the recorded reach deviations optimally according to a least-squared error algorithm. They should each fall within the range [0,1]. To ensure that the fast process learns faster than the slow process but also forgets faster than the slow process the model is further constrained by requiring that $L^s < L^f$ and $R^s > R^f$.
 
