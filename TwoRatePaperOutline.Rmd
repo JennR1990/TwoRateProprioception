@@ -160,6 +160,11 @@ FullANOVA
 
 ### Random Descriptive Stats
       Allmeans<- Allmeans()
+
+      
+### Polynomial Regressions
+allpars<- ParticipantReachmodels(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,], nocursorI_reaches[33:320,])
+      pLogRegression(allpars)
       
       
 ```
