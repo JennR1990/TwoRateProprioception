@@ -46,6 +46,14 @@ PlotallTapCI <- function (pl = dataset1, al = dataset2) {
   PlotData(pl, 2, 2, 1)
 }
 
+
+
+Plotnocursors <- function (acd,ncd_NC, ncdI) {
+  PlotoutLine(acd, 4:5, 4:5, "Open-Loop Reaches")
+  PlotData(ncd_NC, 4, 4, x =  c(c(33:288), rev(c(33:288))))
+  PlotData(ncdI, 5, 5, x =  c(c(33:288), rev(c(33:288))))
+}
+
 PlotallreachesCI <-
   function (acd = dataset1,
             pad = dataset2,
@@ -359,7 +367,7 @@ RegressionPLotchange <- function() {
 ##this plots reach, localization and no-cursor data.
 
 
-PlotData <- function(dataset, color, trans, rotate = -1) {
+PlotData <- function(dataset, color, trans, rotate = -1, x =  c(c(1:288), rev(c(1:288)))) {
   colorlist <- c(colorA, colorPA, colorNL, colorNC, colorNNC)
   translist <-
     c(colorA_trans,
@@ -372,10 +380,10 @@ PlotData <- function(dataset, color, trans, rotate = -1) {
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
   dataset$Mean <-
     rowMeans(dataset[, 2:length(dataset)], na.rm = TRUE)
-  x <- c(c(1:288), rev(c(1:288)))
+  x <- x
   y <- c(dataCIs[, 1], rev(dataCIs[, 2]))
   polygon(x, y, col = translist[trans], border = NA)
-  lines(dataset$Mean * rotate, col = colorlist[color], lwd = 1.5)
+  lines(x[1:length(dataset$Mean)],dataset$Mean * rotate, col = colorlist[color], lwd = 1.5)
 }
 
 Plotschedule <- function(dataset) {
