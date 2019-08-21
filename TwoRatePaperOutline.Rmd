@@ -47,22 +47,8 @@ library('effsize')
 library('SMCL')
 loadcolors()
 downloadOSFdata()
-
-pause_reaches<- Loaddata(group='pause')
-Pause<- Loaddata(group='pause', task = 'pre_post_Prop')
-active_reaches<- Loaddata(group='active')
-passive_reaches<- Loaddata()
-nocursor_reaches<- Loaddata(group='nocursor')
-nocursorI_reaches<- Loaddata(group='nocursor', task = 'NI_reaches')
-passive_localization<- Loaddata(task = 'localization')
-active_localization<- Loaddata(group='active', task = 'localization')
-nocursor_nocursors<- Loaddata(group='nocursor', task = 'nocursors')
-NoCursor<- Loaddata(group='NoCursor', task = 'pre_post_Prop')
-nocursorI_nocursors<- Loaddata(group='nocursor', task = 'NI_nocursors')
-NewNoC<- Loaddata(group='NewNoC', task = 'pre_post_Prop')
+loadalldata()
 ```
-
-
 Here is a list of planned figures with their potential message:
 library("svglite", lib.loc="~/R/win-library/3.4")
 - Fig 1: A) setup, B) reach training + targets, C) localization + points, D) no-cursor + targets (illustrate the hardware and trial types, not done in R)
@@ -82,7 +68,6 @@ PlotIndividualdata(nocursorI_reaches[33:320,],5, "Individual No-Cursor_I Data")
 
 PausePars<-Reachmodel(pause_reaches[33:320,], 'Pause')
 NoCPars<-Reachmodel(nocursor_reaches[33:320,], 'No-Cursor')
-#Reachmodel(nocursor_nocursors, 'No-Cursors')
 NoCIPars<-Reachmodel(nocursorI_reaches[33:320,], 'No-Cursor', grid = 'skewed')
 ActivePars<-Reachmodel(active_reaches, 'Active')
 PassivePars<-Reachmodel(passive_reaches, 'Passive')
@@ -186,6 +171,12 @@ Passive_AICS<- ModelAICs(passive_reaches, 'Passive')
 Pause_AICS<- ModelAICs(pause_reaches, 'Pause')
 NC_AICS<- ModelAICs(nocursor_reaches, 'No-Cursor')
 NCI_AICS<- ModelAICs(nocursorI_reaches,'No-Cursor_I')
+
+Poneratevstworate(active_reaches, 'Active') #16 one rate people
+Poneratevstworate(passive_reaches) #28 one rate people
+Poneratevstworate(pause_reaches, 'Pause') #26 one rate people
+Poneratevstworate(nocursor_reaches, 'No-Cursor') # 28 one rate people
+Poneratevstworate(nocursorI_reaches, 'No-Cursor_I') #15 one rate people
 ```
 
 Figures for the manuscript

@@ -81,50 +81,18 @@ return(Descriptives<- (data.frame(AlignedMean, AlignedMax, AlignedMin, InitialRo
   }
 
 
-##Looking at per-participant fits-----
-
-
-
-##per participant fits for each group 
-ppfits<- function (groups = c('active', 'passive', 'pause', 'nocursor', 'nocursor_NI'), rate = 2) {
-  pars<- data.frame()
-  counter<- 1
-  for (group in groups){
-  filename<- sprintf('data/%s_reaches.csv', group)
-  data<- read.csv(filename, stringsAsFactors = F, header = TRUE)
-  
-  if (rate == 2){
-  par<- getParticipantFits(data)
-  } else {
-  par<- getoneParticipantFits(data)
-  }
-  par$experiment<- rep(group, times = nrow(par))
-  
-  if (counter >1){
-    pars<- rbind(pars, par)
-  } else {
-    pars<- par
-  }
-  counter<- counter + 1
-  print(dim(pars))
-  # output<- sprintf('%s_participant_parameters.csv', group)
-  # write.csv(pars, output, quote = FALSE, row.names = FALSE)
-  }
-  return(pars)
-}
-
 ##How do the different parameters predict the experiments, or can they? -----
 #polynomial logistic regression
 
-pLogRegression <- function(data) {
+pLogRegression <- function(data, variable = Test_Trial) {
   
   #df <- read.csv('data/Pilot/rebound.csv', stringsAsFactors = F)
   
-  data$Test_Trial<- as.factor(data$Test_Trial)
+  data$variable<- as.factor(data$variable)
   
 
     
-    print(summary(glm(formula = Test_Trial ~ rs + ls + rf + lf, family = binomial(link = "logit"), 
+    print(summary(glm(formula = variable ~ rs + ls + rf + lf, family = binomial(link = "logit"), 
                       data = data)))
 
   
@@ -132,15 +100,8 @@ pLogRegression <- function(data) {
 
 tpanalyzedata<- function(AllDataRM){
   IndependentT(AllDataRM, 'Active', 'Passive', 'Localization')
-  # IndependentT(AllDataRM, 'Pause', 'No-Cursor')
-  # IndependentT(AllDataRM, 'Active', 'No-Cursor')
-  # IndependentT(AllDataRM, 'Passive', 'No-Cursor')
-  # IndependentT(AllDataRM, 'Active', 'Pause')
-  # IndependentT(AllDataRM, 'Passive', 'Pause')
   PairedT(AllDataRM, 'Active', 'Localization')
   PairedT(AllDataRM, 'Passive', 'Localization')
-  # PairedT(AllDataRM, 'Pause')
-  # PairedT(AllDataRM, 'No-Cursor')
 }
 
 
@@ -329,7 +290,7 @@ PairedT<- function(data, exp1, task) {
 
 ##Models
 
-ParticipantReachmodels<- function(adata, pasdata, paudata, ncdata, ncidata) {
+ParticipantReachmodels2<- function(adata, pasdata, paudata, ncdata, ncidata) {
   a_par<- getParticipantFits2(adata)
   a_par$Experiment<-'Active'
   a_par$Test_Trial<-'Active'
@@ -348,28 +309,67 @@ ParticipantReachmodels<- function(adata, pasdata, paudata, ncdata, ncidata) {
   allpars<- rbind(a_par, Pas_par, Pau_par, nc_par, nci_par)
   return(allpars)
 }
-
-prepdatagetfits<- function (data){
-  data$distortion<- data$distortion
-  # modeldata<- getreachesformodel(data)
-  pars<- getParticipantFits(data)
-  return(pars)
+ParticipantBothReachmodels<- function(adata, pasdata, paudata, ncdata, ncidata) {
+  a_par<- getParticipantFits2(adata)
+  a_par1<- getParticipantFits1(adata)
+  a_par$Experiment<-'Active'
+  a_par$Test_Trial<-'Active'
+  a_par1$Experiment<-'Active'
+  a_par1$Test_Trial<-'Active'
+  Pas_par<- getParticipantFits2(pasdata)
+  Pas_par1<- getParticipantFits1(pasdata)
+  Pas_par$Experiment<-'Passive'
+  Pas_par$Test_Trial<-'Passive'
+  Pas_par1$Experiment<-'Passive'
+  Pas_par1$Test_Trial<-'Passive'
+  Pau_par<- getParticipantFits2(paudata)
+  Pau_par1<- getParticipantFits1(paudata)
+  Pau_par$Experiment<-'Pause'
+  Pau_par$Test_Trial<-'Passive'
+  Pau_par1$Experiment<-'Pause'
+  Pau_par1$Test_Trial<-'Passive'
+  nc_par<- getParticipantFits2(ncdata)
+  nc_par1<- getParticipantFits1(ncdata)
+  nc_par$Experiment<-'No-Cursor'
+  nc_par$Test_Trial<-'Active'
+  nc_par1$Experiment<-'No-Cursor'
+  nc_par1$Test_Trial<-'Active'
+  nci_par<- getParticipantFits2(ncidata)
+  nci_par1<- getParticipantFits1(ncidata)
+  nci_par$Experiment<-'No-Cursor_I'
+  nci_par$Test_Trial<-'Active'
+  nci_par1$Experiment<-'No-Cursor_I'
+  nci_par1$Test_Trial<-'Active'
+  allpars<- rbind(a_par, Pas_par, Pau_par, nc_par, nci_par,a_par1, Pas_par1, Pau_par1, nc_par1, nci_par1)
+  return(allpars)
+}
+ParticipantReachmodels1<- function(adata, pasdata, paudata, ncdata, ncidata) {
+  a_par<- getParticipantFits1(adata)
+  a_par$Experiment<-'Active'
+  a_par$Test_Trial<-'Active'
+  Pas_par<- getParticipantFits1(pasdata)
+  Pas_par$Experiment<-'Passive'
+  Pas_par$Test_Trial<-'Passive'
+  Pau_par<- getParticipantFits1(paudata)
+  Pau_par$Experiment<-'Pause'
+  Pau_par$Test_Trial<-'Passive'
+  nc_par<- getParticipantFits1(ncdata)
+  nc_par$Experiment<-'No-Cursor'
+  nc_par$Test_Trial<-'Active'
+  nci_par<- getParticipantFits1(ncidata)
+  nci_par$Experiment<-'No-Cursor_I'
+  nci_par$Test_Trial<-'Active'
+  allpars<- rbind(a_par, Pas_par, Pau_par, nc_par, nci_par)
+  return(allpars)
 }
 
-prepdatagetonefits<- function (data){
-  data$distortion<- data$distortion
-  # modeldata<- getreachesformodel(data)
-  pars<- getoneParticipantFits(data)
-  return(pars)
-}
-
-ModelAICs <- function(data, group, grid = 'restricted') {
+GroupModelAICs <- function(data, group, grid = 'restricted') {
   
   df<- getreachesformodel(data)
   #group='active'# add this to the function call when i use the commented line below
   #df <- read.csv(sprintf('data/%s_reaches.csv', group), stringsAsFactors = FALSE)
   
-  schedule <- df$schedule
+  schedule <- df$distortion
   
   #Reaches <- as.matrix(df[,2:dim(df)[2]])
   Reaches<- df$meanreaches
@@ -407,105 +407,6 @@ ModelAICs <- function(data, group, grid = 'restricted') {
   return(AICs)
 }
 
-
-ModelPars <- function(data, group, grid = 'restricted') {
-  
-  df<- getreachesformodel(data)
-  #group='active'# add this to the function call when i use the commented line below
-  #df <- read.csv(sprintf('data/%s_reaches.csv', group), stringsAsFactors = FALSE)
-  
-  schedule <- df$schedule
-  
-  #Reaches <- as.matrix(df[,2:dim(df)[2]])
-  Reaches<- df$meanreaches
-  
-  twoRateFit <- fitTwoRateReachModel(reaches=Reaches, schedule=schedule, oneTwoRates=2, grid=grid, checkStability=TRUE)
-  oneRateFit <- fitTwoRateReachModel(reaches=Reaches, schedule=schedule, oneTwoRates=1, grid=grid, checkStability=TRUE)
-  #twoRateFit<- fittworatemodel(Reaches, schedule)
-  #oneRateFit<- fitoneratemodel(Reaches, schedule)
-  
-  
-  print(oneRateFit)
-  print(twoRateFit)
-  
-  twoRateMSE <- twoRateReachModelErrors(par=twoRateFit, reaches=Reaches, schedule=schedule)
-  oneRateMSE <- twoRateReachModelErrors(par=oneRateFit, reaches=Reaches, schedule=schedule)
-  #twoRateMSE <- twoRateReachModelError(par=twoRateFit, reaches=Reaches, distortions =schedule)
-  #oneRateMSE <- oneRateReachModelError(par=oneRateFit, reaches=Reaches, distortions =  schedule)
-  
-  #preparing the AIC stuff
-  N <- dim(df)[2] - 1
-  # the median length of a phase is 40 trials,
-  # and there are 7.2 of those in 288 trials
-  InOb <- 6
-  # this is then used for C:
-  C <- InOb*(log(2*pi)+1)
-  twoRateAIC <- (2*4) + InOb*log(twoRateMSE) + C
-  oneRateAIC <- (2*2) + InOb*log(oneRateMSE) + C
-  
-  cat(sprintf('1-rate AIC: %0.2f  %s  2-rate AIC: %0.2f\n',oneRateAIC,c('>=', ' <')[as.numeric(oneRateAIC<twoRateAIC)+1],twoRateAIC))
-  
-  pars<- twoRateFit
-  AICs<- data.frame(twoRateAIC, oneRateAIC)
-  #write.csv(AICs, sprintf("ana/AICs/Group AICs for %s Reaches.csv", group), row.names = TRUE, quote = FALSE)
-  
-  return(pars)
-}
-
-bootstrapModelAICs <- function(data, group) {
-  #group='active'# add this to the function call when i use the commented line below
-  
-
-  
-  #df <- read.csv(sprintf('data/%s_reaches.csv', group), stringsAsFactors = FALSE)
-
-  schedule <- df$distortion
-  
-  Reaches <- as.matrix(df[,2:dim(df)[2]])
-  
-  N <- dim(df)[2] - 1
-  # prep for AICs:
-  
-  # the median length of a phase is 40 trials,
-  # and there are 7.2 of those in 288 trials
-  InOb <- 5
-  # # the mean length is 55 though:
-  # N <- 4
-  
-  # this is then used for C:
-  C <- InOb*(log(2*pi)+1)
-  
-  #for (bootstrap in c(1:bootstraps)) {
-    
-    #medReaches <- apply(reaches[,sample(c(1:N),N,replace=TRUE)], 1, median, na.rm=TRUE)
-    
-    twoRateFit <- fitTwoRateReachModel(reaches=Reaches, schedule=schedule, oneTwoRates=2, grid='restricted', checkStability=TRUE)
-    oneRateFit <- fitTwoRateReachModel(reaches=Reaches, schedule=schedule, oneTwoRates=1, grid='restricted', checkStability=TRUE)
-    print(oneRateFit)
-    print(twoRateFit)
-    
-    twoRateMSE <- twoRateReachModelErrors(par=twoRateFit, reaches=Reaches, schedule=schedule)
-    oneRateMSE <- twoRateReachModelErrors(par=oneRateFit, reaches=Reaches, schedule=schedule)
-    
-    
-    twoRateAIC <- (2*4) + InOb*log(twoRateMSE) + C
-    oneRateAIC <- (2*2) + InOb*log(oneRateMSE) + C
-    
-    cat(sprintf('1-rate AIC: %0.2f  %s  2-rate AIC: %0.2f\n',oneRateAIC,c('>=', ' <')[as.numeric(oneRateAIC<twoRateAIC)+1],twoRateAIC))
-    
-  #}
-  AICs<- data.frame(twoRateAIC, oneRateAIC)
-  write.csv(AICs, sprintf("ana/AICs/Group AICs for %s Reaches.csv", group), row.names = TRUE, quote = FALSE)
-  
-  return(AICs)
-}
-
-# Poneratevstworate(active_reaches, 'Active') #16 one rate people
-# Poneratevstworate(passive_reaches) #28 one rate people
-# Poneratevstworate(pause_reaches, 'Pause') #26 one rate people
-# Poneratevstworate(nocursor_reaches, 'No-Cursor') # 28 one rate people
-# Poneratevstworate(nocursorI_reaches, 'No-Cursor_I') #15 one rate people
-
 getParticipantFits2 <- function(data, grid='restricted') {
   
   participants <- colnames(data)[2:dim(data)[2]]
@@ -536,7 +437,7 @@ getParticipantFits2 <- function(data, grid='restricted') {
   return(participantfits)
 }
 
-getoneParticipantFits1 <- function(data, grid='restricted') {
+getParticipantFits1 <- function(data, grid='restricted') {
   
   participants <- colnames(data)[2:dim(data)[2]]
   distortions <- data$distortion
@@ -563,23 +464,39 @@ getoneParticipantFits1 <- function(data, grid='restricted') {
   return(participantfits)
 }
 
+getgroupfits2<- function(data, grid = grid) {
+  reaches<-rowMeans(data[,2:ncol(data)], na.rm=TRUE)
+  distortion<- data$distortion
+  pars <- fitTwoRateReachModel(reaches=reaches, schedule=distortions, oneTwoRates=2, grid=grid, checkStability=TRUE)
+  pars$MSE <- twoRateReachModelErrors(pars, reaches, distortions)
+  return(pars)
+}
+getgroupfits1<- function(data, grid = grid) {
+  reaches<-rowMeans(data[,2:ncol(data)], na.rm=TRUE)
+  distortion<- data$distortion
+  pars <- fitTwoRateReachModel(reaches=reaches, schedule=distortions, oneTwoRates=1, grid=grid, checkStability=TRUE)
+  pars$MSE <- twoRateReachModelErrors(pars, reaches, distortions)
+  return(pars)
+}
 
 
 Poneratevstworate<- function (data, group = 'Passive',  grid = 'restricted') {
   ##Getting AICS for one-rate model vs. two-rate model
   #need to run one rate model
 
-  par1<- getoneParticipantFits1(data, grid = grid)
+  par1<- getParticipantFits1(data, grid = grid)
   
   #write.csv(par1, sprintf("ana/AICs/One Rate Parameters for %s Reaches.csv", group), row.names = TRUE, quote = FALSE)
   #need to run two rate model
   
   
-  par2<- getParticipantFits1(data, grid = grid)
+  par2<- getParticipantFits2(data, grid = grid)
   #write.csv(par2, sprintf("ana/AICs/Two Rate Parameters for %s Reaches.csv", group), row.names = TRUE, quote = FALSE)
 
   Data1MSE<- par1$MSE
+  print(par1$MSE)
   Data2MSE<- par2$MSE
+  print(par2$MSE)
   N<- 6
   P1 <- 2
   P2 <- 4
