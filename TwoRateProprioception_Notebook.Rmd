@@ -1,0 +1,53 @@
+---
+title: "Two Rate Proprioception Paper"
+output:
+  word_document: default
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+# Prepping Data
+
+##Here we will make sure we have all the functions and scripts loaded we need
+
+```{r eval=TRUE, echo=FALSE}
+source('R/Analysis_Scripts.R')
+source('R/Plots.R', encoding = 'UTF-8')
+source('R/Repeated_Measures_Combine.R')
+source('R/shared.R')
+source('R/tworatemodel.R')
+library('ez')
+library('RateRate')
+library('svglite')
+library('effsize')
+library('SMCL')
+```
+
+## We will now download and load the data and make the color scheme available
+```{r eval=TRUE, echo=FALSE}
+loadcolors()
+downloadOSFdata()
+loadalldata()
+Allmeans<- Allmeans()
+```
+
+# Exploration of the data
+
+##First we will look at each group of data and what each participant is doing
+```{r}
+PlotIndividualdata(pause_reaches[33:320,],3, "Individual Pause Data") #individual traces for pause data
+PlotIndividualdata(active_reaches,1, "Individual Active Data")
+PlotIndividualdata(passive_reaches,2, "Individual Passive Data")
+PlotIndividualdata(nocursor_reaches[33:320,],4, "Individual No-Cursor Data")
+PlotIndividualdata(nocursorI_reaches[33:320,],5, "Individual No-Cursor_I Data")
+```
+## Now we can look at the mean of each of the groups and of all the data we collected
+```{r}
+Allmeans[,c(1,4,7,10,16,19)]
+```
+
+# Training Trials
+## Here we will look at how well the participants performed when the cursor was present
+```{r}
+PlotallreachesCI(active_reaches,passive_reaches, pause_reaches[33:320,],nocursor_reaches[33:320,],nocursorI_reaches[33:320,])
+```
