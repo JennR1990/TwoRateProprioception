@@ -156,7 +156,7 @@ fitPropModel<- function(reachdata, locadata, color, title) {
   axis(2, at = c(-15, -10,-5,0, 5,10,15), cex.axis = 0.75)
   output<- PropModel(unlist(pargrid[bestpar]), schedule)
   lines(output, col = "black")
-  proportion<- sprintf('RMSE = %f', unlist(pargrid[bestpar]))
+  proportion<- sprintf('Proportion = %f', unlist(pargrid[bestpar]))
   print(proportion)
   legend(5, -7, legend = c('Localization Data', 'Model Prediction'), col = c(color, "black"), lty = 1, lwd = 2, bty = 'n')
   text(144, 0, labels = proportion)
