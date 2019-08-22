@@ -1,0 +1,75 @@
+---
+title: "Two Rate Proprioception Paper"
+output:
+  word_document: default
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+# Prepping Data
+
+###Here we will make sure we have all the functions and scripts loaded we need
+
+```{r eval=TRUE, echo=FALSE}
+source('R/Analysis_Scripts.R')
+source('R/Plots.R', encoding = 'UTF-8')
+source('R/Repeated_Measures_Combine.R')
+source('R/shared.R')
+source('R/tworatemodel.R')
+library('ez')
+library('RateRate')
+library('svglite')
+library('effsize')
+library('SMCL')
+```
+
+### We will now download and load the data and make the color scheme available
+```{r eval=TRUE, echo=FALSE}
+loadcolors()
+downloadOSFdata()
+pause_reaches<- Loaddata(group='pause')
+pause<- Loaddata(group='pause', task = 'pre_post_Prop')
+active_reaches<- Loaddata(group='active')
+passive_reaches<- Loaddata()
+nocursor_reaches<- Loaddata(group='nocursor')
+nocursorI_reaches<- Loaddata(group='nocursor', task = 'NI_reaches')
+passive_localization<- Loaddata(task = 'localization')
+active_localization<- Loaddata(group='active', task = 'localization')
+nocursor_nocursors<- Loaddata(group='nocursor', task = 'nocursors')
+NoCursor<- Loaddata(group='NoCursor', task = 'pre_post_Prop')
+nocursorI_nocursors<- Loaddata(group='nocursor', task = 'NI_nocursors')
+NewNoC<- Loaddata(group='NewNoC', task = 'pre_post_Prop') 
+Allmeans<- Allmeans()
+```
+
+# Exploration of the data
+
+###First we will look at each group of data and what each participant is doing
+```{r eval=TRUE, echo=FALSE}
+PlotIndividualdata(pause_reaches[33:320,],3, "Individual Pause Data") #individual traces for pause data
+PlotIndividualdata(active_reaches,1, "Individual Active Data")
+PlotIndividualdata(passive_reaches,2, "Individual Passive Data")
+PlotIndividualdata(nocursor_reaches[33:320,],4, "Individual No-Cursor Data")
+PlotIndividualdata(nocursorI_reaches[33:320,],5, "Individual No-Cursor_I Data")
+```
+
+### Now we can look at the mean of each of the groups and of all the data we collected
+```{r}
+Allmeans[,c(1,4,7,10,16,19)]
+```
+
+# How did the participants perform as a group?
+### Here we will look at how well the participants performed when the cursor was present
+```{r}
+PlotallreachesCI(active_reaches,passive_reaches, pause_reaches[33:320,],nocursor_reaches[33:320,],nocursorI_reaches[33:320,])
+```
+
+### Here we will look at how the participants performed on the Hand localization test trials
+```{r}
+PlotallTapCI(passive_localization, active_localization) #has no model output
+```
+
+### Here we will look at how the participants performed when there was no hand cursor, during the open-loop test trials
+```{r}
+Plotnocursors(active_reaches, nocursor_nocursors, nocursorI_nocursors)
+```
