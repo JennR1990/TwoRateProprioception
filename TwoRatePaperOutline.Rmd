@@ -182,8 +182,9 @@ Poneratevstworate(nocursor_reaches, 'No-Cursor') # 28 one rate people
 Poneratevstworate(nocursorI_reaches, 'No-Cursor_I') #15 one rate people
 
 ##model comparison for localization data to total, slow and prop
-LocalizationModelCompare(passive_localization, passive_reaches)
-LocalizationModelCompare(passive_localization, passive_reaches)
+LocalizationModelCompare(passive_localization, passive_reaches, colorPA)
+LocalizationModelCompare(active_localization, active_reaches, colorA)
+
 ```
 
 Figures for the manuscript

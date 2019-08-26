@@ -606,7 +606,7 @@ CompareModel<- function(groups = c('active', 'passive','pause', 'nocursor', 'noc
 
 mmed <- function(x,n=5){runmed(x,n)}
 
-LocalizationModelCompare<- function (dataset, dataset2) {
+LocalizationModelCompare<- function (dataset, dataset2, color) {
   data<- getreachesformodel(dataset)
   dist<- data$schedule
   localizations<- mmed(data$meanreaches)
@@ -622,13 +622,13 @@ LocalizationModelCompare<- function (dataset, dataset2) {
   meanreaches<- meanreaches*-1
   dataset2$distortion[241:288]<- as.numeric(meanreaches)
   output<- PropModel(unlist(prop_par), dataset2$distortion)
-  plot(localizations,main = "Localizations vs Scaled Model",ylim = c(-5, 10), lwd = 2.5, axes= F,col=rgb(0.44,0.51,0.57), xlab = "Trial", ylab = "Difference in Hand Direction [?]", type = "l")
+  plot(localizations,main = "Localizations vs Scaled Model",ylim = c(-5, 10), lwd = 2.5, axes= F,col=color, xlab = "Trial", ylab = "Difference in Hand Direction [?]", type = "l")
   axis(1, at=c(1,64,224,240,288), cex.axis=0.75)
   axis(2, at=c(-5,0,5,10), cex.axis=0.75)
   lines(Reach_model$total*-1, col = c(rgb(.5,0.,.5)))
   lines(Reach_model$slow*-1, col = rgb(0.,.5,1.))
   lines(output, col = 'yellow')
-  legend(-3,-1,legend=c('Localization Data','Reach Model - Total', "Reach Model - Slow", 'Prop Model'),col=c(rgb(0.44,0.51,0.57),rgb(.5,0.,.5), rgb(0.,.5,1.), 'yellow'),lty=c(1,1),lwd=c(2,2),bty='n')
+  legend(-3,-1,legend=c('Localization Data','Reach Model - Total', "Reach Model - Slow", 'Prop Model'),col=c(color,rgb(.5,0.,.5), rgb(0.,.5,1.), 'yellow'),lty=c(1,1),lwd=c(2,2),bty='n')
   TotalMSE<- mean((localizations - Reach_model$total)^2)
   SlowMSE<- mean((localizations - Reach_model$slow)^2)
   PropMSE<- mean((localizations - output)^2)
@@ -642,11 +642,11 @@ LocalizationModelCompare<- function (dataset, dataset2) {
   relativeLikelihoods <- exp((min(AICs) - AICs)/2)
   names(relativeLikelihoods)<- c('slow', 'Total', 'Prop')
   metrics<- list(AICs, relativeLikelihoods)
-  totallh<- sprintf('Total %f', relativeLikelihoods[2])
+  totallh<- sprintf('Total %1.2f', relativeLikelihoods[2])
   text(180, 2, totallh)
-  Slowlh<- sprintf('Slow %f', relativeLikelihoods[1])
+  Slowlh<- sprintf('Slow %1.2f', relativeLikelihoods[1])
   text(180, 0, Slowlh)
-  Proplh<- sprintf('Prop %f', relativeLikelihoods[3])
+  Proplh<- sprintf('Prop %1.2f', relativeLikelihoods[3])
   text(180, -2, Proplh)
   
   return(metrics)
