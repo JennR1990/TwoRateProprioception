@@ -166,17 +166,24 @@ Then we check to see if the data is more one-rate or two-rate on the group level
 All of the data sets, when taken as a group, appear to be more two-rate than one rate. 
 This makes sense since the size of the rebound is pretty large in at least the first 3 groups.
 ```{r}
-Active_AICS<- ModelAICs(active_reaches, 'Active')
-Passive_AICS<- ModelAICs(passive_reaches, 'Passive')
-Pause_AICS<- ModelAICs(pause_reaches, 'Pause')
-NC_AICS<- ModelAICs(nocursor_reaches, 'No-Cursor')
-NCI_AICS<- ModelAICs(nocursorI_reaches,'No-Cursor_I')
+Active_metrics<- GroupModelAICs(active_reaches, 'Active')
+Passive_metrics<- GroupModelAICs(passive_reaches, 'Passive')
+Pause_metrics<- GroupModelAICs(pause_reaches, 'Pause')
+NC_metrics<- GroupModelAICs(nocursor_reaches, 'No-Cursor', 'skewed')
+NCI_metrics<- GroupModelAICs(nocursorI_reaches,'No-Cursor_I', 'skewed')
+metrics<- rbind(Active_metrics, passive_reaches, Pause_metrics, NC_metrics, NCI_metrics)
+groups = c('active', 'passive','pause', 'nocursor', 'nocursor_NI')
+metrics$group<- groups
 
 Poneratevstworate(active_reaches, 'Active') #16 one rate people
 Poneratevstworate(passive_reaches) #28 one rate people
 Poneratevstworate(pause_reaches, 'Pause') #26 one rate people
 Poneratevstworate(nocursor_reaches, 'No-Cursor') # 28 one rate people
 Poneratevstworate(nocursorI_reaches, 'No-Cursor_I') #15 one rate people
+
+##model comparison for localization data to total, slow and prop
+LocalizationModelCompare(passive_localization, passive_reaches)
+LocalizationModelCompare(passive_localization, passive_reaches)
 ```
 
 Figures for the manuscript

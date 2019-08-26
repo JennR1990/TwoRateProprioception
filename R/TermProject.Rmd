@@ -1,0 +1,36 @@
+---
+title: "Term Project"
+author: "Jennifer Ruttle"
+date: "April 17, 2019"
+output:
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source('TermProjectScripts.R')
+```
+
+## Background and Models
+I have collected a few different sets of data where each participant makes the same out and back reaches to a target 12cm away but each different data set has the participants doing a different task in between each training trial. 
+
+I have only included the training data so we can see if the model looks different with different intervening tasks. The below code, loads the data, runs the model and plots both the model fit and the real data. 
+
+
+```{r Plot and Run Model}
+Parameters<-Reachmodel()
+```
+
+From these plots its pretty obvious that the one rate model is just not sufficient to explain the data we have collected. The two data sets appear for the most part similar with some differences that the model seems to be able to capture. 
+
+
+## Model Comparison
+Below i calculate an AIC,BIC and relative likelihood for each set of data.  For the AIC and BIC values, the lower the number the better the model fit. The relative likelihood tells us which model is more likely to explain the data. We use the Mean Squared Error between the real data and the model output to compare the model fits. By changing the bootstraps = argument you can change the number of times the values are recalculated.  
+
+
+```{r Model Comparison}
+comp<- CompareModel(bootstraps = 1)
+comp
+```
+
+We can see that all three measures (AIC, BIC and relative likelihoods) produce the same conclusion, which is that the two-rate model better fits the data. 

@@ -369,7 +369,7 @@ GroupModelAICs <- function(data, group, grid = 'restricted') {
   #group='active'# add this to the function call when i use the commented line below
   #df <- read.csv(sprintf('data/%s_reaches.csv', group), stringsAsFactors = FALSE)
   
-  schedule <- df$distortion
+  schedule <- df$schedule
   
   #Reaches <- as.matrix(df[,2:dim(df)[2]])
   Reaches<- df$meanreaches
@@ -399,12 +399,14 @@ GroupModelAICs <- function(data, group, grid = 'restricted') {
   oneRateAIC <- (2*2) + InOb*log(oneRateMSE) + C
   
   cat(sprintf('1-rate AIC: %0.2f  %s  2-rate AIC: %0.2f\n',oneRateAIC,c('>=', ' <')[as.numeric(oneRateAIC<twoRateAIC)+1],twoRateAIC))
-  
+  likelihood<-exp((min(c(twoRateAIC, oneRateAIC))-c(twoRateAIC, oneRateAIC))/2)
+  print(likelihood)
   #pars<- data.frame(twoRateFit)
-  AICs<- data.frame(twoRateAIC, oneRateAIC)
+  metrics<- data.frame(twoRateAIC, oneRateAIC, likelihood[1], likelihood[2])
+  names(metrics)<- c('twoRateAIC', 'oneRateAIC', 'twoRatelikelihood', 'oneratelikelihood')
   #write.csv(AICs, sprintf("ana/AICs/Group AICs for %s Reaches.csv", group), row.names = TRUE, quote = FALSE)
   
-  return(AICs)
+  return(metrics)
 }
 
 getParticipantFits2 <- function(data, grid='restricted') {
@@ -506,7 +508,8 @@ Poneratevstworate<- function (data, group = 'Passive',  grid = 'restricted') {
   count<-sum(Data1AIC<Data2AIC)
   print(sprintf('the number of participants with a higher AIC for two rates are %d',count))
   #AICs<- c('One Rate Model'=Data1AIC,'Two Rate Model'=Data2AIC)
-  AICs<- cbind(Data1AIC, Data2AIC)
+  likelihood<-exp((min(c(Data2AIC, Data1AIC))-c(Data2AIC, Data1AIC))/2)
+  metrics<- cbind(Data1AIC, Data2AIC, likelihood)
   #write.csv(AICs, sprintf("ana/AICs/AICs for one and two rate %s reach data.csv", group), row.names = TRUE, quote = FALSE)
   #relativeLikelihoods <- exp((min(AICs) - AICs)/2)
   
@@ -527,42 +530,125 @@ GetRMSEs<- function (){
 }
 
 
-randomcodes<- function () {
-  mmed <- function(x,n=5){runmed(x,n)}  #run this function to do the median smoothing
-  Active_p<- mmed(ActiveP$meanreaches)
-  Passive_p<- mmed(PassiveP$meanreaches)
-  Diff<-ActiveP$meanreaches - PassiveP$meanreaches
-  Diff<- Active_p - Passive_p
-  PSC<- data.frame(Diff, dist)
-  PSC$dist<- PSC$dist*-1
-  Average<- mean(PSC$Diff[182:224], na.rm = TRUE)
+
+
+# Model Comparison----
+CompareModel<- function(groups = c('active', 'passive','pause', 'nocursor', 'nocursor_NI'), bootstraps) {
+  
+  allcomps<- list()
+  counter<- 1
+  for (group in groups){
+    
+    outcomes<- list()
+    
+    df <- read.csv(sprintf('data/%s_reaches.csv', group), stringsAsFactors = FALSE)
+    distortion <- df$distortion
+    
+    reaches <- as.matrix(df[,2:dim(df)[2]])
+    
+    N <- dim(df)[2] - 1
+    
+    InOb <-   (288/48)  # I use these values because there are 288 trials which are not technically independent observations
+    # and 48 is the last lag before the autocorrelation between time points drops below .1 
+    
+    for (bootstrap in c(1:bootstraps)) {
+      
+      
+      medReaches <- apply(reaches[,sample(c(1:N),N,replace=TRUE)], 1, median, na.rm=TRUE)
+      distortion<- distortion
+      
+      
+      onerate_par<- fitoneratemodel(reaches = medReaches, distortions = distortion)
+      tworate_par<- fittworatemodel(reaches = medReaches, distortions = distortion)
+      
+      
+      distortion<- distortion
+      onerate_model<- oneratemodel(par = onerate_par, distortions = distortion)
+      tworate_model<- tworatemodel(par = tworate_par, distortions = distortion)
+      
+      
+      twoRateMSE<-twoRateReachModelError(tworate_par, reaches = medReaches, distortions = distortion)
+      oneRateMSE<-oneRateReachModelError(onerate_par, reaches = medReaches, distortions = distortion)
+      
+      twoRateAIC <- InOb + InOb * log(2 * pi) + InOb * log(twoRateMSE) + 2*5
+      oneRateAIC <- InOb + InOb * log(2 * pi) + InOb * log(oneRateMSE) + 2 * 2
+      
+      twoRateBIC <- InOb + InOb * log(2 * pi) + InOb * log(twoRateMSE) + log(InOb) * 5
+      oneRateBIC<-  InOb + InOb * log(2 * pi) + InOb * log(oneRateMSE) + log(InOb) * 2
+      if (length(outcomes) == 0){
+        outcomes[[1]]<- c(twoRateAIC, oneRateAIC)
+        outcomes[[2]]<- c(twoRateBIC, oneRateBIC)
+        outcomes[[3]]<-exp((min(c(twoRateAIC, oneRateAIC))-c(twoRateAIC, oneRateAIC))/2)
+      }else{
+        outcomes[[1]]<- c(outcomes[[1]], twoRateAIC, oneRateAIC)
+        outcomes[[2]]<- c(outcomes[[2]], twoRateBIC, oneRateBIC)
+        outcomes[[3]]<-c(outcomes[[3]],exp((min(c(twoRateAIC, oneRateAIC))-c(twoRateAIC, oneRateAIC))/2))
+      }
+      
+      
+    }
+    names(outcomes)<- c("AIC", "BIC", "Relative Likelihood")
+    names(outcomes[[1]])<- c(rep(c('two-Rate', "one-Rate"), times = bootstraps))
+    names(outcomes[[2]])<- c(rep(c('two-Rate', "one-Rate"), times = bootstraps)) 
+    names(outcomes[[3]])<- c(rep(c('two-Rate', "one-Rate"), times = bootstraps)) 
+    
+    allcomps[[counter]]<- outcomes 
+    counter<- counter + 1
+  }
+  
+  names(allcomps)<- groups
+  return(allcomps)
+}
+
+
+
+
+
+mmed <- function(x,n=5){runmed(x,n)}
+
+LocalizationModelCompare<- function (dataset, dataset2) {
+  data<- getreachesformodel(dataset)
+  dist<- data$schedule
+  localizations<- mmed(data$meanreaches)
+  Average<- mean(localizations[182:224], na.rm = TRUE)
   Scale<- Average/30
-  AllReaches<- data.frame(cbind(PassiveR$meanreaches, PauseR$meanreaches[33:320],ActiveR$meanreaches ))
-  AllReachesMean<- rowMeans(allreaches, na.rm = TRUE)
-  Reaches<- data.frame(AllReachesMean, dist*-1)
-  Reaches_par<- fittworatemodel(Reaches$AllReachesMean, Reaches$dist)
-  Reach_model<-tworatemodel(par=Reaches_par, distortions = dist)
-  Reach_model$output<-Reach_model$output*Scale
+  reachdata<- getreachesformodel(dataset2)$meanreaches
+  Reach_par<- fitTwoRateReachModel(reaches = reachdata,schedule= dist)
+  Reach_model<-twoRateReachModel(par=Reach_par, schedule = dist)
+  Reach_model$total<-Reach_model$total*Scale
   Reach_model$slow<-Reach_model$slow*Scale
-  Diff<- Diff*-1
-  Diff <- filtfilt(butter(1, W=0.5, type='low'), Diff)
-  layout(matrix(c(1,1,1,1,2,3,4,5), nrow=2, byrow=TRUE), heights=c(3,1))
-  plot(Diff*-1,main = "Predicted Sensory Consequences",ylim = c(-10, 10), lwd = 2.5, axes= F,col=rgb(0.44,0.51,0.57), xlab = "Trial", ylab = "Difference in Hand Direction [?]", type = "l")
+  prop_par<-fitPropModel(dataset2,dataset)
+  meanreaches<-rowMeans(dataset2[241:288,2:ncol(dataset2)], na.rm=TRUE)
+  meanreaches<- meanreaches*-1
+  dataset2$distortion[241:288]<- as.numeric(meanreaches)
+  output<- PropModel(unlist(prop_par), dataset2$distortion)
+  plot(localizations,main = "Localizations vs Scaled Model",ylim = c(-5, 10), lwd = 2.5, axes= F,col=rgb(0.44,0.51,0.57), xlab = "Trial", ylab = "Difference in Hand Direction [?]", type = "l")
   axis(1, at=c(1,64,224,240,288), cex.axis=0.75)
-  axis(2, at=c(-6,-3,0,3,6), cex.axis=0.75)
-  lines(Reach_model$output, col = c(rgb(.5,0.,.5)))
-  lines(Reach_model$slow, col = rgb(0.,.5,1.))
-  legend(-3,-2,legend=c('Difference','Reach Model - Output', "Reach Model - Slow"),col=c(rgb(0.44,0.51,0.57),rgb(.5,0.,.5), rgb(0.,.5,1.)),lty=c(1,1),lwd=c(2,2),bty='n')
-  OutputMSE<- mean((Diff - Reach_model$output)^2)
-  SlowMSE<- mean((Diff - Reach_model$slow)^2)
+  axis(2, at=c(-5,0,5,10), cex.axis=0.75)
+  lines(Reach_model$total*-1, col = c(rgb(.5,0.,.5)))
+  lines(Reach_model$slow*-1, col = rgb(0.,.5,1.))
+  lines(output, col = 'yellow')
+  legend(-3,-1,legend=c('Localization Data','Reach Model - Total', "Reach Model - Slow", 'Prop Model'),col=c(rgb(0.44,0.51,0.57),rgb(.5,0.,.5), rgb(0.,.5,1.), 'yellow'),lty=c(1,1),lwd=c(2,2),bty='n')
+  TotalMSE<- mean((localizations - Reach_model$total)^2)
+  SlowMSE<- mean((localizations - Reach_model$slow)^2)
+  PropMSE<- mean((localizations - output)^2)
   N<- 22.15
   P <- 4
   C <- N*(log(2*pi)+1)
-  OutputAIC <- 2*P + N*log(OutputMSE) + C
+  TotalAIC <- 2*P + N*log(TotalMSE) + C
   SlowAIC <- 2*P + N*log(SlowMSE) + C
-  AICs<- c('slow'=SlowAIC, 'Output'=OutputAIC)
+  PropAIC <- 2*P + N*log(PropMSE) + C
+  AICs<- c('slow'=SlowAIC, 'Total'=TotalAIC, 'Prop' = PropMSE)
   relativeLikelihoods <- exp((min(AICs) - AICs)/2)
-  relativeLikelihoods
+  names(relativeLikelihoods)<- c('slow', 'Total', 'Prop')
+  metrics<- list(AICs, relativeLikelihoods)
+  totallh<- sprintf('Total %f', relativeLikelihoods[2])
+  text(180, 2, totallh)
+  Slowlh<- sprintf('Slow %f', relativeLikelihoods[1])
+  text(180, 0, Slowlh)
+  Proplh<- sprintf('Prop %f', relativeLikelihoods[3])
+  text(180, -2, Proplh)
   
+  return(metrics)
   
 }

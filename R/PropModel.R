@@ -80,9 +80,10 @@ PropModelFit <- function(reachdata, locadata,  gridpoints=6, gridfits=6) {
                               MARGIN=c(1),
                               FUN=optim,
                               fn=PropModelMSE,
-                              method='Nelder-Mead',
+                              method='Brent', lower = 0, upper = 1,
                               schedule=schedule,
                               localizations=localizations ) )
+    
     
     # pick the best fit:
     win <- allfits[order(unlist(data.frame(allfits)[,'value']))[1],]
@@ -118,52 +119,7 @@ gridsearch<- function(localizations, schedule, nsteps=7, topn=4) {
 
 
 
-fitPropModel<- function(reachdata, locadata, color, title) {
-  
-  localizations<-rowMeans(locadata[,2:ncol(locadata)], na.rm=TRUE)
-  meanreaches<-rowMeans(reachdata[241:288,2:ncol(reachdata)], na.rm=TRUE)
-  meanreaches<- meanreaches*-1
-  reachdata$distortion[241:288]<- as.numeric(meanreaches)
-  schedule<- reachdata$distortion
-  
-  
-  #this function will take the dataframe made in the last function (dogridsearch) and use the list of parameters to make a new model then compare to output and get a new mse. 
-  pargrid <- gridsearch(localizations, schedule, nsteps = 7, topn = 4)
-  cat('optimize best fits...\n')
-  for (gridpoint in c(1:nrow(pargrid))) { #for each row 
-    par<-unlist(pargrid[gridpoint,1]) 
 
-    control <- list('maxit'=10000, 'ndeps'=1e-9 )
-    fit <- optim(par=par, PropModelMSE, gr=NULL, schedule, localizations, control=control, method = "Brent", lower = 0, upper = 1)
-    optpar<- fit$par
-
-    
-    # stick optpar back in pargrid
-    pargrid[gridpoint,1] <- optpar
-    
-    pargrid[gridpoint,2]<- fit$value
-    
-  } 
-  # get lowest MSE, and pars that go with that
-  bestpar <- order(pargrid[,2])[1]
-  plot(localizations, type = 'l',  ylim = c(-15,15), axes = FALSE, main = title, ylab = 'Change in Hand Localizations [°]', xlab = "Trial", col = color)
-  axis(
-    1,
-    at = c(1, 64, 224, 240, 288),
-    cex.axis = 0.75,
-    las = 2
-  )
-  axis(2, at = c(-15, -10,-5,0, 5,10,15), cex.axis = 0.75)
-  output<- PropModel(unlist(pargrid[bestpar]), schedule)
-  lines(output, col = "black")
-  proportion<- sprintf('Proportion = %f', unlist(pargrid[bestpar]))
-  print(proportion)
-  legend(5, -7, legend = c('Localization Data', 'Model Prediction'), col = c(color, "black"), lty = 1, lwd = 2, bty = 'n')
-  text(144, 0, labels = proportion)
-  # return(those pars)
-  return(unlist(pargrid[bestpar]))
-
-}
 
 
 

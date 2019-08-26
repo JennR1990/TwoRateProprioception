@@ -172,13 +172,14 @@ RegressionPLotec <- function() {
     PPec <- PPec$EC_Late
     plot(
       PPec ~ PRRm,
-      col = colorPA,
+      col = colorPA_trans,
       xlab = 'Reaches',
       ylab = 'Localization',
       main = 'Localization ~ Reaches During Error Clamp',
       xlim = c(-12, 25),
       ylim = c(-12, 25),
-      axes = FALSE
+      axes = FALSE,
+      pch = 19
     )
     axis(2,
          at = c( -10, 0, 10, 20, 30),
@@ -193,7 +194,7 @@ RegressionPLotec <- function() {
     ARm <- Arm$EC_Late * -1
     APec <- TCombine(active_localization)
     APec <- APec$EC_Late
-    points(APec ~ ARm, col = colorA)
+    points(APec ~ ARm, col = colorA_trans, pch = 19)
     plotRegressionWithCI(ARm, APec, colors = c(colorA_trans, colorA))
 
     legend(
@@ -311,15 +312,16 @@ RegressionPLot3P <- function() {
   PPec <- TCombine(passive_localization)
   loc <- c(PPec$R2,PPec$Aligned,PPec$R1_Late)
   pert<- c(rep(-30, 32),rep(0, 32),rep(30, 32))
+  pert1<- c(rep(-29, 32),rep(1, 32),rep(31, 32))
    plot(
-    loc ~ pert,
-    col = colorPA,
+    loc ~ pert1,
+    col = colorPA_trans,
     xlab = 'Size of Perturbation [°]',
     ylab = 'Change in Hand Localization [°]',
-    xlim = c(-30, 30),
+    xlim = c(-35, 35),
     ylim = c(-20, 20),
     main = 'Size of Perturbation Vs. Localizations',
-    axes = FALSE, asp = 1
+    axes = FALSE, asp = 1, pch = 19
   )
   axis(2,
        at = c(-20, -10,0,10, 20),
@@ -334,8 +336,9 @@ RegressionPLot3P <- function() {
   APec <- TCombine(active_localization)
   loca <- c(APec$R2,APec$Aligned,APec$R1_Late)
   perta<- c(rep(-30, 32),rep(0, 32),rep(30, 32))
+  pertb<- c(rep(-31, 32),rep(-1, 32),rep(29, 32))
 
-  points(loca ~ perta, col = colorA)
+  points(loca ~ pertb, col = colorA_trans, pch = 19)
   gm<-plotRegressionWithCI(perta, loca, colors = c(colorA_trans, colorA))
   slopes<-c(slopes,gm$coefficients[2])
   legend(
@@ -362,15 +365,17 @@ RegressionPLotchange <- function() {
   c<-PPec$R1_Late - PPec$R2
   loc <- c(a,b,c)
   pert<- c(rep(0, 32),rep(30, 32),rep(60, 32))
+  pert1<- c(rep(1, 32),rep(31, 32),rep(61, 32))
   plot(
-    loc ~ pert,
-    col = colorPA,
+    loc ~ pert1,
+    col = colorPA_trans,
     xlab = 'Change in Size of Pertubation [°]',
     ylab = 'Change in Hand Localization [°]',
     xlim = c(0, 60),
     ylim = c(-10, 30),
     main = 'Change in Perturbation Vs. Localizations',
-    axes = FALSE
+    axes = FALSE,
+    pch = 19
   )
   axis(2,
        at = c( -10, 0, 10 ,20, 30),
@@ -385,9 +390,10 @@ RegressionPLotchange <- function() {
   
   APec <- TCombine(active_localization)
   loca <- c(APec$Aligned,APec$R1_Late,APec$R1_Late - APec$R2)
-  perta<- c(rep(0, 32),rep(30, 32),rep(60, 32))
+  perta<- c(rep(0, 32),rep(30, 32),rep(60, 32))  
+  pertb<- c(rep(-1, 32),rep(29, 32),rep(59, 32))
   
-  points(loca ~ perta, col = colorA)
+  points(loca ~ pertb, col = colorA_trans, pch = 19)
   gm<-plotRegressionWithCI(perta, loca, colors = c(colorA_trans, colorA))
   slopes<-c(slopes,gm$coefficients[2])
 
