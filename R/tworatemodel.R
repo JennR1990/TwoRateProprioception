@@ -251,7 +251,7 @@ getallparticipants<- function(experiment) {
     participants<- c(1:32)
     distortion <-  c(rep(0,64),rep(30,160), rep(-30,16), rep(NA, 48))
   } else if (experiment == 7) {
-    participants<- c(2)
+    participants<- c(1:32)
     distortion <-  c(rep(0,64),rep(30,160), rep(-30,16), rep(NA, 48))
   }
   
@@ -265,15 +265,17 @@ getallparticipants<- function(experiment) {
     print(dim(partiangles))
     #baselining only works for experiment 1&5, 2 & 4 only have 32 aligned in total 
     #so they would need different amount of trials
-    baselinedangles <- baselinebyaligned(df = partiangles, experiment = experiment)
+    #average<- mean(partiangles$reachdeviations[32:64], na.rm = TRUE)
+    baselinedangles <- baselinebyaligned(df = partiangles, experiment = experiment, dist = distortion)
+    #print(mean(baselinedangles$reachdeviations[32:64], na.rm = TRUE))
     print(experiment)
     if (experiment == 3) {
-    expangles[,sprintf('p%d',participant)] <- baselinedangles$reachdeviations[1:480]
+    expangles[,sprintf('p%d',participant)] <- baselinedangles$reaches[1:480]
     } else if (experiment %in% c(1,5,7)) {
-      expangles[,sprintf('p%d',participant)] <- baselinedangles$reachdeviations[1:288]  
+      expangles[,sprintf('p%d',participant)] <- baselinedangles$reaches[1:288] 
     } else if (experiment %in% c(2,4)) {
       print(nrow(expangles))
-      expangles[,sprintf('p%d',participant)] <- baselinedangles$reachdeviations[1:320]
+      expangles[,sprintf('p%d',participant)] <- baselinedangles$reaches[1:320]
     }
   }
   outputfilename<- sprintf('time_model%d_Updated_Reaches.csv', experiment)
@@ -286,23 +288,37 @@ getallparticipants<- function(experiment) {
 
 
 
-baselinebyaligned<- function(df, experiment) {
-  
+baselinebyaligned<- function(df, experiment, dist) {
+  #print(head(df))
+  angles<-df$targetangles
+  reaches<- df$reachdeviations
+  if (length(reaches)<length(dist)){
+    reaches<- c(reaches, rep(NA, times = (length(dist)-length(reaches))))
+    angles<- c(angles, rep(NA, times = (length(dist)-length(angles))))
+  }
   #take an average of the aligned data where distortion = 0
   #subtract that from reach angles
   if (experiment == 1| experiment == 5| experiment == 7) {
-    bias<-mean(df$reachdeviations[32:64], na.rm = TRUE)
-    df$reachdeviations[1:288]<- df$reachdeviations[1:288] - bias
+    bias<-mean(reaches[32:64], na.rm = TRUE)
+    print(bias)
+    reaches[1:288]<- reaches[1:288] - bias
+   # print(df$reachdeviations[1:288])
   } else if (experiment == 2 | experiment == 4) {
     bias<-mean(df$reachdeviations[64:96], na.rm = TRUE)
-    df$reachdeviations[1:320]<- df$reachdeviations[1:320] - bias
+    reaches[1:320]<- reaches[1:320] - bias
   } else if (experiment == 3) {
     bias<-mean(df$reachdeviations[23:49], na.rm = TRUE)
-    corrected <- df$reachdeviations - bias
-    df$reachdeviations <- corrected
+    reaches <- reaches- bias
+  } else {
+    print('hi')
   }
   
-  return(df)
+  # if (length(reaches)<288){
+  #   reaches<- c(reaches, rep(NA, times = (288-length(reaches))))
+  #   angles<- c(angles, rep(NA, times = (288-length(angles))))
+  # }
+  data<- data.frame(reaches, angles)
+  return(data)
 }
 
 
@@ -396,7 +412,7 @@ getfilenames<- function (ppn, expn) {
   } else if (expn == 7) {
     tasknumbers <- c(1:4)
     
-    expfolder <- '../Time Model Good Data/Time Model Terminal Raw Data/'
+    expfolder <- '../Time Model Good Data/Time Model Terminal Selected Data/'
     
     ppfolder <- sprintf('time_model1_%d/',ppn)
     filenames <- c()
@@ -569,7 +585,7 @@ getTrialReachAngleAt <- function(trialdf, location='maxvel') {
 
 
 # EXTRACT PROP DEVIATIONS -------------------------------------------------
-getallTaps<- function(experiment) {
+getPassiveTaps<- function(experiment) {
   
   if (experiment == 1){
     participants<- c(1:32)
@@ -594,31 +610,39 @@ getallTaps<- function(experiment) {
     partiangles<-getparticipantpropdata(participant = participant, experiment = experiment)
     #baselining only works for experiment 1&5, 2 & 4 only have 32 aligned in total 
     #so they would need different amount of trials
-    baselinedangles <- baselineTapbyaligned(df = partiangles, experiment = experiment)
-    expangles[,sprintf('p%d',participant)] <- baselinedangles$Tapdeviations
+    baselinedangles <- baselineTapbyaligned(df = partiangles, experiment = experiment, dist = distortion)
+    expangles[,sprintf('p%d',participant)] <- baselinedangles$Taps
   }
-  outputfilename<- sprintf('time_model%d_baseline_output_Prop.csv', experiment)
+  outputfilename<- sprintf('time_model%d_baseline_output_Prop_test1.csv', experiment)
   
   write.csv(expangles, file = outputfilename,  row.names = F, quote = F)
 }
 
 
-baselineTapbyaligned<- function(df, experiment) {
+baselineTapbyaligned<- function(df, experiment, dist) {
+  
+  angles<-df$targetangles
+  Taps<- df$Tapdeviations
+  if (length(Taps)<length(dist)){
+    Taps<- c(Taps, rep(NA, times = (length(dist)-length(Taps))))
+    angles<- c(angles, rep(NA, times = (length(dist)-length(angles))))
+  }
   
   #take an average of the aligned data where distortion = 0
   #subtract that from reach angles
   if (experiment == 1| experiment == 5) {
-    bias<-mean(df$Tapdeviations[32:64], na.rm = TRUE)
-    df$Tapdeviations[1:288]<- df$Tapdeviations[1:288] - bias
+    bias<-mean(Taps[32:64], na.rm = TRUE)
+    Taps[1:288]<- Taps[1:288] - bias
   } else if (experiment == 2 | experiment == 4) {
     # bias<-mean(df$Tapdeviations[1:32], na.rm = TRUE)
     print(df)#$Tapdeviations[1:nrow(df)]<- df$Tapdeviations[1:nrow(df)] - 0
   } else if (experiment == 3) {
-    bias<-mean(df$reachdeviations[23:49], na.rm = TRUE)
-    corrected <- df$reachdeviations - bias
-    df$reachdeviations <- corrected
+    bias<-mean(Taps[23:49], na.rm = TRUE)
+    Taps <- Taps - bias
+    
   }
-  return(df)
+  data<- data.frame(Taps, angles)
+  return(data)
 }
 
 
@@ -648,7 +672,7 @@ getpropfilenames<- function (ppn, expn) {
   if (expn == 1) {
     tasknumbers <- c(1:4)
     
-    expfolder <- '../Time Model/Time Model Variant 1 Selected Data/'
+    expfolder <- '../Time Model Good Data/Time Model Variant 1 Selected Data/'
     
     ppfolder <- sprintf('time_model1_%d/',ppn)
     
@@ -776,7 +800,7 @@ getallncparticipants<- function(experiment) {
     partiangles<-getncparticipantdata(participant = participant, experiment = experiment)
     #baselining only works for experiment 1&5, 2 & 4 only have 32 aligned in total 
     #so they would need different amount of trials
-    baselinedangles <- baselinebyaligned(df = partiangles, experiment = experiment)
+    baselinedangles <- baselinebyNCaligned(df = partiangles, experiment = experiment)
     expangles[,sprintf('p%d',participant)] <- baselinedangles$reachdeviations
   }
   outputfilename<- sprintf('time_model%d_No-Cursors.csv', experiment)
@@ -789,7 +813,7 @@ getallncparticipants<- function(experiment) {
 
 
 
-baselinebyaligned<- function(df, experiment) {
+baselinebyNCaligned<- function(df, experiment) {
   
   #take an average of the aligned data where distortion = 0
   #subtract that from reach angles
@@ -1430,7 +1454,7 @@ getUSallparticipants<- function(experiment) {
     partiangles<-getUSparticipantdata(participant = participant, experiment = experiment)
     #baselining only works for experiment 1&5, 2 & 4 only have 32 aligned in total 
     #so they would need different amount of trials
-    baselinedangles <- baselinebyaligned(df = partiangles, experiment = experiment)
+    baselinedangles <- baselinebyUSaligned(df = partiangles, experiment = experiment)
     expangles[,sprintf('p%d',participant)] <- baselinedangles$reachdeviations
   }
   outputfilename<- sprintf('time_model%d_baseline_Unselected_NoC_output.csv', experiment)
@@ -1443,7 +1467,7 @@ getUSallparticipants<- function(experiment) {
 
 
 
-baselinebyaligned<- function(df, experiment) {
+baselinebyUSaligned<- function(df, experiment) {
   
   #take an average of the aligned data where distortion = 0
   #subtract that from reach angles
