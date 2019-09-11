@@ -177,17 +177,17 @@ RegressionPLotec <- function() {
       xlab = 'Reaches',
       ylab = 'Localization',
       main = 'Localization ~ Reaches During Error Clamp',
-      xlim = c(-12, 25),
-      ylim = c(-12, 25),
+      xlim = c(-12, 30),
+      ylim = c(-12, 30),
       axes = FALSE,
-      pch = 19
+      pch = 19, cex.lab = 1.5, cex.main = 1.5
     )
     axis(2,
          at = c( -10, 0, 10, 20, 30),
-         cex.axis = 0.75)
+         cex.axis = 1.5, las =2)
     axis(1,
          at = c(- 10, 0, 10, 20, 30),
-         cex.axis = 0.75)
+         cex.axis = 1.5)
     plotRegressionWithCI(PRRm, PPec, colors = c(colorPA_trans, colorPA))
     
     
@@ -200,7 +200,7 @@ RegressionPLotec <- function() {
 
     legend(
       -14,
-      23,
+      30,
       legend = c(
         'Passive Localization',
         'Active Localization'
@@ -208,7 +208,7 @@ RegressionPLotec <- function() {
       col = c(colorPA, colorA),
       lty = c(1, 1),
       lwd = c(2, 2),
-      bty = 'n'
+      bty = 'n', cex = 1.5
     )
 
 }
@@ -319,17 +319,17 @@ RegressionPLot3P <- function() {
     col = colorPA_trans,
     xlab = 'Size of Perturbation [°]',
     ylab = 'Change in Hand Localization [°]',
-    xlim = c(-35, 35),
-    ylim = c(-20, 20),
+    xlim = c(-32, 32),
+    ylim = c(-32, 32),
     main = 'Size of Perturbation Vs. Localizations',
-    axes = FALSE, asp = 1, pch = 19
+    axes = FALSE, pch = 19, cex.lab = 1.5, cex.main = 1.5
   )
   axis(2,
-       at = c(-20, -10,0,10, 20),
-       cex.axis = 0.75)
+       at = c(-30,-20, -10,0,10, 20, 30),
+       cex.axis = 1.50, las = 2)
   axis(1,
        at = c( -30, 0,  30),
-       cex.axis = 0.75)
+       cex.axis = 1.5)
   lm<-plotRegressionWithCI(pert, loc, colors = c(colorPA_trans, colorPA))
   slopes<-lm$coefficients[2]
   
@@ -344,7 +344,7 @@ RegressionPLot3P <- function() {
   slopes<-c(slopes,gm$coefficients[2])
   legend(
     -30,
-    22,
+    40,
     legend = c(
       'Passive Localization',
       'Active Localization'
@@ -352,7 +352,7 @@ RegressionPLot3P <- function() {
     col = c(colorPA, colorA),
     lty = c(1, 1),
     lwd = c(2, 2),
-    bty = 'n'
+    bty = 'n', cex = 1.5
   )
   names(slopes)<- c('Passive', 'Active')
   return(slopes)
@@ -559,7 +559,7 @@ t.interval = function(data,
 ## This plots the data without a confidence interval but will run the model and add the output to the figure. ----
 ## It reruns the model everytime you plot so it does take a second or two.
 
-Reachmodel <- function(data, name, grid = 'restricted', condition, ncdata = NA, loc_data = NA) {
+Reachmodel <- function(data, name, grid = 'restricted', condition, ncdata = NA, loc_data = NA, color) {
   grid <- grid
   reaches <- getreachesformodel(data)
   reach_par <-
@@ -575,24 +575,24 @@ Reachmodel <- function(data, name, grid = 'restricted', condition, ncdata = NA, 
   
   if (condition == 'nc'){
     reach_model <- reach_model[33:320, ]
-    Plotncmodel(data[33:320, ], name)
-    lines(reach_model$total * -1, col = c(rgb(.5, 0., .5)))
-    lines(reach_model$slow * -1, col = rgb(0., .5, 1.))
-    lines(reach_model$fast * -1, col = rgb(0.0, 0.7, 0.0))
+    Plotncmodel(data[33:320, ], name, color)
+    lines(reach_model$total * -1, col = color,lty = 4)
+    lines(reach_model$slow * -1, col = color,lty = 2)
+    lines(reach_model$fast * -1, col = color,lty = 3)
     ncreaches <- getreachesformodel(ncdata)
-    lines(x = 33:288, y = ncreaches$meanreaches * -1)
+    lines(x = 33:288, y = ncreaches$meanreaches * -1, col = color)
     
   } else if (condition == 'loc') {
-    Plotlocmodel(data, name)
-    lines(reach_model$total * -1, col = c(rgb(.5, 0., .5)))
-    lines(reach_model$slow * -1, col = rgb(0., .5, 1.))
-    lines(reach_model$fast * -1, col = rgb(0.0, 0.7, 0.0))
-    lines(rowMeans(loc_data[, 2:ncol(loc_data)], na.rm = TRUE))
+    Plotlocmodel(data, name, color)
+    lines(reach_model$total * -1, col = color,lty = 4)
+    lines(reach_model$slow * -1, col = color,lty = 2)
+    lines(reach_model$fast * -1, col = color,lty = 3)
+    lines(rowMeans(loc_data[, 2:ncol(loc_data)], na.rm = TRUE), col = color)
   } else{
-    Plotmodel(data, name)
-    lines(reach_model$total * -1, col = c(rgb(.5, 0., .5)))
-    lines(reach_model$slow * -1, col = rgb(0., .5, 1.))
-    lines(reach_model$fast * -1, col = rgb(0.0, 0.7, 0.0))
+    Plotmodel(data, name, color)
+    lines(reach_model$total * -1, col = color,lty = 4)
+    lines(reach_model$slow * -1, col = color,lty = 2)
+    lines(reach_model$fast * -1, col = color,lty = 3)
   }
   
 
@@ -604,7 +604,7 @@ Reachmodel <- function(data, name, grid = 'restricted', condition, ncdata = NA, 
   return(pars)
 }
 
-Reachmodelnc <- function(data, ncdata, name) {
+Reachmodelnc <- function(data, ncdata, name, color) {
   reaches <- getreachesformodel(data)
   reach_par <-
     fitTwoRateReachModel(
@@ -617,18 +617,18 @@ Reachmodelnc <- function(data, ncdata, name) {
   reach_model1 <-
     twoRateReachModel(par = reach_par, schedule = reaches$distortion)
   reach_model <- reach_model1[33:320, ]
-  Plotncmodel(data[33:320, ], name)
-  lines(reach_model$total * -1, col = c(rgb(.5, 0., .5)))
-  lines(reach_model$slow * -1, col = rgb(0., .5, 1.))
-  lines(reach_model$fast * -1, col = rgb(0.0, 0.7, 0.0))
+  Plotncmodel(data[33:320, ], name, color)
+  lines(reach_model$total * -1, col = color,lty = 4)
+  lines(reach_model$slow * -1, col = color,lty = 2)
+  lines(reach_model$fast * -1, col = color,lty = 3)
   ncreaches <- getreachesformodel(ncdata)
-  lines(x = 33:288, y = ncreaches$meanreaches * -1)
+  lines(x = 33:288, y = ncreaches$meanreaches * -1, col = color)
   return(reach_par)
 }
 
 
 
-Plotmodel <- function(dataset, name) {
+Plotmodel <- function(dataset, name, color) {
   title <- sprintf('%s Testing Trial', name)
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
   dataset$Mean <- rowMeans(dataset[, 2:ncol(dataset)], na.rm = TRUE)
@@ -658,11 +658,11 @@ Plotmodel <- function(dataset, name) {
     legend = c('Reach data', 'model', 'fast', 'slow'),
     col = c(
       rgb(0.44, 0.51, 0.57),
-      rgb(.5, 0., .5),
-      rgb(0.0, 0.7, 0.0),
-      rgb(0., .5, 1.)
+      color,
+      color,
+      color
     ),
-    lty = c(1, 1, 1, 1),
+    lty = c(1, 4, 3, 2),
     lwd = c(2, 2, 2, 2),
     bty = 'n', 
     cex = 1.5
@@ -679,7 +679,7 @@ Plotmodel <- function(dataset, name) {
 
 
 
-Plotncmodel <- function(dataset, name) {
+Plotncmodel <- function(dataset, name, color) {
   title <- sprintf('%s Testing Trial', name)
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
   dataset$Mean <- rowMeans(dataset[, 2:ncol(dataset)], na.rm = TRUE)
@@ -708,12 +708,12 @@ Plotncmodel <- function(dataset, name) {
     legend = c('Reach data', 'No-cursor data', 'model', 'fast', 'slow'),
     col = c(
       rgb(0.44, 0.51, 0.57),
-      rgb(0, 0, 0),
-      rgb(.5, 0., .5),
-      rgb(0.0, 0.7, 0.0),
-      rgb(0., .5, 1.)
+      color,
+      color,
+      color,
+      color
     ),
-    lty = c(1, 1, 1, 1, 1),
+    lty = c(1, 1, 4, 3, 2),
     lwd = c(2, 2, 2, 2, 2),
     bty = 'n',
     ncol = 2, 
@@ -729,7 +729,7 @@ Plotncmodel <- function(dataset, name) {
   lines(dataset$Mean * -1, col = c(rgb(0.44, 0.51, 0.57)))
 }
 
-Plotlocmodel <- function(dataset, name) {
+Plotlocmodel <- function(dataset, name, color) {
   title <- sprintf('%s Testing Trial', name)
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
   dataset$Mean <- rowMeans(dataset[, 2:ncol(dataset)], na.rm = TRUE)
@@ -759,12 +759,12 @@ Plotlocmodel <- function(dataset, name) {
     legend = c('Reach data', 'Localization data', 'model', 'fast', 'slow'),
     col = c(
       rgb(0.44, 0.51, 0.57),
-      rgb(0, 0, 0),
-      rgb(.5, 0., .5),
-      rgb(0.0, 0.7, 0.0),
-      rgb(0., .5, 1.)
+      color,
+      color,
+      color,
+      color
     ),
-    lty = c(1, 1, 1, 1, 1),
+    lty = c(1, 1, 4, 3, 2),
     lwd = c(2, 2, 2, 2, 2),
     bty = 'n',
     ncol = 2, 

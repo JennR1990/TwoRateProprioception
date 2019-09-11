@@ -2,17 +2,17 @@ svglite(file='doc/MLMC fig 3.svg', width=7, height=8,pointsize = 13, system_font
 #layout(matrix(c(1,2,3), nrow=3, byrow=TRUE), heights=c(3,1))
 par(mfrow = c(3,1))
 #want to put both no-cursor datasets on the same figure - their models and the RA and the reaches as a transparent confidence interval
-Reachmodel(nocursor_reaches, 'No-Cursor', grid = 'skewed', condition = 'nc', ncdata = nocursor_nocursors)
-Reachmodel(nocursorI_reaches, 'No-Cursor_Instructed', grid = 'skewed', condition = 'nc', ncdata = nocursorI_nocursors)
+Reachmodel(nocursor_reaches, 'No-Cursor', grid = 'skewed', condition = 'nc', ncdata = nocursor_nocursors, color = colorNC)
+Reachmodel(nocursorI_reaches, 'No-Cursor_Instructed', grid = 'skewed', condition = 'nc', ncdata = nocursorI_nocursors, color = colorNNC)
 Plotnocursors(active_reaches, nocursor_nocursors, nocursorI_nocursors)
 dev.off()
 Plotexp2CI(pause_reaches[33:320,],nocursor_reaches[33:320,], nocursorI_reaches[33:320,], pause_reaches[33:320,])
 
 
-svglite(file='doc/MLMC fig 2.svg', width=14, height=8,pointsize = 13, system_fonts=list(sans = "Arial"))
+svglite(file='doc/MLMC fig 2.svg', width=10, height=8,pointsize = 13, system_fonts=list(sans = "Arial"))
 par(mfrow = c(3,2))
-Reachmodel(passive_reaches, 'Passive', condition = 'loc', loc_data = passive_localization)
-Reachmodel(active_reaches, 'Active', condition = 'loc', loc_data = active_localization)
+Reachmodel(passive_reaches, 'Passive', condition = 'loc', loc_data = passive_localization, color = colorPA)
+Reachmodel(active_reaches, 'Active', condition = 'loc', loc_data = active_localization, color = colorA)
 plotfitPropModel(passive_reaches, passive_localization, colorPA, 'Passive Localizations')
 plotfitPropModel(active_reaches, active_localization, colorA, 'Active Localizations')
 RegressionPLot3P()

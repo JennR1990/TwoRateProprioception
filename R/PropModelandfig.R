@@ -39,8 +39,26 @@ plotfitPropModel<- function(reachdata, locadata, color, title) {
   lines(localizations, col = color)
   proportion<- sprintf('Proportion = %f', unlist(pargrid[bestpar]))
   print(proportion)
-  legend(5, -7, legend = c('Localization Data', 'Model Prediction'), col = c(color, "black"), lty = 1, lwd = 2, bty = 'n', cex = 1.5)
-  text(144, 0, labels = proportion)
+  legend(-10, -2, legend = c('Localization data', 'proportional', 'fast', 'slow'), col = c(color, "black", color, color), lty = c(1,1,3,2), lwd = 2, bty = 'n', cex = 1.5, ncol =  2)
+  #text(144, 0, labels = proportion)
+  
+  reaches <- getreachesformodel(reachdata)
+  reach_par <-
+    fitTwoRateReachModel(
+      reaches = reaches$meanreaches,
+      schedule = schedule,
+      oneTwoRates = 2,
+      checkStability = TRUE
+    )
+  reach_model <-
+    twoRateReachModel(par = reach_par, schedule = schedule)
+  Average<- mean(localizations[182:224], na.rm = TRUE)
+  Scale<- Average/30
+  reach_model$slow<- reach_model$slow*Scale
+  reach_model$fast<- reach_model$fast*Scale
+  lines(reach_model$slow * -1, col = color,lty = 2)
+  lines(reach_model$fast * -1, col = color,lty = 3)
+  
   # return(those pars)
   return(unlist(pargrid[bestpar]))
   
