@@ -49,10 +49,11 @@ PlotallTapCI <- function (pl = dataset1, al = dataset2) {
 
 
 Plotnocursors <- function (acd,ncd_NC, ncdI) {
-  PlotoutLine(acd, 4:5, 4:5, "Open-Loop Reaches")
+  PlotoutLine(acd, 4:5, 4:5, "Reach Aftereffects")
   PlotData(ncd_NC, 4, 4, x =  c(c(33:288), rev(c(33:288))))
   PlotData(ncdI, 5, 5, x =  c(c(33:288), rev(c(33:288))))
 }
+
 
 PlotallreachesCI <-
   function (acd = dataset1,
@@ -467,8 +468,8 @@ Plotschedule <- function(dataset) {
         lty = 2,
         col = rgb(0., 0., 0.))
 
-  axis(2, at = c(-30, -15, 0, 15, 30), cex.axis = 0.75)
-  axis(1, at = c(1, 64, 224, 240, 288), cex.axis = 0.75)
+  axis(2, at = c(-30, -15, 0, 15, 30), cex.axis = 1.5, las = 2)
+  axis(1, at = c(1, 64, 224, 240, 288), cex.axis = 1.5, las = 2)
 }
 PlotoutLine <- function(dataset, exp, color,title) {
   labels <-
@@ -496,7 +497,9 @@ PlotoutLine <- function(dataset, exp, color,title) {
     axes = F,
     main = title,
     type = 'l',
-    col = 'white'
+    col = 'white', 
+    cex.lab = 1.5,
+    cex.main = 1.5
   )
   lines(c(1, 64, 64, 224, 224, 240, 240),
         c(0, 0, 30, 30, -30, -30, 0),
@@ -506,16 +509,18 @@ PlotoutLine <- function(dataset, exp, color,title) {
         lty = 2,
         col = rgb(0., 0., 0.))
   legend(
-    -5,
     -10,
+    0,
     legend = c(label),
     col = c(unlist(colors)),
     lty = c(1),
     lwd = c(2),
-    bty = 'n'
+    bty = 'n', 
+    cex = 1.5
   )
-  axis(2, at = c(-30, -15, 0, 15, 30), cex.axis = 0.75)
-  axis(1, at = c(1, 64, 224, 240, 288), cex.axis = 0.75)
+  axis(2, at = c(-30, -15, 0, 15, 30), cex.axis = 1.5,
+       las = 2)
+  axis(1, at = c(1, 64, 224, 240, 288), cex.axis = 1.5, las = 2)
 }
 
 
@@ -636,7 +641,9 @@ Plotmodel <- function(dataset, name) {
     col = c(rgb(0.8, 0.8, 0.8)),
     axes = FALSE,
     main = title,
-    type = 'l'
+    type = 'l', 
+    cex.lab = 1.5,
+    cex.main = 1.5
   )
   lines(c(1, 64, 64, 224, 224, 240, 240),
         c(0, 0, 30, 30, -30, -30, 0),
@@ -647,7 +654,7 @@ Plotmodel <- function(dataset, name) {
         col = rgb(0., 0., 0.))
   legend(
     -10,
-    -10,
+    3,
     legend = c('Reach data', 'model', 'fast', 'slow'),
     col = c(
       rgb(0.44, 0.51, 0.57),
@@ -657,15 +664,16 @@ Plotmodel <- function(dataset, name) {
     ),
     lty = c(1, 1, 1, 1),
     lwd = c(2, 2, 2, 2),
-    bty = 'n'
+    bty = 'n', 
+    cex = 1.5
   )
   axis(
     1,
     at = c(1, 64, 224, 240, 288),
-    cex.axis = 0.75,
+    cex.axis = 1.5,
     las = 2
   )
-  axis(2, at = c(-30, -15, 0, 15, 30), cex.axis = 0.75)
+  axis(2, at = c(-30, -15, 0, 15, 30), cex.axis = 1.5, las = 2)
   lines(dataset$Mean * -1, col = c(rgb(0.44, 0.51, 0.57)))
 }
 
@@ -684,7 +692,9 @@ Plotncmodel <- function(dataset, name) {
     col = c(rgb(0.8, 0.8, 0.8)),
     axes = FALSE,
     main = title,
-    type = 'l'
+    type = 'l', 
+    cex.lab = 1.5,
+    cex.main = 1.5
   )
   lines(c(1, 64, 64, 224, 224, 240, 240),
         c(0, 0, 30, 30, -30, -30, 0),
@@ -694,8 +704,7 @@ Plotncmodel <- function(dataset, name) {
         lty = 2,
         col = rgb(0., 0., 0.))
   legend(
-    -10,
-    -10,
+  -10,3,
     legend = c('Reach data', 'No-cursor data', 'model', 'fast', 'slow'),
     col = c(
       rgb(0.44, 0.51, 0.57),
@@ -707,15 +716,16 @@ Plotncmodel <- function(dataset, name) {
     lty = c(1, 1, 1, 1, 1),
     lwd = c(2, 2, 2, 2, 2),
     bty = 'n',
-    ncol = 2
+    ncol = 2, 
+    cex = 1.5
   )
   axis(
     1,
     at = c(1, 64, 224, 240, 288),
-    cex.axis = 0.75,
+    cex.axis = 1.5,
     las = 2
   )
-  axis(2, at = c(-30, -15, 0, 15, 30), cex.axis = 0.75)
+  axis(2, at = c(-30, -15, 0, 15, 30), cex.axis = 1.5, las = 2)
   lines(dataset$Mean * -1, col = c(rgb(0.44, 0.51, 0.57)))
 }
 
@@ -732,7 +742,9 @@ Plotlocmodel <- function(dataset, name) {
     col = c(rgb(0.8, 0.8, 0.8)),
     axes = FALSE,
     main = title,
-    type = 'l'
+    type = 'l', 
+    cex.lab = 1.5,
+    cex.main = 1.5
   )
   lines(c(1, 64, 64, 224, 224, 240, 240),
         c(0, 0, 30, 30, -30, -30, 0),
@@ -743,7 +755,7 @@ Plotlocmodel <- function(dataset, name) {
         col = rgb(0., 0., 0.))
   legend(
     -10,
-    -10,
+    3,
     legend = c('Reach data', 'Localization data', 'model', 'fast', 'slow'),
     col = c(
       rgb(0.44, 0.51, 0.57),
@@ -755,15 +767,16 @@ Plotlocmodel <- function(dataset, name) {
     lty = c(1, 1, 1, 1, 1),
     lwd = c(2, 2, 2, 2, 2),
     bty = 'n',
-    ncol = 2
+    ncol = 2, 
+    cex = 1.5
   )
   axis(
     1,
     at = c(1, 64, 224, 240, 288),
-    cex.axis = 0.75,
+    cex.axis = 1.5,
     las = 2
   )
-  axis(2, at = c(-30, -15, 0, 15, 30), cex.axis = 0.75)
+  axis(2, at = c(-30, -15, 0, 15, 30), cex.axis = 1.5, las = 2)
   lines(dataset$Mean * -1, col = c(rgb(0.44, 0.51, 0.57)))
 }
 
