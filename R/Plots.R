@@ -174,9 +174,9 @@ RegressionPLotec <- function() {
     plot(
       PPec ~ PRRm,
       col = colorPA_trans,
-      xlab = 'Reaches',
-      ylab = 'Localization',
-      main = 'Localization ~ Reaches During Error Clamp',
+      xlab = 'Reach Deviations  [°]',
+      ylab = NA,
+      main = 'Error Clamp',
       xlim = c(-12, 30),
       ylim = c(-12, 30),
       axes = FALSE,
@@ -202,8 +202,8 @@ RegressionPLotec <- function() {
       -14,
       30,
       legend = c(
-        'Passive Localization',
-        'Active Localization'
+        'Passive',
+        'Active'
       ),
       col = c(colorPA, colorA),
       lty = c(1, 1),
@@ -321,7 +321,7 @@ RegressionPLot3P <- function() {
     ylab = 'Change in Hand Localization [°]',
     xlim = c(-32, 32),
     ylim = c(-32, 32),
-    main = 'Size of Perturbation Vs. Localizations',
+    main = 'Perturbation Size',
     axes = FALSE, pch = 19, cex.lab = 1.5, cex.main = 1.5
   )
   axis(2,
@@ -344,10 +344,10 @@ RegressionPLot3P <- function() {
   slopes<-c(slopes,gm$coefficients[2])
   legend(
     -30,
-    40,
+    30,
     legend = c(
-      'Passive Localization',
-      'Active Localization'
+      'Passive',
+      'Active'
     ),
     col = c(colorPA, colorA),
     lty = c(1, 1),
@@ -437,7 +437,7 @@ PlotData <- function(dataset, color, trans, rotate = -1, x =  c(c(1:288), rev(c(
   x <- x
   y <- c(dataCIs[, 1], rev(dataCIs[, 2]))
   polygon(x, y, col = translist[trans], border = NA)
-  lines(x[1:length(dataset$Mean)],dataset$Mean * rotate, col = colorlist[color], lwd = 1.5)
+  #lines(x[1:length(dataset$Mean)],dataset$Mean * rotate, col = colorlist[color], lwd = 1.5)
 }
 
 Plotschedule <- function(dataset) {
@@ -654,7 +654,7 @@ Plotmodel <- function(dataset, name, color) {
         col = rgb(0., 0., 0.))
   legend(
     -10,
-    3,
+    -5,
     legend = c('Reach data', 'model', 'fast', 'slow'),
     col = c(
       rgb(0.44, 0.51, 0.57),
@@ -704,7 +704,7 @@ Plotncmodel <- function(dataset, name, color) {
         lty = 2,
         col = rgb(0., 0., 0.))
   legend(
-  -10,3,
+  -10,-5,
     legend = c('Reach data', 'No-cursor data', 'model', 'fast', 'slow'),
     col = c(
       rgb(0.44, 0.51, 0.57),
@@ -755,7 +755,7 @@ Plotlocmodel <- function(dataset, name, color) {
         col = rgb(0., 0., 0.))
   legend(
     -10,
-    3,
+    -5,
     legend = c('Reach data', 'Localization data', 'model', 'fast', 'slow'),
     col = c(
       rgb(0.44, 0.51, 0.57),
@@ -878,8 +878,9 @@ plotfitPropModel<- function(reachdata, locadata, color, title) {
   lines(localizations, col = color)
   proportion<- sprintf('Proportion = %f', unlist(pargrid[bestpar]))
   print(proportion)
-  legend(-10, -2, legend = c('Localization data', 'proportional', 'fast', 'slow'), col = c(color, "black", color, color), lty = c(1,1,3,2), lwd = 2, bty = 'n', cex = 1.5, ncol =  2)
+  legend(-10, -2, legend = c('Localization data', 'proportional'), col = c(color, "black"), lty = c(1,1), lwd = 2, bty = 'n', cex = 1.5)
   #text(144, 0, labels = proportion)
+  #, 'fast', 'slow', , color, color, ,3,2 , ncol =  2
   
   reaches <- getreachesformodel(reachdata)
   reach_par <-
@@ -895,8 +896,8 @@ plotfitPropModel<- function(reachdata, locadata, color, title) {
   Scale<- Average/30
   reach_model$slow<- reach_model$slow*Scale
   reach_model$fast<- reach_model$fast*Scale
-  lines(reach_model$slow * -1, col = color,lty = 2)
-  lines(reach_model$fast * -1, col = color,lty = 3)
+  #lines(reach_model$slow * -1, col = color,lty = 2)
+  #lines(reach_model$fast * -1, col = color,lty = 3)
   
   # return(those pars)
   return(unlist(pargrid[bestpar]))

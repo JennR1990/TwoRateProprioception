@@ -9,14 +9,25 @@ dev.off()
 Plotexp2CI(pause_reaches[33:320,],nocursor_reaches[33:320,], nocursorI_reaches[33:320,], pause_reaches[33:320,])
 
 
-svglite(file='doc/MLMC fig 2.svg', width=10, height=8,pointsize = 13, system_fonts=list(sans = "Arial"))
-par(mfrow = c(3,2))
+svglite(file='doc/MLMC fig 2new_updated.svg', width=15, height=10,pointsize = 13, system_fonts=list(sans = "Arial"))
+layout(matrix(c(1,2,3,4,5,6), nrow=3, byrow=TRUE), heights=c(1,1,1))
+layout(matrix(c(1,1,2,2,0,0,3,3,4,4,5,6), nrow=2, byrow=TRUE) )
+layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(1,1))
+#par(mfrow = c(3,2))
 Reachmodel(passive_reaches, 'Passive', condition = 'loc', loc_data = passive_localization, color = colorPA)
 Reachmodel(active_reaches, 'Active', condition = 'loc', loc_data = active_localization, color = colorA)
 plotfitPropModel(passive_reaches, passive_localization, colorPA, 'Passive Localizations')
 plotfitPropModel(active_reaches, active_localization, colorA, 'Active Localizations')
+dev.off()
+svglite(file='doc/MLMC fig 2a_updated.svg', width=5, height=4,pointsize = 13, system_fonts=list(sans = "Arial"))
+layout(matrix(c(1,2), nrow=1, byrow=TRUE), heights=c(1,1))
 RegressionPLot3P()
 RegressionPLotec()
+dev.off()
+
+svglite(file='doc/MLMCnocursor.svg', width=17, height=10,pointsize = 13, system_fonts=list(sans = "Arial"))
+layout(matrix(c(1,1,2,2,0,0,3,3,4,4,5,6), nrow=2, byrow=TRUE) )
+fi3outLine(nocursor_reaches,1:6, 1:2, ' Reach Aftereffects', nocursorI_reaches, grid = 'skewed', nocursor_nocursors, nocursorI_nocursors)
 dev.off()
 
 
@@ -26,23 +37,28 @@ MLMCfig3 <- function (acd,ncd_NC, ncdI) {
   PlotData(ncdI, 5, 5, x =  c(c(33:288), rev(c(33:288))))
 }
 
-fi3outLine <- function(dataset, exp, color,title) {
+fi3outLine <- function(dataset1, exp, color,title, dataset2, grid, ncdata1, ncdata2) {
   labels <-
     list (
-      'No-Cursor Group (N=32)',
-      'No-Cursor Instructed Group (N=16)',
-      'No Cursor Data',
-      'Passive Localizations (N=32)'
+      'RAE (N=32)',
+      'RAE-I(N=16)',
+      'No Cursor data',
+      'model','fast', "slow"
     )
-  colorlist <- list(colorA, colorPA, colorNL, colorNC, colorNNC)
+  translist <-
+    c(colorNC_trans,
+      colorNNC_trans)
+  colorlist <- list(colorNC, colorNNC)
   label <- labels[exp]
   colors <- colorlist[color]
-  dataCIs <- trialCI(data = dataset)
-  dataset["distortion"][is.na(dataset["distortion"])] <- 0
-  dataset$Mean <-
-    rowMeans(dataset[, 2:length(dataset)], na.rm = TRUE)
+  dataCIs1 <- trialCI(data = dataset1)
+  dataCIs2 <- trialCI(data = dataset2)
+  
+  dataset1["distortion"][is.na(dataset1["distortion"])] <- 0
+  dataset1$Mean <-
+    rowMeans(dataset1[, 2:length(dataset1)], na.rm = TRUE)
   plot(
-    dataset$Mean,
+    dataset1$Mean,
     ylim = c(-35, 35),
     xlab = "Trial",
     ylab = "Hand Direction [°]",
@@ -64,8 +80,8 @@ fi3outLine <- function(dataset, exp, color,title) {
     -10,
     0,
     legend = c(label),
-    col = c(unlist(colors)),
-    lty = c(1),
+    col = c(unlist(colors), 'black', 'black', 'black', 'black'),
+    lty = c(1,1,1,4,3,2),
     lwd = c(2),
     bty = 'n', 
     cex = 1.5
@@ -73,6 +89,43 @@ fi3outLine <- function(dataset, exp, color,title) {
   axis(2, at = c(-30, -15, 0, 15, 30), cex.axis = 1.5,
        las = 2)
   axis(1, at = c(1, 64, 224, 240, 288), cex.axis = 1.5, las = 2)
+  PlotData(nocursor_reaches[33:320,], 4, 4)
+  PlotData(nocursorI_reaches[33:320,], 5, 5)
+  
+  grid <- grid
+  reaches <- getreachesformodel(dataset1[33:320,])
+  reach_par <-
+    fitTwoRateReachModel(
+      reaches = reaches$meanreaches,
+      schedule = reaches$distortion,
+      oneTwoRates = 2,
+      grid = grid,
+      checkStability = TRUE
+    )
+  reach_model <-
+    twoRateReachModel(par = reach_par, schedule = reaches$distortion)
+  lines(reach_model$total * -1, col = unlist(colors[1]),lty = 4)
+  lines(reach_model$slow * -1, col = unlist(colors[1]),lty = 2)
+  lines(reach_model$fast * -1, col = unlist(colors[1]),lty = 3)
+  ncreaches <- getreachesformodel(ncdata1)
+  lines(x = 33:288, y = ncreaches$meanreaches * -1, col = colorNC)
+  
+  reaches <- getreachesformodel(dataset2[33:320,])
+  reach_par <-
+    fitTwoRateReachModel(
+      reaches = reaches$meanreaches,
+      schedule = reaches$distortion,
+      oneTwoRates = 2,
+      grid = grid,
+      checkStability = TRUE
+    )
+  reach_model <-
+    twoRateReachModel(par = reach_par, schedule = reaches$distortion)
+  lines(reach_model$total * -1, col = unlist(colors[2]),lty = 4)
+  lines(reach_model$slow * -1, col = unlist(colors[2]),lty = 2)
+  lines(reach_model$fast * -1, col = unlist(colors[2]),lty = 3)
+  ncreaches <- getreachesformodel(ncdata2)
+  lines(x = 33:288, y = ncreaches$meanreaches * -1, col = colorNNC)
 }
 
 
