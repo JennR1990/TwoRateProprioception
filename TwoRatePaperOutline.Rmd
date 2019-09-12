@@ -39,7 +39,6 @@ source('R/Analysis_Scripts.R')
 source('R/Plots.R', encoding = 'UTF-8')
 source('R/Repeated_Measures_Combine.R')
 source('R/shared.R')
-source('R/tworatemodel.R')
 library('ez')
 library('RateRate')
 library('svglite')
@@ -66,11 +65,11 @@ PlotIndividualdata(nocursorI_reaches[33:320,],5, "Individual No-Cursor_I Data")
 ```{r}
 #Allpars<-Allreachmodels(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,])
 
-PausePars<-Reachmodel(pause_reaches[33:320,], 'Pause')
-NoCPars<-Reachmodel(nocursor_reaches[33:320,], 'No-Cursor')
-NoCIPars<-Reachmodel(nocursorI_reaches[33:320,], 'No-Cursor', grid = 'skewed')
-ActivePars<-Reachmodel(active_reaches, 'Active')
-PassivePars<-Reachmodel(passive_reaches, 'Passive')
+PausePars<-Reachmodel(pause_reaches[33:320,], 'Pause', color = colorNL)
+NoCPars<-Reachmodel(nocursor_reaches[33:320,], 'No-Cursor', color = colorNC)
+NoCIPars<-Reachmodel(nocursorI_reaches[33:320,], 'No-Cursor', grid = 'skewed', color = colorNNC)
+ActivePars<-Reachmodel(active_reaches, 'Active', color = colorA)
+PassivePars<-Reachmodel(passive_reaches, 'Passive', color = colorPA)
 ```
 - Fig 5: comparing reach deviations over time, (show differences between the groups, or should this go in a previous figure? seems it would get cluttered)
 ```{r}
@@ -84,8 +83,8 @@ PlotallTapCI(passive_localization, active_localization) #has no model output
 
 - Fig 8: A) time course of no-cursor changes (no-cursor could reflect a watered down version of the slow process?)
 ```{r}
-Reachmodelnc(nocursor_reaches, nocursor_nocursors, 'No-Cursor')
-Reachmodelnc(nocursorI_reaches, nocursorI_nocursors, 'No-Cursor')
+Reachmodelnc(nocursor_reaches, nocursor_nocursors, 'No-Cursor', color = colorNC)
+Reachmodelnc(nocursorI_reaches, nocursorI_nocursors, 'No-Cursor', color = colorNNC)
 ```
 
 ## Analysis of data
@@ -197,8 +196,8 @@ svglite(file='doc/Experiment_1_Figures.svg', width=12, height=8, system_fonts=li
 layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
 Plotexp1CI(active_reaches, passive_reaches, pause_reaches[33:320,])
 PlotallTapCI(passive_localization, active_localization)
-Reachmodel(active_reaches, 'Active', condition = 'loc', loc_data = active_localization)
-Reachmodel(passive_reaches, 'Passive', condition = 'loc', loc_data = passive_localization)
+Reachmodel(active_reaches, 'Active', condition = 'loc', loc_data = active_localization, color=colorA)
+Reachmodel(passive_reaches, 'Passive', condition = 'loc', loc_data = passive_localization, color=colorPA)
 dev.off()
 
 svglite(file='doc/prop vs. reaches correlations and prop model.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
@@ -206,16 +205,16 @@ layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), nrow=2, byrow=TRUE), heights=c(2,2))
 RegressionPLot3P()
 RegressionPLotchange()
 RegressionPLotec()
-fitPropModel(active_reaches, active_localization, colorA, 'Active Localizations')
-fitPropModel(passive_reaches, passive_localization, colorPA, 'Passive Localizations')
+plotfitPropModel(active_reaches, active_localization, colorA, 'Active Localizations')
+plotfitPropModel(passive_reaches, passive_localization, colorPA, 'Passive Localizations')
 dev.off()
 
 svglite(file='doc/Experiment_2_Figures.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
 layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
 Plotexp2CI(pause_reaches[33:320,],nocursor_reaches[33:320,], nocursorI_reaches[33:320,], pause_reaches[33:320,])
 Plotnocursors(active_reaches, nocursor_nocursors, nocursorI_nocursors)
-Reachmodel(nocursor_reaches, 'No-Cursor', grid = 'skewed', condition = 'nc', ncdata = nocursor_nocursors)
-Reachmodel(nocursorI_reaches, 'No-Cursor_Instructed', grid = 'skewed', condition = 'nc', ncdata = nocursorI_nocursors)
+Reachmodel(nocursor_reaches, 'No-Cursor', grid = 'skewed', condition = 'nc', ncdata = nocursor_nocursors, color = colorNC)
+Reachmodel(nocursorI_reaches, 'No-Cursor_Instructed', grid = 'skewed', condition = 'nc', ncdata = nocursorI_nocursors, color = colorNNC)
 dev.off()
 
 svglite(file='doc/correlations.svg', width=12, height=8, system_fonts=list(sans = "Arial"))

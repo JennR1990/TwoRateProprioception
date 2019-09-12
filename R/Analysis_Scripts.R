@@ -369,7 +369,7 @@ GroupModelAICs <- function(data, group, grid = 'restricted') {
   #group='active'# add this to the function call when i use the commented line below
   #df <- read.csv(sprintf('data/%s_reaches.csv', group), stringsAsFactors = FALSE)
   
-  schedule <- df$schedule
+  schedule <- df$distortion
   
   #Reaches <- as.matrix(df[,2:dim(df)[2]])
   Reaches<- df$meanreaches

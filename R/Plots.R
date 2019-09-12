@@ -559,7 +559,7 @@ t.interval = function(data,
 ## This plots the data without a confidence interval but will run the model and add the output to the figure. ----
 ## It reruns the model everytime you plot so it does take a second or two.
 
-Reachmodel <- function(data, name, grid = 'restricted', condition, ncdata = NA, loc_data = NA, color) {
+Reachmodel <- function(data, name, grid = 'restricted', condition = 'Reach', ncdata = NA, loc_data = NA, color) {
   grid <- grid
   reaches <- getreachesformodel(data)
   reach_par <-
