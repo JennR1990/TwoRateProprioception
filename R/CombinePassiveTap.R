@@ -1,7 +1,7 @@
 getPassiveTaps<- function(experiment) {
   
   if (experiment == 1){
-    participants<- c(1:32)
+    participants<- c(1:26,38,40:44)
     distortion <-  c(rep(0,64),rep(30,160), rep(-30,16), rep(NA, 48))
   } else if (experiment == 2) {
     participants<- c(1:23)
@@ -26,7 +26,7 @@ getPassiveTaps<- function(experiment) {
     baselinedangles <- baselineTapbyaligned(df = partiangles, experiment = experiment, dist = distortion)
     expangles[,sprintf('p%d',participant)] <- baselinedangles$Taps
   }
-  outputfilename<- sprintf('time_model%d_Passive_Prop.csv', experiment)
+  outputfilename<- sprintf('time_model%d_Exposure_Passive_Prop.csv', experiment)
   
   write.csv(expangles, file = outputfilename,  row.names = F, quote = F)
 }
@@ -85,7 +85,7 @@ getpropfilenames<- function (ppn, expn) {
   if (expn == 1) {
     tasknumbers <- c(1:4)
     
-    expfolder <- '../Time Model Good Data/Time Model Variant 1 Selected Data/'
+    expfolder <- '../Time Model Good Data/Time Model Exposure Data/'
     
     ppfolder <- sprintf('time_model1_%d/',ppn)
     

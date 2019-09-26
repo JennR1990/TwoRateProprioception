@@ -23,7 +23,7 @@ getallparticipants<- function(experiment) {
     participants<- c(1:16)
     distortion <-  c(rep(0,96),rep(30,160), rep(-30,16), rep(NA, 48))
   } else if (experiment == 7) {
-    participants<- c(1:34)
+    participants<- c(1:18, 20:27, 29:34)
     distortion <-  c(rep(0,64),rep(30,160), rep(-30,16), rep(NA, 48))
   }
   
@@ -48,7 +48,7 @@ getallparticipants<- function(experiment) {
       expangles[,sprintf('p%d',participant)] <- baselinedangles$reaches[1:320]
     }
   }
-  outputfilename<- sprintf('time_model%d_Updated_Reaches.csv', experiment)
+  outputfilename<- sprintf('time_model%d_Terminal_Reaches.csv', experiment)
   
   write.csv(expangles, file = outputfilename,  row.names = F, quote = F)
 }
