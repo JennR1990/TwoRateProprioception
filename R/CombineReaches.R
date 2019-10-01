@@ -3,6 +3,7 @@ getallparticipants<- function(experiment) {
   if (experiment == 1){
     participants<- c(1:32)
     distortion <-  c(rep(0,64),rep(30,160), rep(-30,16), rep(NA, 48))
+    #distortion <-  c( rep(NA, 48))
   } else if (experiment == 2) {
     participants<- c(1:32)
     distortion <-  c(rep(0,96),rep(30,160), rep(-30,16), rep(NA, 48)) 
@@ -48,7 +49,7 @@ getallparticipants<- function(experiment) {
       expangles[,sprintf('p%d',participant)] <- baselinedangles$reaches[1:320]
     }
   }
-  outputfilename<- sprintf('time_model%d_Terminal_Reaches.csv', experiment)
+  outputfilename<- sprintf('time_model%d_Reaches.csv', experiment)
   
   write.csv(expangles, file = outputfilename,  row.names = F, quote = F)
 }
@@ -70,8 +71,8 @@ baselinebyaligned<- function(df, experiment, dist) {
   #subtract that from reach angles
   if (experiment == 1| experiment == 5| experiment == 7) {
     bias<-mean(reaches[32:64], na.rm = TRUE)
-    print(bias)
     reaches[1:288]<- reaches[1:288] - bias
+    #reaches[1:48]<- reaches[1:48] - 0
     # print(df$reachdeviations[1:288])
   } else if (experiment == 2 | experiment == 4| experiment == 6) {
     bias<-mean(df$reachdeviations[64:96], na.rm = TRUE)
