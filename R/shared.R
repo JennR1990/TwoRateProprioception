@@ -11,18 +11,18 @@ Loaddata<- function (group='passive', task='reaches') {
 }
  
 loadalldata<- function () {
-  pause_reaches<- Loaddata(group='pause')
-  Pause<- Loaddata(group='pause', task = 'pre_post_Prop')
-  active_reaches<- Loaddata(group='active')
-  passive_reaches<- Loaddata()
-  nocursor_reaches<- Loaddata(group='nocursor')
-  nocursorI_reaches<- Loaddata(group='nocursor', task = 'NI_reaches')
-  passive_localization<- Loaddata(task = 'localization')
-  active_localization<- Loaddata(group='active', task = 'localization')
-  nocursor_nocursors<- Loaddata(group='nocursor', task = 'nocursors')
-  NoCursor<- Loaddata(group='NoCursor', task = 'pre_post_Prop')
-  nocursorI_nocursors<- Loaddata(group='nocursor', task = 'NI_nocursors')
-  NewNoC<- Loaddata(group='NewNoC', task = 'pre_post_Prop') 
+  pause_reaches<<- Loaddata(group='pause')
+  Pause<<- Loaddata(group='pause', task = 'pre_post_Prop')
+  active_reaches<<- Loaddata(group='active')
+  passive_reaches<<- Loaddata()
+  nocursor_reaches<<- Loaddata(group='nocursor')
+  nocursorI_reaches<<- Loaddata(group='nocursor', task = 'NI_reaches')
+  passive_localization<<- Loaddata(task = 'localization')
+  active_localization<<- Loaddata(group='active', task = 'localization')
+  nocursor_nocursors<<- Loaddata(group='nocursor', task = 'nocursors')
+  NoCursor<<- Loaddata(group='NoCursor', task = 'pre_post_Prop')
+  nocursorI_nocursors<<- Loaddata(group='nocursor', task = 'NI_nocursors')
+  NewNoC<<- Loaddata(group='NewNoC', task = 'pre_post_Prop') 
 }
 
 downloadOSFdata <- function(update=FALSE) {
