@@ -629,7 +629,7 @@ Reachmodelnc <- function(data, ncdata, name, color) {
 
 
 Plotmodel <- function(dataset, name, color) {
-  title <- sprintf('%s Testing Trial', name)
+  title <- sprintf('%s', name)
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
   dataset$Mean <- rowMeans(dataset[, 2:ncol(dataset)], na.rm = TRUE)
   plot(
