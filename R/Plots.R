@@ -188,7 +188,10 @@ RegressionPLotec <- function() {
     axis(1,
          at = c(- 10, 0, 10, 20, 30),
          cex.axis = 1.5)
-    plotRegressionWithCI(PRRm, PPec, colors = c(colorPA_trans, colorPA))
+    lm<-plotRegressionWithCI(PRRm, PPec, colors = c(colorPA_trans, colorPA))
+    slopes<-lm$coefficients[2]
+    intercepts<- lm$coefficients[1]
+    rsquareds<-summary(lm)$adj.r.squared
     
     
     Arm <- TCombine(active_reaches)
@@ -196,19 +199,22 @@ RegressionPLotec <- function() {
     APec <- TCombine(active_localization)
     APec <- APec$EC_Late
     points(APec ~ ARm, col = colorA_trans, pch = 19)
-    plotRegressionWithCI(ARm, APec, colors = c(colorA_trans, colorA))
+    gm<-plotRegressionWithCI(ARm, APec, colors = c(colorA_trans, colorA))
+    slopes<-c(slopes,gm$coefficients[2])
+    intercepts<- c(intercepts,gm$coefficients[1])
+    rsquareds<-c(rsquareds,summary(gm)$adj.r.squared)
 
     legend(
       -14,
       30,
       legend = c(
-        'Passive',
-        'Active'
+        sprintf('Passive Y = %.2fx + %.2f, r2 = %.2f', slopes[1], intercepts[1], rsquareds[1]),
+        sprintf('Active Y = %.2fx + %.2f, r2 = %.2f', slopes[2], intercepts[2], rsquareds[2])
       ),
       col = c(colorPA, colorA),
       lty = c(1, 1),
       lwd = c(2, 2),
-      bty = 'n', cex = 1.5
+      bty = 'n', cex = 1.25
     )
 
 }
@@ -245,18 +251,7 @@ RegressionPLotR1 <- function() {
   points(APec ~ ARm, col = colorA)
   gm<-plotRegressionWithCI(ARm, APec, colors = c(colorA_trans, colorA))
   slopes<-c(slopes,gm$coefficients[2])
-  # legend(
-  #   16,
-  #   32,
-  #   legend = c(
-  #     'Passive Localization',
-  #     'Active Localization'
-  #   ),
-  #   col = c(colorPA, colorA),
-  #   lty = c(1, 1),
-  #   lwd = c(2, 2),
-  #   bty = 'n'
-  # )
+
   names(slopes)<- c('Passive', 'Active')
   return(slopes)
 }
@@ -292,18 +287,6 @@ RegressionPLotR1E <- function() {
   points(APec ~ ARm, col = colorA)
   gm<-plotRegressionWithCI(ARm, APec, colors = c(colorA_trans, colorA))
   slopes<-c(slopes,gm$coefficients[2])
-  # legend(
-  #   0,
-  #   32,
-  #   legend = c(
-  #     'Passive Localization',
-  #     'Active Localization'
-  #   ),
-  #   col = c(colorPA, colorA),
-  #   lty = c(1, 1),
-  #   lwd = c(2, 2),
-  #   bty = 'n'
-  # )
   names(slopes)<- c('Passive', 'Active')
   return(slopes)
 }
@@ -332,6 +315,8 @@ RegressionPLot3P <- function() {
        cex.axis = 1.5)
   lm<-plotRegressionWithCI(pert, loc, colors = c(colorPA_trans, colorPA))
   slopes<-lm$coefficients[2]
+  intercepts<- lm$coefficients[1]
+  rsquareds<-summary(lm)$adj.r.squared
   
 
   APec <- TCombine(active_localization)
@@ -342,17 +327,19 @@ RegressionPLot3P <- function() {
   points(loca ~ pertb, col = colorA_trans, pch = 19)
   gm<-plotRegressionWithCI(perta, loca, colors = c(colorA_trans, colorA))
   slopes<-c(slopes,gm$coefficients[2])
+  intercepts<- c(intercepts,gm$coefficients[1])
+  rsquareds<-c(rsquareds,summary(gm)$adj.r.squared)
   legend(
     -30,
     30,
     legend = c(
-      'Passive',
-      'Active'
+      sprintf('Passive Y = %.2fx + %.2f, r2 = %.2f', slopes[1], intercepts[1], rsquareds[1]),
+      sprintf('Active Y = %.2fx + %.2f, r2 = %.2f', slopes[2], intercepts[2], rsquareds[2])
     ),
     col = c(colorPA, colorA),
     lty = c(1, 1),
     lwd = c(2, 2),
-    bty = 'n', cex = 1.5
+    bty = 'n', cex = 1.25
   )
   names(slopes)<- c('Passive', 'Active')
   return(slopes)
@@ -376,16 +363,18 @@ RegressionPLotchange <- function() {
     ylim = c(-10, 30),
     main = 'Change in Perturbation Vs. Localizations',
     axes = FALSE,
-    pch = 19
+    pch = 19, cex.lab = 1.5, cex.main = 1.5
   )
   axis(2,
        at = c( -10, 0, 10 ,20, 30),
-       cex.axis = 0.75)
+       cex.axis = 1.5)
   axis(1,
        at = c( 0, 30,  60),
-       cex.axis = 0.75)
+       cex.axis = 1.5)
   lm<-plotRegressionWithCI(pert, loc, colors = c(colorPA_trans, colorPA))
   slopes<-lm$coefficients[2]
+  intercepts<- lm$coefficients[1]
+  rsquareds<-summary(lm)$adj.r.squared
   
   
   
@@ -397,18 +386,21 @@ RegressionPLotchange <- function() {
   points(loca ~ pertb, col = colorA_trans, pch = 19)
   gm<-plotRegressionWithCI(perta, loca, colors = c(colorA_trans, colorA))
   slopes<-c(slopes,gm$coefficients[2])
+  intercepts<- c(intercepts,gm$coefficients[1])
+  rsquareds<-c(rsquareds,summary(gm)$adj.r.squared)
+  
 
   legend(
     0,
     32,
     legend = c(
-      'Passive Localization',
-      'Active Localization'
+      sprintf('Passive Y = %.2fx + %.2f, r2 = %.2f', slopes[1], intercepts[1], rsquareds[1]),
+      sprintf('Active Y = %.2fx + %.2f, r2 = %.2f', slopes[2], intercepts[2], rsquareds[2])
     ),
     col = c(colorPA, colorA),
     lty = c(1, 1),
     lwd = c(2, 2),
-    bty = 'n'
+    bty = 'n', cex = 1.25
   )
   names(slopes)<- c('Passive', 'Active')
   return(slopes)
@@ -437,7 +429,7 @@ PlotData <- function(dataset, color, trans, rotate = -1, x =  c(c(1:288), rev(c(
   x <- x
   y <- c(dataCIs[, 1], rev(dataCIs[, 2]))
   polygon(x, y, col = translist[trans], border = NA)
-  #lines(x[1:length(dataset$Mean)],dataset$Mean * rotate, col = colorlist[color], lwd = 1.5)
+  lines(x[1:length(dataset$Mean)],dataset$Mean * rotate, col = colorlist[color])
 }
 
 Plotschedule <- function(dataset) {
@@ -876,10 +868,10 @@ plotfitPropModel<- function(reachdata, locadata, color, title) {
   output<- PropModel(unlist(pargrid[bestpar]), schedule)
   lines(output, col = "black")
   lines(localizations, col = color)
-  proportion<- sprintf('Proportion = %f', unlist(pargrid[bestpar]))
+  proportion<- sprintf('Proportion = %.2f', unlist(pargrid[bestpar]))
   print(proportion)
-  legend(-10, -2, legend = c('Localization data', 'proportional'), col = c(color, "black"), lty = c(1,1), lwd = 2, bty = 'n', cex = 1.5)
-  #text(144, 0, labels = proportion)
+  legend(-10, -2, legend = c('Localization data', 'Model Prediction'), col = c(color, "black"), lty = c(1,1), lwd = 2, bty = 'n', cex = 1.5)
+  text(144, 0, labels = proportion, lwd = 2, cex = 1.5)
   #, 'fast', 'slow', , color, color, ,3,2 , ncol =  2
   
   reaches <- getreachesformodel(reachdata)

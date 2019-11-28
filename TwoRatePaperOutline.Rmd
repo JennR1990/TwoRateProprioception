@@ -200,7 +200,7 @@ Reachmodel(active_reaches, 'Active Localization', condition = 'loc', loc_data = 
 Reachmodel(passive_reaches, 'Passive Localization', condition = 'loc', loc_data = passive_localization, color=colorPA)
 dev.off()
 
-svglite(file='doc/prop vs. reaches correlations and prop model.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
+svglite(file='doc/prop vs. reaches correlations and prop model-updated.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
 layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), nrow=2, byrow=TRUE), heights=c(2,2))
 RegressionPLot3P()
 RegressionPLotchange()
@@ -214,7 +214,7 @@ layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
 Plotexp2CI(pause_reaches[33:320,],nocursor_reaches[33:320,], nocursorI_reaches[33:320,], pause_reaches[33:320,])
 Plotnocursors(active_reaches, nocursor_nocursors, nocursorI_nocursors)
 Reachmodel(nocursor_reaches, 'No-Cursor', grid = 'skewed', condition = 'nc', ncdata = nocursor_nocursors, color = colorNC)
-Reachmodel(nocursorI_reaches, 'No-Cursor_Instructed', grid = 'skewed', condition = 'nc', ncdata = nocursorI_nocursors, color = colorNNC)
+Reachmodel(nocursorI_reaches, 'No-Cursor Instructed', grid = 'skewed', condition = 'nc', ncdata = nocursorI_nocursors, color = colorNNC)
 dev.off()
 
 svglite(file='doc/correlations.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
