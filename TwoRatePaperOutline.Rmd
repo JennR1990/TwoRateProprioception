@@ -196,8 +196,8 @@ svglite(file='doc/Experiment_1_Figures.svg', width=12, height=8, system_fonts=li
 layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
 Plotexp1CI(active_reaches, passive_reaches, pause_reaches[33:320,])
 PlotallTapCI(passive_localization, active_localization)
-Reachmodel(active_reaches, 'Active', condition = 'loc', loc_data = active_localization, color=colorA)
-Reachmodel(passive_reaches, 'Passive', condition = 'loc', loc_data = passive_localization, color=colorPA)
+Reachmodel(active_reaches, 'Active Localization', condition = 'loc', loc_data = active_localization, color=colorA)
+Reachmodel(passive_reaches, 'Passive Localization', condition = 'loc', loc_data = passive_localization, color=colorPA)
 dev.off()
 
 svglite(file='doc/prop vs. reaches correlations and prop model.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
