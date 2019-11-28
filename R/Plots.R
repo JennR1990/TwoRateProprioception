@@ -680,7 +680,7 @@ Plotmodel <- function(dataset, name, color) {
 
 
 Plotncmodel <- function(dataset, name, color) {
-  title <- sprintf('%s Testing Trial', name)
+  title <- sprintf('%s', name)
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
   dataset$Mean <- rowMeans(dataset[, 2:ncol(dataset)], na.rm = TRUE)
   plot(
@@ -730,7 +730,7 @@ Plotncmodel <- function(dataset, name, color) {
 }
 
 Plotlocmodel <- function(dataset, name, color) {
-  title <- sprintf('%s Testing Trial', name)
+  title <- sprintf('%s', name)
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
   dataset$Mean <- rowMeans(dataset[, 2:ncol(dataset)], na.rm = TRUE)
   plot(
