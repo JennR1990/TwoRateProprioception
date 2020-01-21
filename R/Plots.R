@@ -27,21 +27,21 @@ loadcolors <- function() {
 
 
 Plotexp1CI <- function (acd, pad, nld) {
-  PlotoutLine(acd, 1:3, 1:3, "Training Trials")
+  PlotoutLine(acd, 1:3, 1:3, "Training Trials", 'Reach Deviations [°]')
   PlotData(acd, 1, 1)
   PlotData(pad, 2, 2)
   PlotData(nld, 3, 3)
 }
 
 Plotexp2CI <- function (acd, ncd, ncdI, nld) {
-  PlotoutLine(acd, 3:5, 3:5, "Training Trials")
+  PlotoutLine(acd, 3:5, 3:5, "Training Trials", 'Reach Deviations [°]')
   PlotData(nld, 3, 3)
   PlotData(ncd, 4, 4)
   PlotData(ncdI, 5, 5)
 }
 
 PlotallTapCI <- function (pl = dataset1, al = dataset2) {
-  PlotoutLine(pl, 6:7, 1:2, "Hand Localizations")
+  PlotoutLine(pl, 6:7, 1:2, "Hand Localizations", "Hand Localization Shift")
   PlotData(al, 1, 1, 1)
   PlotData(pl, 2, 2, 1)
 }
@@ -49,7 +49,7 @@ PlotallTapCI <- function (pl = dataset1, al = dataset2) {
 
 
 Plotnocursors <- function (acd,ncd_NC, ncdI) {
-  PlotoutLine(acd, 4:5, 4:5, "Reach Aftereffects")
+  PlotoutLine(acd, 4:5, 4:5, "Reach Aftereffects", 'Reach Deviations [°]')
   PlotData(ncd_NC, 4, 4, x =  c(c(33:288), rev(c(33:288))))
   PlotData(ncdI, 5, 5, x =  c(c(33:288), rev(c(33:288))))
 }
@@ -61,7 +61,7 @@ PlotallreachesCI <-
             nld = dataset3,
             ncd = dataset4,
             ncdI = dataset5) {
-    PlotoutLine(acd, 1:5, 1:5, "Training Trials")
+    PlotoutLine(acd, 1:5, 1:5, "Training Trials", 'Reach Deviations [°]')
     PlotData(acd, 1, 1)
     PlotData(pad, 2, 2)
     PlotData(nld, 3, 3)
@@ -84,7 +84,8 @@ RegressionPLot <- function(exp) {
       main = 'Localization ~ Reaches During Error Clamp',
       xlim = c(-12, 25),
       ylim = c(-12, 25),
-      axes = FALSE
+      axes = FALSE,
+      asp=1
     )
     axis(2,
          at = c(-30, -20, -10, 0, 10, 20, 30),
@@ -174,19 +175,20 @@ RegressionPLotec <- function() {
     plot(
       PPec ~ PRRm,
       col = colorPA_trans,
-      xlab = 'Reach Deviations  [°]',
+      xlab = 'Reach Deviations [°]',
       ylab = NA,
       main = 'Error Clamp',
-      xlim = c(-12, 30),
+      xlim = c(-30, 30),
       ylim = c(-12, 30),
       axes = FALSE,
-      pch = 19, cex.lab = 1.5, cex.main = 1.5
+      pch = 19, cex.lab = 1.5, cex.main = 1.5,
+      asp=1
     )
     axis(2,
          at = c( -10, 0, 10, 20, 30),
          cex.axis = 1.5, las =2)
     axis(1,
-         at = c(- 10, 0, 10, 20, 30),
+         at = c(-30,-20,- 10, 0, 10, 20, 30),
          cex.axis = 1.5)
     lm<-plotRegressionWithCI(PRRm, PPec, colors = c(colorPA_trans, colorPA))
     slopes<-lm$coefficients[2]
@@ -438,7 +440,7 @@ Plotschedule <- function(dataset) {
     dataset$p1,
     ylim = c(-35, 35),
     xlab = "Trial",
-    ylab = "Hand Direction [°]",
+    ylab = "Reach Deviations [°]",
     axes = F,
     main = "Schedule",
     type = 'l',
@@ -463,14 +465,14 @@ Plotschedule <- function(dataset) {
   axis(2, at = c(-30, -15, 0, 15, 30), cex.axis = 1.5, las = 2)
   axis(1, at = c(1, 64, 224, 240, 288), cex.axis = 1.5, las = 2)
 }
-PlotoutLine <- function(dataset, exp, color,title) {
+PlotoutLine <- function(dataset, exp, color,title,ylabel) {
   labels <-
     list (
-      'Active Localization Group (N=32)',
-      'Passive Localization Group (N=32)',
-      'Pause Group (N=32)',
-      'No-Cursor Group (N=32)',
-      'No-Cursor Instructed Group (N=16)',
+      'Active Localization (N=32)',
+      'Passive Localization (N=32)',
+      'Pause (N=32)',
+      'No-Cursor (N=32)',
+      'No-Cursor Instructed (N=16)',
       'Active Localizations (N=32)',
       'Passive Localizations (N=32)'
     )
@@ -485,7 +487,7 @@ PlotoutLine <- function(dataset, exp, color,title) {
     dataset$Mean,
     ylim = c(-35, 35),
     xlab = "Trial",
-    ylab = "Hand Direction [°]",
+    ylab = ylabel,
     axes = F,
     main = title,
     type = 'l',
@@ -647,7 +649,7 @@ Plotmodel <- function(dataset, name, color) {
   legend(
     -10,
     -5,
-    legend = c('Reach data', 'model', 'fast', 'slow'),
+    legend = c('Reaches', 'model', 'fast', 'slow'),
     col = c(
       rgb(0.44, 0.51, 0.57),
       color,
@@ -697,7 +699,7 @@ Plotncmodel <- function(dataset, name, color) {
         col = rgb(0., 0., 0.))
   legend(
   -10,-5,
-    legend = c('Reach data', 'No-cursor data', 'model', 'fast', 'slow'),
+    legend = c('Reaches', 'No-cursors', 'model', 'fast', 'slow'),
     col = c(
       rgb(0.44, 0.51, 0.57),
       color,
@@ -748,7 +750,7 @@ Plotlocmodel <- function(dataset, name, color) {
   legend(
     -10,
     -5,
-    legend = c('Reach data', 'Localization data', 'model', 'fast', 'slow'),
+    legend = c('Reaches', 'Localizations', 'model', 'fast', 'slow'),
     col = c(
       rgb(0.44, 0.51, 0.57),
       color,
@@ -947,11 +949,11 @@ gridsearch<- function(localizations, schedule, nsteps=7, topn=4) {
 PlotIndividualdata <- function (data, exp, title) {
   labels <-
     list (
-      'Active Localization Group (N=32)',
-      'Passive Localization Group (N=32)',
-      'No Localization Group (N=32)',
-      'No-Cursor Group (N=32)',
-      'Instructed No-Cursor Group (N=32)'
+      'Active Localization (N=32)',
+      'Passive Localization (N=32)',
+      'No Localization (N=32)',
+      'No-Cursor (N=32)',
+      'Instructed No-Cursor (N=32)'
     )
   PlotoutLine(data, exp, exp, title)
   PlotData(data, exp, exp)
@@ -971,7 +973,7 @@ averagedprepost<- function (dataset = c('Pause', 'NoCursor', 'NewNoC')) {
   svglite(file='doc/Pre_Post_Data.svg', width=6, height=9, system_fonts=list(sans = "Arial"))
   layout(c(1,2,3), heights = c(2,2,2))
   
-  exp = list('No-Localization Task','No-Cursor Task', 'New No-Cursor Task')
+  exp = list('Pause Task','No-Cursor Task', 'New No-Cursor Task')
   counter<- 1
   
   for (data in dataset) {

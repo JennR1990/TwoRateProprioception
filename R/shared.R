@@ -23,6 +23,7 @@ loadalldata<- function () {
   NoCursor<<- Loaddata(group='NoCursor', task = 'pre_post_Prop')
   nocursorI_nocursors<<- Loaddata(group='nocursor', task = 'NI_nocursors')
   NewNoC<<- Loaddata(group='NewNoC', task = 'pre_post_Prop') 
+  wenocursor_reaches<- cbind(nocursor_reaches, nocursorI_reaches[2:ncol(nocursorI_reaches)])
 }
 
 downloadOSFdata <- function(update=FALSE) {
