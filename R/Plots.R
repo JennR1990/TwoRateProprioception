@@ -552,7 +552,7 @@ t.interval = function(data,
 ## This plots the data without a confidence interval but will run the model and add the output to the figure. ----
 ## It reruns the model everytime you plot so it does take a second or two.
 
-Reachmodel <- function(data, name, grid = 'restricted', condition = 'Reach', ncdata = NA, loc_data = NA, color, yaxis) {
+Reachmodel <- function(data, name, grid = 'restricted', condition = 'Reach', ncdata = NA, loc_data = NA, color, yaxis = 'Hand Direction [°]') {
   grid <- grid
   reaches <- getreachesformodel(data)
   reach_par <-
@@ -945,7 +945,7 @@ gridsearch<- function(localizations, schedule, nsteps=7, topn=4) {
 
 ## This one plots the invidual traces of each participant over the group average. ----
 
-PlotIndividualdata <- function (data, exp, title) {
+PlotIndividualdata <- function (data, exp, title, yaxis) {
   labels <-
     list (
       'Active Localization (N=32)',
@@ -954,7 +954,7 @@ PlotIndividualdata <- function (data, exp, title) {
       'No-Cursor (N=32)',
       'Instructed No-Cursor (N=32)'
     )
-  PlotoutLine(data, exp, exp, title)
+  PlotoutLine(data, exp, exp, title, yaxis)
   PlotData(data, exp, exp)
   subdata <- data * -1
   participants <- 2:ncol(data)

@@ -88,7 +88,7 @@ pLogRegression <- function(data, variable = Test_Trial) {
   
   #df <- read.csv('data/Pilot/rebound.csv', stringsAsFactors = F)
   
-  data$variable<- as.factor(data$variable)
+  data$variable<- as.factor(data$Test_Trial)
   
 
     
@@ -349,7 +349,7 @@ PairedT<- function(data, exp1, task) {
 
 ##Models
 
-ParticipantReachmodels2<- function(adata, pasdata, paudata, ncdata, ncidata) {
+ParticipantReachmodels2<- function(adata, pasdata, paudata, ncdata) {
   a_par<- getParticipantFits2(adata)
   a_par$Experiment<-'Active'
   a_par$Test_Trial<-'Active'
@@ -362,10 +362,8 @@ ParticipantReachmodels2<- function(adata, pasdata, paudata, ncdata, ncidata) {
   nc_par<- getParticipantFits2(ncdata)
   nc_par$Experiment<-'No-Cursor'
   nc_par$Test_Trial<-'Active'
-  nci_par<- getParticipantFits2(ncidata)
-  nci_par$Experiment<-'No-Cursor_I'
-  nci_par$Test_Trial<-'Active'
-  allpars<- rbind(a_par, Pas_par, Pau_par, nc_par, nci_par)
+
+  allpars<- rbind(a_par, Pas_par, Pau_par, nc_par)
   return(allpars)
 }
 ParticipantBothReachmodels<- function(adata, pasdata, paudata, ncdata, ncidata) {
@@ -402,7 +400,7 @@ ParticipantBothReachmodels<- function(adata, pasdata, paudata, ncdata, ncidata) 
   allpars<- rbind(a_par, Pas_par, Pau_par, nc_par, nci_par,a_par1, Pas_par1, Pau_par1, nc_par1, nci_par1)
   return(allpars)
 }
-ParticipantReachmodels1<- function(adata, pasdata, paudata, ncdata, ncidata) {
+ParticipantReachmodels1<- function(adata, pasdata, paudata, ncdata) {
   a_par<- getParticipantFits1(adata)
   a_par$Experiment<-'Active'
   a_par$Test_Trial<-'Active'
@@ -415,10 +413,7 @@ ParticipantReachmodels1<- function(adata, pasdata, paudata, ncdata, ncidata) {
   nc_par<- getParticipantFits1(ncdata)
   nc_par$Experiment<-'No-Cursor'
   nc_par$Test_Trial<-'Active'
-  nci_par<- getParticipantFits1(ncidata)
-  nci_par$Experiment<-'No-Cursor_I'
-  nci_par$Test_Trial<-'Active'
-  allpars<- rbind(a_par, Pas_par, Pau_par, nc_par, nci_par)
+  allpars<- rbind(a_par, Pas_par, Pau_par, nc_par)
   return(allpars)
 }
 
@@ -451,12 +446,15 @@ GroupModelAICs <- function(data, group, grid = 'restricted') {
   N <- dim(df)[2] - 1
   # the median length of a phase is 40 trials,
   # and there are 7.2 of those in 288 trials
-  InOb <- seriesEffectiveSampleSize(Reaches, method='ac_one')
+  InOb <- seriesEffectiveSampleSize(Reaches, method='ac_lag95%CI')
   print(InOb)
   # this is then used for C:
-  C <- InOb*(log(2*pi)+1)
-  twoRateAIC <- (2*4) + InOb*log(twoRateMSE) + C
-  oneRateAIC <- (2*2) + InOb*log(oneRateMSE) + C
+  #C <- InOb*(log(2*pi)+1)
+  #twoRateAIC <- (2*4) + InOb*log(twoRateMSE) + C
+  #oneRateAIC <- (2*2) + InOb*log(oneRateMSE) + C
+  
+  twoRateAIC<-(InOb * log(twoRateMSE)) + (2 * 4)
+  oneRateAIC<-(InOb * log(oneRateMSE)) + (2 * 2)
   
   cat(sprintf('1-rate AIC: %0.2f  %s  2-rate AIC: %0.2f\n',oneRateAIC,c('>=', ' <')[as.numeric(oneRateAIC<twoRateAIC)+1],twoRateAIC))
   likelihood<-exp((min(c(twoRateAIC, oneRateAIC))-c(twoRateAIC, oneRateAIC))/2)

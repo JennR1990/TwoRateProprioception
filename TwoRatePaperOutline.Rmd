@@ -67,11 +67,12 @@ PlotIndividualdata(nocursorI_reaches[33:320,],5, "Individual No-Cursor_I Data")
 #Allpars<-Allreachmodels(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,])
 
 PausePars<-Reachmodel(pause_reaches[33:320,], 'Pause', color = colorNL)
-NoCPars<-Reachmodel(nocursor_reaches[33:320,], 'No-Cursor', color = colorNC)
-NoCIPars<-Reachmodel(nocursorI_reaches[33:320,], 'No-Cursor', grid = 'skewed', color = colorNNC)
 AllNoCPars<-Reachmodel(newnocursor_reaches[33:320,], 'No-Cursor', color = colorNC)
 ActivePars<-Reachmodel(active_reaches, 'Active', color = colorA)
 PassivePars<-Reachmodel(passive_reaches, 'Passive', color = colorPA)
+
+NoCPars<-Reachmodel(nocursor_reaches[33:320,], 'No-Cursor', color = colorNC)
+NoCIPars<-Reachmodel(nocursorI_reaches[33:320,], 'No-Cursor', grid = 'skewed', color = colorNNC)
 ```
 - Fig 5: comparing reach deviations over time, (show differences between the groups, or should this go in a previous figure? seems it would get cluttered)
 ```{r}
@@ -219,10 +220,12 @@ Allmeans<- Allmeans()
 
       
 ### Polynomial Regressions
-allpars<- ParticipantReachmodels(active_reaches, passive_reaches, pause_reaches[33:320,], newnocursor_reaches[33:320,])
+allpars<- ParticipantReachmodels1(active_reaches, passive_reaches, pause_reaches[33:320,], newnocursor_reaches[33:320,])
       pLogRegression(allpars)
       
+
       
+      kable(metrics)
 ```
 
 
@@ -236,13 +239,13 @@ Active_metrics<- GroupModelAICs(active_reaches, 'Active')
 Passive_metrics<- GroupModelAICs(passive_reaches, 'Passive')
 Pause_metrics<- GroupModelAICs(pause_reaches, 'Pause')
 NC_metrics<- GroupModelAICs(newnocursor_reaches, 'No-Cursor', 'skewed')
-metrics<- rbind(Active_metrics, passive_reaches, Pause_metrics, NC_metrics)
+metrics<- rbind(Active_metrics, Passive_metrics, Pause_metrics, NC_metrics)
 groups = c('active', 'passive','pause', 'nocursor')
 metrics$group<- groups
 
 NC_metrics<- GroupModelAICs(nocursor_reaches, 'No-Cursor', 'skewed')
 NCI_metrics<- GroupModelAICs(nocursorI_reaches,'No-Cursor_I', 'skewed')
-metrics<- rbind(Active_metrics, passive_reaches, Pause_metrics, NC_metrics, NCI_metrics)
+metrics<- rbind(Active_metrics, Passive_metrics, Pause_metrics, NC_metrics, NCI_metrics)
 groups = c('active', 'passive','pause', 'nocursor', 'nocursor_NI')
 metrics$group<- groups
 
@@ -269,7 +272,7 @@ layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
 Plotexp1CI(active_reaches, passive_reaches, pause_reaches[33:320,])
 PlotallTapCI(passive_localization, active_localization)
 Reachmodel(active_reaches, 'Active Localization', condition = 'loc', loc_data = active_localization, color=colorA)
-Reachmodel(passive_reaches, 'Passive Localization', condition = 'loc', loc_data = passive_localization, color=colorPA)
+Reachmodel(passive_reaches, 'Passive Localization', condition = 'loc', loc_data = passive_localization, color=colorPA , yaxis = 'Hand Direction [°]')
 dev.off()
 
 svglite(file='doc/prop vs. reaches correlations and prop model-updated.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
@@ -281,14 +284,14 @@ plotfitPropModel(active_reaches, active_localization, colorA, 'Active Localizati
 plotfitPropModel(passive_reaches, passive_localization, colorPA, 'Passive Localizations')
 dev.off()
 
-svglite(file='doc/Experiment_2_Figures.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
+svglite(file='doc/Experiment_2_Figures.svg', width=12, height=4, system_fonts=list(sans = "Arial"))
 layout(matrix(c(1,2), nrow=1, byrow=TRUE), heights=c(2))
 Plotexp2CI(pause_reaches[33:320,],newnocursor_reaches[33:320,], pause_reaches[33:320,])
-
-Reachmodel(newnocursor_reaches, 'No-Cursor', grid = 'skewed', condition = 'nc', ncdata = newnocursor_nocursors, color = colorNC)
+Reachmodel(newnocursor_reaches, 'No-Cursor', grid = 'skewed', condition = 'nc', ncdata = newnocursor_nocursors, color = colorNC, yaxis = 'Hand Direction [°]')
+dev.off()
 #Plotnocursors(active_reaches, nocursor_nocursors, nocursorI_nocursors)
 #Reachmodel(nocursorI_reaches, 'No-Cursor Instructed', grid = 'skewed', condition = 'nc', ncdata = nocursorI_nocursors, color = colorNNC)
-dev.off()
+
 
 svglite(file='doc/correlations.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
 layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), nrow=2, byrow=TRUE), heights=c(2,2))
