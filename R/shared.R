@@ -11,19 +11,29 @@ Loaddata<- function (group='passive', task='reaches') {
 }
  
 loadalldata<- function () {
-  pause_reaches<<- Loaddata(group='pause')
-  Pause<<- Loaddata(group='pause', task = 'pre_post_Prop')
-  active_reaches<<- Loaddata(group='active')
-  passive_reaches<<- Loaddata()
-  nocursor_reaches<<- Loaddata(group='nocursor')
-  nocursorI_reaches<<- Loaddata(group='nocursor', task = 'NI_reaches')
-  passive_localization<<- Loaddata(task = 'localization')
-  active_localization<<- Loaddata(group='active', task = 'localization')
-  nocursor_nocursors<<- Loaddata(group='nocursor', task = 'nocursors')
-  NoCursor<<- Loaddata(group='NoCursor', task = 'pre_post_Prop')
-  nocursorI_nocursors<<- Loaddata(group='nocursor', task = 'NI_nocursors')
-  NewNoC<<- Loaddata(group='NewNoC', task = 'pre_post_Prop') 
-  wenocursor_reaches<- cbind(nocursor_reaches, nocursorI_reaches[2:ncol(nocursorI_reaches)])
+  pause_reaches<<- removeReachOutliers(Loaddata(group='pause'))
+  Pause<<- removeReachOutliers(Loaddata(group='pause', task = 'pre_post_Prop'))
+  active_reaches<<- removeReachOutliers(Loaddata(group='active'))
+  passive_reaches<<- removeReachOutliers(Loaddata())
+  nocursor_reaches<<- removeReachOutliers(Loaddata(group='nocursor'))
+  nocursorI_reaches<<- removeReachOutliers(Loaddata(group='nocursor', task = 'NI_reaches'))
+  passive_localization<<- removeReachOutliers(Loaddata(task = 'localization'))
+  active_localization<<- removeReachOutliers(Loaddata(group='active', task = 'localization'))
+  nocursor_nocursors<<- removeReachOutliers(Loaddata(group='nocursor', task = 'nocursors'))
+  NoCursor<<- removeReachOutliers(Loaddata(group='NoCursor', task = 'pre_post_Prop'))
+  nocursorI_nocursors<<- removeReachOutliers(Loaddata(group='nocursor', task = 'NI_nocursors'))
+  NewNoC<<- removeReachOutliers(Loaddata(group='NewNoC', task = 'pre_post_Prop')) 
+  newnocursor_reaches<<- cbind(nocursor_reaches, nocursorI_reaches[2:ncol(nocursorI_reaches)])
+  newnocursor_nocursors<<- cbind(nocursor_nocursors, nocursorI_nocursors[2:ncol(nocursorI_nocursors)])
+}
+
+fixnocursorcolnames<- function () {
+  
+  names<-colnames(newnocursor_reaches)
+  newnames<- c('p33','p34','p35','p36','p37','p38','p39','p40','p41','p42','p43','p44','p45','p46','p47','p48')
+  names<- c(names[1:33], newnames)
+  colnames(newnocursor_reaches)<<- names
+  colnames(newnocursor_nocursors)<<- names
 }
 
 downloadOSFdata <- function(update=FALSE) {
@@ -194,5 +204,45 @@ seriesEffectiveSampleSize <- function(series, method='ac_one') {
   }
   
   stop('Unrecognized method for determining effective sample size.\nUse one of: ac_one, ac_lag.10 or ac_lag95%CI\n')
+  
+}
+
+
+# OUTLIER REMOVAL ---------------------------------------------------------
+
+removeSDoutliers <- function(values, sds=3) {
+  
+  avg <- mean(values, na.rm=TRUE)
+  std <- sd(values, na.rm=TRUE) * sds
+  
+  values[values > avg + std] <- NA
+  values[values < avg - std] <- NA
+  
+  return(values)
+  
+}
+
+removeIQRoutliers <- function(values, range=3) {
+  
+  bp <- boxplot(values, range=3, plot=FALSE)
+  
+  values[values %in% bp$out] <- NA
+  
+  return(values)
+  
+}
+
+
+removeReachOutliers <- function(data) {
+  
+  ntrials <- nrow(data)
+  
+  for (trialn in c(1:ntrials)) {
+    
+    data[trialn,2:ncol(data)] <- removeSDoutliers(as.numeric(data[trialn,2:ncol(data)]))
+    
+  }
+  
+  return(data)
   
 }

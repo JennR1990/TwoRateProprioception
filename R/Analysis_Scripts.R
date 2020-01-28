@@ -119,7 +119,31 @@ ANOVAanalysis<- function(AllDataANOVA){
 }
 
 
-PrepdataforT<- function(adata, pasdata, paudata, ncdata, ncncdata, ncIdata, ncncIdata){
+PrepdataforT<- function(adata, pasdata, paudata, ncdata, ncncdata){
+  #
+  
+  A_RM<-TCombine(adata)
+  A_RM$Experiment <- rep('Active', nrow(A_RM))
+  
+  Pas_RM<-TCombine(pasdata)
+  Pas_RM$Experiment <- rep('Passive', nrow(Pas_RM))
+  
+  Pau_RM<-TCombine(paudata)
+  Pau_RM$Experiment <- rep('Pause', nrow(Pau_RM))
+  
+  nc_RM<-TCombine(ncdata)
+  nc_RM$Experiment <- rep('No-Cursor', nrow(nc_RM))
+  
+  ncnc_RM<-NoCursorsTCombine(ncncdata)
+  ncnc_RM$Experiment <- rep('No-Cursor_No-Cursors', nrow(ncnc_RM))
+
+  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM)
+  # 
+  return(AllDataRM)
+}
+
+
+PrepdataforT1<- function(adata, pasdata, paudata, ncdata, ncncdata, ncIdata, ncncIdata){
   #
   
   A_RM<-TCombine(adata)
@@ -139,7 +163,7 @@ PrepdataforT<- function(adata, pasdata, paudata, ncdata, ncncdata, ncIdata, ncnc
   
   ncI_RM<-TCombine(ncIdata)
   ncI_RM$Experiment <- rep('No-CursorI', nrow(ncI_RM))
-
+  
   ncncI_RM<-NoCursorsTCombine(ncncIdata)
   ncncI_RM$Experiment <- rep('No-CursorI_No-Cursors', nrow(ncncI_RM))
   
@@ -148,7 +172,41 @@ PrepdataforT<- function(adata, pasdata, paudata, ncdata, ncncdata, ncIdata, ncnc
   return(AllDataRM)
 }
 
-PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata, ncIdata, ncncIdata) {
+
+
+PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata) {
+  
+  # 
+  
+  A_RM<-ANOVAcombine(adata)
+  A_RM$ID <- sprintf('ActLoc.%s',A_RM$ID)
+  A_RM$Experiment <- rep('Active', nrow(A_RM))
+  
+  Pas_RM<-ANOVAcombine(pasdata)
+  Pas_RM$ID <- sprintf('PasLoc.%s',Pas_RM$ID)
+  Pas_RM$Experiment <- rep('Passive', nrow(Pas_RM))
+  
+  Pau_RM<-ANOVAcombine(paudata)
+  Pau_RM$ID <- sprintf('Pause.%s',Pau_RM$ID)
+  Pau_RM$Experiment <- rep('Pause', nrow(Pau_RM))
+  
+  nc_RM<-ANOVAcombine(ncdata)
+  nc_RM$ID <- sprintf('NoCursor.%s',nc_RM$ID)
+  nc_RM$Experiment <- rep('No-Cursor', nrow(nc_RM))
+  
+  ncnc_RM<-NoCursorACombine(ncncdata)
+  ncnc_RM$ID <- sprintf('NoCursor_No-Cursors.%s',ncnc_RM$ID)
+  ncnc_RM$Experiment <- rep('No-Cursor_No-Cursors', nrow(ncnc_RM))
+  
+
+  
+  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM)
+  #
+  return(AllDataRM)
+  
+}
+
+PrepdataforANOVA1 <- function(adata, pasdata, paudata, ncdata, ncncdata, ncIdata, ncncIdata) {
   
   # 
   
@@ -175,7 +233,7 @@ PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata, ncIdata,
   ncI_RM<-ANOVAcombine(ncIdata)
   ncI_RM$ID <- sprintf('NoCursor.%s',ncI_RM$ID)
   ncI_RM$Experiment <- rep('No-CursorI', nrow(ncI_RM))
-
+  
   ncncI_RM<-NoCursorACombine(ncncIdata)
   ncncI_RM$ID <- sprintf('NoCursorI_No-Cursors.%s',ncncI_RM$ID)
   ncncI_RM$Experiment <- rep('No-CursorI_No-Cursors', nrow(ncncI_RM))
@@ -185,6 +243,7 @@ PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata, ncIdata,
   return(AllDataRM)
   
 }
+
 
 PrepdataforPropT<- function(adata, pasdata, paudata, ncdata, ncncdata){
   A_RM<-TCombine(adata)
@@ -392,7 +451,8 @@ GroupModelAICs <- function(data, group, grid = 'restricted') {
   N <- dim(df)[2] - 1
   # the median length of a phase is 40 trials,
   # and there are 7.2 of those in 288 trials
-  InOb <- 6
+  InOb <- seriesEffectiveSampleSize(Reaches, method='ac_one')
+  print(InOb)
   # this is then used for C:
   C <- InOb*(log(2*pi)+1)
   twoRateAIC <- (2*4) + InOb*log(twoRateMSE) + C
@@ -608,7 +668,7 @@ mmed <- function(x,n=5){runmed(x,n)}
 
 LocalizationModelCompare<- function (dataset, dataset2, color) {
   data<- getreachesformodel(dataset)
-  dist<- data$schedule
+  dist<- data$distortion
   localizations<- mmed(data$meanreaches)
   Average<- mean(localizations[182:224], na.rm = TRUE)
   Scale<- Average/30
@@ -652,3 +712,103 @@ LocalizationModelCompare<- function (dataset, dataset2, color) {
   return(metrics)
   
 }
+
+
+fitPropModel<- function(reachdata, locadata) {
+  
+  localizations<-rowMeans(locadata[,2:ncol(locadata)], na.rm=TRUE)
+  meanreaches<-rowMeans(reachdata[241:288,2:ncol(reachdata)], na.rm=TRUE)
+  meanreaches<- meanreaches*-1
+  reachdata$distortion[241:288]<- as.numeric(meanreaches)
+  schedule<- reachdata$distortion
+  
+  
+  #this function will take the dataframe made in the last function (dogridsearch) and use the list of parameters to make a new model then compare to output and get a new mse. 
+  pargrid <- gridsearch(localizations, schedule, nsteps = 7, topn = 4)
+  cat('optimize best fits...\n')
+  for (gridpoint in c(1:nrow(pargrid))) { #for each row 
+    par<-unlist(pargrid[gridpoint,1]) 
+    
+    control <- list('maxit'=10000, 'ndeps'=1e-9 )
+    fit <- optim(par=par, PropModelMSE, gr=NULL, schedule, localizations, control=control, method = "Brent", lower = 0, upper = 1)
+    optpar<- fit$par
+    
+    
+    # stick optpar back in pargrid
+    pargrid[gridpoint,1] <- optpar
+    
+    pargrid[gridpoint,2]<- fit$value
+    
+  } 
+  # get lowest MSE, and pars that go with that
+  bestpar <- order(pargrid[,2])[1]
+  
+  output<- PropModel(unlist(pargrid[bestpar]), schedule)
+  proportion<- sprintf('Proportion = %.2f', unlist(pargrid[bestpar]))
+  
+  reaches <- getreachesformodel(reachdata)
+  reach_par <-
+    fitTwoRateReachModel(
+      reaches = reaches$meanreaches,
+      schedule = schedule,
+      oneTwoRates = 2,
+      checkStability = TRUE
+    )
+  reach_model <-
+    twoRateReachModel(par = reach_par, schedule = schedule)
+  Average<- mean(localizations[182:224], na.rm = TRUE)
+  Scale<- Average/30
+  reach_model$slow<- reach_model$slow*Scale
+  reach_model$fast<- reach_model$fast*Scale
+
+  return(unlist(pargrid[bestpar]))
+  
+}
+PropModel <- function(par, schedule) {
+  locest<-c()
+  #loop through the perturbations in the schedule:
+  for (t in c(1:length(schedule))) {
+    # first we calculate what the model does, since the model is proportional, we just multiply the one parameters by the schedule to get what the person should do
+    
+    locest[t] <- par * schedule[t]
+  }
+  
+  # after we loop through all trials, we return the model output:
+  return(locest)
+  
+}
+
+PropModelMSE <- function(par, schedule, localizations) {
+  
+  locesti<- PropModel(par, schedule)
+  errors <- locesti - localizations
+  MSE <- mean(errors^2, na.rm=TRUE)
+  
+  
+  
+  return( MSE )
+  
+}
+
+
+gridsearch<- function(localizations, schedule, nsteps=7, topn=4) {
+  
+  
+  cat('doing grid search...\n')
+  
+  steps <- nsteps #say how many points inbetween 0-1 we want
+  pargrid <- seq(0.5*(1/steps),1-(0.5*(1/steps)),by=1/steps) #not sure what exactly this does
+  MSE<- rep(NA, length(pargrid))
+  pargrid<- cbind(pargrid, MSE)
+  
+  for (gridpoint in c(1:nrow(pargrid))) { #for each row 
+    par<-unlist(pargrid[gridpoint,1])    #take that row and take it out of df and make it par 
+    pargrid[gridpoint,2] <- PropModelMSE(par, schedule,localizations)
+  }
+  
+  bestN <- order(pargrid[,2])[1:topn]
+  
+  return(pargrid[bestN,])
+}
+
+

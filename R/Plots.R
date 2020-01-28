@@ -12,8 +12,9 @@ loadcolors <- function() {
   
   
   ## Pause
-  colorNL       <<- rgb(0.63, 0.71, 0.81)      # blue-gray
-  colorNL_trans <<- rgb(0.63, 0.71, 0.81, 0.2)  # transparent blue-gray
+  colorNL       <<- rgb(0.1, 0.3, 0.5)         # Blue
+  colorNL_trans <<- rgb(0.1, 0.3, 0.5, 0.2)     # transparent Blue
+
   
   
   ##No-Cursor
@@ -21,8 +22,8 @@ loadcolors <- function() {
   colorNC_trans <<- rgb(0.0, 0.7, 0.0, 0.2)     # transparent green
   
   ##New No-Cursor
-  colorNNC       <<- rgb(0.1, 0.3, 0.5)         # purple
-  colorNNC_trans <<- rgb(0.1, 0.3, 0.5, 0.2)     # transparent purple
+  colorNNC       <<- rgb(0.63, 0.71, 0.81)      # blue-gray
+  colorNNC_trans <<- rgb(0.63, 0.71, 0.81, 0.2)  # transparent blue-gray
 }
 
 
@@ -33,11 +34,11 @@ Plotexp1CI <- function (acd, pad, nld) {
   PlotData(nld, 3, 3)
 }
 
-Plotexp2CI <- function (acd, ncd, ncdI, nld) {
-  PlotoutLine(acd, 3:5, 3:5, "Training Trials", 'Reach Deviations [°]')
+Plotexp2CI <- function (acd, ncd, nld) {
+  PlotoutLine(acd, 3:4, 3:4, "Training Trials", 'Reach Deviations [°]')
   PlotData(nld, 3, 3)
   PlotData(ncd, 4, 4)
-  PlotData(ncdI, 5, 5)
+
 }
 
 PlotallTapCI <- function (pl = dataset1, al = dataset2) {
@@ -59,14 +60,12 @@ PlotallreachesCI <-
   function (acd = dataset1,
             pad = dataset2,
             nld = dataset3,
-            ncd = dataset4,
-            ncdI = dataset5) {
-    PlotoutLine(acd, 1:5, 1:5, "Training Trials", 'Reach Deviations [°]')
+            ncd = dataset4) {
+    PlotoutLine(acd, 1:4, 1:4, "Training Trials", 'Reach Deviations [°]')
     PlotData(acd, 1, 1)
     PlotData(pad, 2, 2)
     PlotData(nld, 3, 3)
     PlotData(ncd, 4, 4)
-    PlotData(ncdI, 5, 5)
   }
 
 
@@ -471,7 +470,7 @@ PlotoutLine <- function(dataset, exp, color,title,ylabel) {
       'Active Localization (N=32)',
       'Passive Localization (N=32)',
       'Pause (N=32)',
-      'No-Cursor (N=32)',
+      'No-Cursor (N=48)',
       'No-Cursor Instructed (N=16)',
       'Active Localizations (N=32)',
       'Passive Localizations (N=32)'
