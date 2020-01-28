@@ -42,7 +42,7 @@ Plotexp2CI <- function (acd, ncd, nld) {
 }
 
 PlotallTapCI <- function (pl = dataset1, al = dataset2) {
-  PlotoutLine(pl, 6:7, 1:2, "Hand Localizations", "Hand Localization Shift")
+  PlotoutLine(pl, 6:7, 1:2, "Hand Localizations", "Hand Localization Shift [°]")
   PlotData(al, 1, 1, 1)
   PlotData(pl, 2, 2, 1)
 }
@@ -552,7 +552,7 @@ t.interval = function(data,
 ## This plots the data without a confidence interval but will run the model and add the output to the figure. ----
 ## It reruns the model everytime you plot so it does take a second or two.
 
-Reachmodel <- function(data, name, grid = 'restricted', condition = 'Reach', ncdata = NA, loc_data = NA, color) {
+Reachmodel <- function(data, name, grid = 'restricted', condition = 'Reach', ncdata = NA, loc_data = NA, color, yaxis) {
   grid <- grid
   reaches <- getreachesformodel(data)
   reach_par <-
@@ -568,7 +568,7 @@ Reachmodel <- function(data, name, grid = 'restricted', condition = 'Reach', ncd
   
   if (condition == 'nc'){
     reach_model <- reach_model[33:320, ]
-    Plotncmodel(data[33:320, ], name, color)
+    Plotncmodel(data[33:320, ], name, color, yaxis)
     lines(reach_model$total * -1, col = color,lty = 4)
     lines(reach_model$slow * -1, col = color,lty = 2)
     lines(reach_model$fast * -1, col = color,lty = 3)
@@ -576,13 +576,13 @@ Reachmodel <- function(data, name, grid = 'restricted', condition = 'Reach', ncd
     lines(x = 33:288, y = ncreaches$meanreaches * -1, col = color)
     
   } else if (condition == 'loc') {
-    Plotlocmodel(data, name, color)
+    Plotlocmodel(data, name, color, yaxis)
     lines(reach_model$total * -1, col = color,lty = 4)
     lines(reach_model$slow * -1, col = color,lty = 2)
     lines(reach_model$fast * -1, col = color,lty = 3)
     lines(rowMeans(loc_data[, 2:ncol(loc_data)], na.rm = TRUE), col = color)
   } else{
-    Plotmodel(data, name, color)
+    Plotmodel(data, name, color, yaxis)
     lines(reach_model$total * -1, col = color,lty = 4)
     lines(reach_model$slow * -1, col = color,lty = 2)
     lines(reach_model$fast * -1, col = color,lty = 3)
@@ -610,7 +610,7 @@ Reachmodelnc <- function(data, ncdata, name, color) {
   reach_model1 <-
     twoRateReachModel(par = reach_par, schedule = reaches$distortion)
   reach_model <- reach_model1[33:320, ]
-  Plotncmodel(data[33:320, ], name, color)
+  Plotncmodel(data[33:320, ], name, color, yaxis)
   lines(reach_model$total * -1, col = color,lty = 4)
   lines(reach_model$slow * -1, col = color,lty = 2)
   lines(reach_model$fast * -1, col = color,lty = 3)
@@ -621,7 +621,7 @@ Reachmodelnc <- function(data, ncdata, name, color) {
 
 
 
-Plotmodel <- function(dataset, name, color) {
+Plotmodel <- function(dataset, name, color, yaxis) {
   title <- sprintf('%s', name)
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
   dataset$Mean <- rowMeans(dataset[, 2:ncol(dataset)], na.rm = TRUE)
@@ -630,7 +630,7 @@ Plotmodel <- function(dataset, name, color) {
     ylim = c(-35, 35),
     xlab = "Trial",
     lwd = 2,
-    ylab = "Hand Direction [°]",
+    ylab = yaxis,
     col = c(rgb(0.8, 0.8, 0.8)),
     axes = FALSE,
     main = title,
@@ -672,7 +672,7 @@ Plotmodel <- function(dataset, name, color) {
 
 
 
-Plotncmodel <- function(dataset, name, color) {
+Plotncmodel <- function(dataset, name, color, yaxis) {
   title <- sprintf('%s', name)
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
   dataset$Mean <- rowMeans(dataset[, 2:ncol(dataset)], na.rm = TRUE)
@@ -681,7 +681,7 @@ Plotncmodel <- function(dataset, name, color) {
     ylim = c(-35, 35),
     xlab = "Trial",
     lwd = 2,
-    ylab = "Hand Direction [°]",
+    ylab =  yaxis,
     col = c(rgb(0.8, 0.8, 0.8)),
     axes = FALSE,
     main = title,
@@ -722,7 +722,7 @@ Plotncmodel <- function(dataset, name, color) {
   lines(dataset$Mean * -1, col = c(rgb(0.44, 0.51, 0.57)))
 }
 
-Plotlocmodel <- function(dataset, name, color) {
+Plotlocmodel <- function(dataset, name, color, yaxis) {
   title <- sprintf('%s', name)
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
   dataset$Mean <- rowMeans(dataset[, 2:ncol(dataset)], na.rm = TRUE)
@@ -731,7 +731,7 @@ Plotlocmodel <- function(dataset, name, color) {
     ylim = c(-35, 35),
     xlab = "Trial",
     lwd = 2,
-    ylab = "Hand Direction [°]",
+    ylab =  yaxis,
     col = c(rgb(0.8, 0.8, 0.8)),
     axes = FALSE,
     main = title,
@@ -858,7 +858,7 @@ plotfitPropModel<- function(reachdata, locadata, color, title) {
   } 
   # get lowest MSE, and pars that go with that
   bestpar <- order(pargrid[,2])[1]
-  plot(localizations, type = 'l',  ylim = c(-15,15), axes = FALSE, main = title, ylab = 'Change in Hand Localizations [°]', xlab = "Trial", col = color, cex.lab = 1.5, cex.main = 1.5)
+  plot(localizations, type = 'l',  ylim = c(-15,15), axes = FALSE, main = title, ylab = "Hand Localization Shift [°]", xlab = "Trial", col = color, cex.lab = 1.5, cex.main = 1.5)
   axis(
     1,
     at = c(1, 64, 224, 240, 288),
