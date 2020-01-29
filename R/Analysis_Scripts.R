@@ -690,12 +690,24 @@ LocalizationModelCompare<- function (dataset, dataset2, color) {
   TotalMSE<- mean((localizations - Reach_model$total)^2)
   SlowMSE<- mean((localizations - Reach_model$slow)^2)
   PropMSE<- mean((localizations - output)^2)
-  N<- 22.15
-  P <- 4
-  C <- N*(log(2*pi)+1)
-  TotalAIC <- 2*P + N*log(TotalMSE) + C
-  SlowAIC <- 2*P + N*log(SlowMSE) + C
-  PropAIC <- 2*P + N*log(PropMSE) + C
+  
+  
+  InOb <- seriesEffectiveSampleSize(reachdata, method='ac_lag95%CI')
+  TotalAIC<-(InOb * log(TotalMSE)) + (2 * 4)
+  SlowAIC<-(InOb * log(SlowMSE)) + (2 * 2)
+  PropAIC<-(InOb * log(PropMSE)) + (2 * 2)
+  
+  
+  # N<- 22.15
+  # P <- 4
+  # C <- N*(log(2*pi)+1)
+  # 
+  
+  
+  # 
+  # TotalAIC <- 2*P + N*log(TotalMSE) + C
+  # SlowAIC <- 2*P + N*log(SlowMSE) + C
+  # PropAIC <- 2*P + N*log(PropMSE) + C
   AICs<- c('slow'=SlowAIC, 'Total'=TotalAIC, 'Prop' = PropMSE)
   relativeLikelihoods <- exp((min(AICs) - AICs)/2)
   names(relativeLikelihoods)<- c('slow', 'Total', 'Prop')
