@@ -2,6 +2,8 @@
 
 ##first have to get all the metrics for each of the four groups and the group parameters
 
+metricstable<- function () {
+
 Active_metrics<- GroupModelAICs(active_reaches, 'Active')
 Passive_metrics<- GroupModelAICs(passive_reaches, 'Passive')
 Pause_metrics<- GroupModelAICs(pause_reaches, 'Pause')
@@ -24,6 +26,13 @@ metrics<- metrics[,-7]
 metrics<- metrics[,-9]
 metrics[,2:9]<- round(metrics[,2:9], digits = 3)
 
-formattable(metrics, align = c('r','c','c','c','c','c','c','c','r'), list(
-  Group = formatter("span", style = ~ style(color = "red", font.weight = 'bold')),
-  `oneRate<br>likelihood` = color_bar('green')))
+colnames(metrics)<- c('Group', "Rs", "Ls", "Rf", "Lf", "MSE", "twoRate<br>AIC", "oneRate<br>AIC", "oneRate<br>likelihood")
+
+formattable(metrics, align = c('r','c','c','c','c','c','c','c','c'), list(
+  Group = formatter("span", style = ~ style(color = "Grey", font.weight = 'bold')),
+  `twoRate<br>AIC` = formatter("span", style =  ~ style(color = ifelse( `oneRate<br>AIC` < `twoRate<br>AIC`, 'red', 'green'))),
+  `oneRate<br>AIC` = formatter("span", style =  ~ style(color = ifelse( `oneRate<br>AIC` > `twoRate<br>AIC`, 'red', 'green'))),
+  `oneRate<br>likelihood` = color_tile('seagreen','palegreen')
+  ))
+
+}

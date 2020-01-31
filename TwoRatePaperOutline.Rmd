@@ -263,7 +263,7 @@ activemetrics<-LocalizationModelCompare(active_localization, active_reaches, col
 
 Figures for the manuscript
 ```{r real figures}
-svglite(file='doc/schedule.svg', width=8, height=4, system_fonts=list(sans = "Arial"))
+svglite(file='doc/schedule.svg', width=6, height=4, system_fonts=list(sans = "Arial"))
 Plotschedule(active_reaches)
 dev.off()
 
@@ -306,6 +306,7 @@ RegressionPLot(1)
 RegressionPLot(2)
 dev.off()
 
+metricstable()
 
 
 ```

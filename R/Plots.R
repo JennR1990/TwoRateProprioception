@@ -206,7 +206,7 @@ RegressionPLotec <- function() {
     rsquareds<-c(rsquareds,summary(gm)$adj.r.squared)
 
     legend(
-      -14,
+      -30,
       30,
       legend = c(
         sprintf('Passive Y = %.2fx + %.2f, r2 = %.2f', slopes[1], intercepts[1], rsquareds[1]),
@@ -306,7 +306,7 @@ RegressionPLot3P <- function() {
     xlim = c(-32, 32),
     ylim = c(-32, 32),
     main = 'Perturbation Size',
-    axes = FALSE, pch = 19, cex.lab = 1.5, cex.main = 1.5
+    axes = FALSE, pch = 19, cex.lab = 1.5, cex.main = 1.5, asp = 1
   )
   axis(2,
        at = c(-30,-20, -10,0,10, 20, 30),
@@ -364,7 +364,7 @@ RegressionPLotchange <- function() {
     ylim = c(-10, 30),
     main = 'Change in Perturbation Vs. Localizations',
     axes = FALSE,
-    pch = 19, cex.lab = 1.5, cex.main = 1.5
+    pch = 19, cex.lab = 1.5, cex.main = 1.5, asp = 1
   )
   axis(2,
        at = c( -10, 0, 10 ,20, 30),
@@ -569,7 +569,7 @@ Reachmodel <- function(data, name, grid = 'restricted', condition = 'Reach', ncd
   if (condition == 'nc'){
     reach_model <- reach_model[33:320, ]
     Plotncmodel(data[33:320, ], name, color, yaxis)
-    lines(reach_model$total * -1, col = color,lty = 4)
+    lines(reach_model$total * -1, col = 'black',lty = 4)
     lines(reach_model$slow * -1, col = color,lty = 2)
     lines(reach_model$fast * -1, col = color,lty = 3)
     ncreaches <- getreachesformodel(ncdata)
@@ -577,13 +577,13 @@ Reachmodel <- function(data, name, grid = 'restricted', condition = 'Reach', ncd
     
   } else if (condition == 'loc') {
     Plotlocmodel(data, name, color, yaxis)
-    lines(reach_model$total * -1, col = color,lty = 4)
+    lines(reach_model$total * -1, col = 'black',lty = 4)
     lines(reach_model$slow * -1, col = color,lty = 2)
     lines(reach_model$fast * -1, col = color,lty = 3)
     lines(rowMeans(loc_data[, 2:ncol(loc_data)], na.rm = TRUE), col = color)
   } else{
     Plotmodel(data, name, color, yaxis)
-    lines(reach_model$total * -1, col = color,lty = 4)
+    lines(reach_model$total * -1, col = 'black',lty = 4)
     lines(reach_model$slow * -1, col = color,lty = 2)
     lines(reach_model$fast * -1, col = color,lty = 3)
   }
@@ -611,7 +611,7 @@ Reachmodelnc <- function(data, ncdata, name, color) {
     twoRateReachModel(par = reach_par, schedule = reaches$distortion)
   reach_model <- reach_model1[33:320, ]
   Plotncmodel(data[33:320, ], name, color, yaxis)
-  lines(reach_model$total * -1, col = color,lty = 4)
+  lines(reach_model$total * -1, col = 'black',lty = 4)
   lines(reach_model$slow * -1, col = color,lty = 2)
   lines(reach_model$fast * -1, col = color,lty = 3)
   ncreaches <- getreachesformodel(ncdata)
@@ -647,11 +647,11 @@ Plotmodel <- function(dataset, name, color, yaxis) {
         col = rgb(0., 0., 0.))
   legend(
     -10,
-    -5,
+    0,
     legend = c('Reaches', 'model', 'fast', 'slow'),
     col = c(
       rgb(0.44, 0.51, 0.57),
-      color,
+      'black',
       color,
       color
     ),
@@ -697,12 +697,12 @@ Plotncmodel <- function(dataset, name, color, yaxis) {
         lty = 2,
         col = rgb(0., 0., 0.))
   legend(
-  -10,-5,
+  -10,0,
     legend = c('Reaches', 'No-cursors', 'model', 'fast', 'slow'),
     col = c(
       rgb(0.44, 0.51, 0.57),
       color,
-      color,
+      'black',
       color,
       color
     ),
@@ -748,12 +748,12 @@ Plotlocmodel <- function(dataset, name, color, yaxis) {
         col = rgb(0., 0., 0.))
   legend(
     -10,
-    -5,
+    0,
     legend = c('Reaches', 'Localizations', 'model', 'fast', 'slow'),
     col = c(
       rgb(0.44, 0.51, 0.57),
       color,
-      color,
+      'black',
       color,
       color
     ),
