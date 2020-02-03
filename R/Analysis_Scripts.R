@@ -347,6 +347,46 @@ PairedT<- function(data, exp1, task) {
 }
 
 
+
+pairtrandom<- function (data, exp1, task){
+  
+  print('Was there learning from 1st to 2nd block of 1st rotation?')
+print(t.test(data$R1_Early[data$Experiment == exp1],data$R1_second[data$Experiment == exp1], paired = TRUE)) # p-value = 0.04535 A vs. NC
+print(cohen.d(data$R1_Early[data$Experiment == exp1],data$R1_second[data$Experiment == exp1], paired = TRUE, na.rm = TRUE))
+print(etaSquaredTtest(data$R1_Early[data$Experiment == exp1],data$R1_second[data$Experiment == exp1], na.rm = TRUE))
+print('Was there learning from 2nd to last block of 1st rotation?')
+print(t.test(data$R1_second[data$Experiment == exp1],data$R1_Late[data$Experiment == exp1], paired = TRUE)) # p-value = 0.04535 A vs. NC
+print(cohen.d(data$R1_second[data$Experiment == exp1],data$R1_Late[data$Experiment == exp1], paired = TRUE, na.rm = TRUE))
+print(etaSquaredTtest(data$R1_second[data$Experiment == exp1],data$R1_Late[data$Experiment == exp1], na.rm = TRUE))
+print('Was there learning from 2nd to 3rd block of 1st rotation?')
+print(t.test(data$R1_second[data$Experiment == exp1],data$R1_third[data$Experiment == exp1], paired = TRUE)) # p-value = 0.04535 A vs. NC
+print(cohen.d(data$R1_second[data$Experiment == exp1],data$R1_third[data$Experiment == exp1], paired = TRUE, na.rm = TRUE))
+print(etaSquaredTtest(data$R1_second[data$Experiment == exp1],data$R1_third[data$Experiment == exp1], na.rm = TRUE))
+print('Was there learning from 3rd to 4th block of 1st rotation?')
+print(t.test(data$R1_third[data$Experiment == exp1],data$R1_forth[data$Experiment == exp1], paired = TRUE)) # p-value = 0.04535 A vs. NC
+print(cohen.d(data$R1_third[data$Experiment == exp1],data$R1_forth[data$Experiment == exp1], paired = TRUE, na.rm = TRUE))
+print(etaSquaredTtest(data$R1_third[data$Experiment == exp1],data$R1_forth[data$Experiment == exp1], na.rm = TRUE))
+print('Was there learning from 4th to 5th block of 1st rotation?')
+print(t.test(data$R1_forth[data$Experiment == exp1],data$R1_fifth[data$Experiment == exp1], paired = TRUE)) # p-value = 0.04535 A vs. NC
+print(cohen.d(data$R1_forth[data$Experiment == exp1],data$R1_fifth[data$Experiment == exp1], paired = TRUE, na.rm = TRUE))
+print(etaSquaredTtest(data$R1_forth[data$Experiment == exp1],data$R1_fifth[data$Experiment == exp1], na.rm = TRUE))
+print('Was there learning from 5th to 6th block of 1st rotation?')
+print(t.test(data$R1_fifth[data$Experiment == exp1],data$R1_sixth[data$Experiment == exp1], paired = TRUE)) # p-value = 0.04535 A vs. NC
+print(cohen.d(data$R1_fifth[data$Experiment == exp1],data$R1_sixth[data$Experiment == exp1], paired = TRUE, na.rm = TRUE))
+print(etaSquaredTtest(data$R1_fifth[data$Experiment == exp1],data$R1_sixth[data$Experiment == exp1], na.rm = TRUE))
+print('Was there learning from 1 to 2 trial of 1st rotation?')
+print(t.test(data$r1[data$Experiment == exp1],data$r2[data$Experiment == exp1], paired = TRUE)) # p-value = 0.04535 A vs. NC
+print(cohen.d(data$r1[data$Experiment == exp1],data$r2[data$Experiment == exp1], paired = TRUE, na.rm = TRUE))
+print(etaSquaredTtest(data$r1[data$Experiment == exp1],data$r2[data$Experiment == exp1], na.rm = TRUE))
+print('Was there learning from 2 to 3 trial of 1st rotation?')
+print(t.test(data$r2[data$Experiment == exp1],data$r3[data$Experiment == exp1], paired = TRUE)) # p-value = 0.04535 A vs. NC
+print(cohen.d(data$r2[data$Experiment == exp1],data$r3[data$Experiment == exp1], paired = TRUE, na.rm = TRUE))
+print(etaSquaredTtest(data$r2[data$Experiment == exp1],data$r3[data$Experiment == exp1], na.rm = TRUE))
+print('Was there learning from 3 to 4 trial of 1st rotation?')
+print(t.test(data$r3[data$Experiment == exp1],data$r4[data$Experiment == exp1], paired = TRUE)) # p-value = 0.04535 A vs. NC
+print(cohen.d(data$r3[data$Experiment == exp1],data$r4[data$Experiment == exp1], paired = TRUE, na.rm = TRUE))
+print(etaSquaredTtest(data$r3[data$Experiment == exp1],data$r4[data$Experiment == exp1], na.rm = TRUE))
+}
 ##Models
 
 ParticipantReachmodels2<- function(adata, pasdata, paudata, ncdata) {

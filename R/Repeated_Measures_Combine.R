@@ -11,6 +11,10 @@ TCombine<- function(data) {
     r4<- unlist(data[68,participant])
     R1_Early<- mean(unlist(data[65:68,participant]), na.rm = TRUE)
     R1_second<-mean(unlist(data[69:72,participant]), na.rm = TRUE) 
+    R1_third<- mean(unlist(data[73:76,participant]), na.rm = TRUE)
+    R1_forth<-mean(unlist(data[77:80,participant]), na.rm = TRUE) 
+    R1_fifth<- mean(unlist(data[81:84,participant]), na.rm = TRUE)
+    R1_sixth<-mean(unlist(data[85:88,participant]), na.rm = TRUE) 
     R1_Late<- mean(unlist(data[221:224,participant]), na.rm = TRUE)
     R2<- mean(unlist(data[237:240,participant]), na.rm = TRUE)
     EC<- mean(unlist(data[241:244,participant]), na.rm = TRUE)
@@ -19,7 +23,7 @@ TCombine<- function(data) {
     EC3<- mean(unlist(data[243,participant]), na.rm = TRUE)
     EC4<- mean(unlist(data[244,participant]), na.rm = TRUE)
     EC_Late<- mean(unlist(data[273:288,participant]), na.rm = TRUE)
-    RM<- data.frame(Aligned, r1, r2,r3,r4, R1_Early, R1_second, R1_Late, R2, EC, EC_Late, EC1, EC2, EC3, EC4)
+    RM<- data.frame(Aligned, r1, r2,r3,r4, R1_Early, R1_second, R1_third, R1_forth, R1_fifth, R1_sixth, R1_Late, R2, EC, EC_Late, EC1, EC2, EC3, EC4)
     if (prod(dim(ParticipantRM)) == 0) {
       ParticipantRM <- RM
     } else {
@@ -71,6 +75,10 @@ NoCursorsTCombine<- function(data) {
     r4<- unlist(data[36,participant])
     R1_Early<- mean(unlist(data[33:36,participant]), na.rm = TRUE)
     R1_second<- mean(unlist(data[37:40,participant]), na.rm = TRUE)
+    R1_third<- mean(unlist(data[41:44,participant]), na.rm = TRUE)
+    R1_forth<-mean(unlist(data[45:48,participant]), na.rm = TRUE) 
+    R1_fifth<- mean(unlist(data[49:52,participant]), na.rm = TRUE)
+    R1_sixth<-mean(unlist(data[53:56,participant]), na.rm = TRUE) 
     R1_Late<- mean(unlist(data[189:192,participant]), na.rm = TRUE)
     R2<- mean(unlist(data[205:208,participant]), na.rm = TRUE)
     EC<- mean(unlist(data[209:212,participant]), na.rm = TRUE)
@@ -79,7 +87,7 @@ NoCursorsTCombine<- function(data) {
     EC2<- mean(unlist(data[210,participant]), na.rm = TRUE)
     EC3<- mean(unlist(data[211,participant]), na.rm = TRUE)
     EC4<- mean(unlist(data[212,participant]), na.rm = TRUE)
-    RM<- data.frame(Aligned, r1, r2,r3,r4, R1_Early,R1_second, R1_Late, R2, EC, EC_Late, EC1, EC2, EC3, EC4)
+    RM<- data.frame(Aligned, r1, r2,r3,r4, R1_Early, R1_second, R1_third, R1_forth, R1_fifth, R1_sixth, R1_Late, R2, EC, EC_Late, EC1, EC2, EC3, EC4)
     if (prod(dim(ParticipantRM)) == 0) {
       ParticipantRM <- RM
     } else {

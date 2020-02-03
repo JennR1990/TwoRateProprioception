@@ -203,7 +203,8 @@ FullILANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor'  | ANOV
 FullILANOVA
 IndependentT(Ttestdata, 'Pause', 'No-Cursor', 'Reach')
 PairedT(Ttestdata, 'No-Cursor_No-Cursors', 'No-Cursors')
-
+PairedT(Ttestdata, 'No-Cursor', 'Reach')
+pairtrandom(Ttestdata, 'No-Cursor_No-Cursors', 'No-Cursors')
   
 ### Comparing Learning Rates Across Test Trials
       
