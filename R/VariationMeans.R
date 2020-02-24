@@ -1,5 +1,7 @@
 
 Getshiftsperrotation<- function() {
+  VR_Data<- getreachesformodel(variation_reaches)
+  VP_Data<- getreachesformodel(variation_localization)
 g<- seq(from = 50, to = 480, by = 12)
 h<- seq(from = 61, to = 481, by = 12)
 h[36]<- h[36]-1
@@ -19,6 +21,7 @@ return(variation_prop<- data.frame(rotation, stuff))
 
 
 Getreachesperrotation<- function() {
+  VR_Data<- getreachesformodel(variation_reaches)
   g<- seq(from = 50, to = 480, by = 12)
   h<- seq(from = 61, to = 481, by = 12)
   h[36]<- h[36]-1
@@ -27,6 +30,7 @@ Getreachesperrotation<- function() {
   
   
   for (i in 1:length(g)) {
+    
     
     stuff[i]<- mean(VR_Data$meanreaches[g[i]:h[i]], na.rm = TRUE)
     rotation[i]<- variation_reaches$distortion[g[i]]
