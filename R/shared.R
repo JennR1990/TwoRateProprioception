@@ -25,6 +25,9 @@ loadalldata<- function () {
   NewNoC<<- removeReachOutliers(Loaddata(group='NewNoC', task = 'pre_post_Prop')) 
   newnocursor_reaches<<- cbind(nocursor_reaches, nocursorI_reaches[2:ncol(nocursorI_reaches)])
   newnocursor_nocursors<<- cbind(nocursor_nocursors, nocursorI_nocursors[2:ncol(nocursorI_nocursors)])
+  variation_reaches<<- removeReachOutliers(Loaddata(group='variation'))
+  variation_localization<<- removeReachOutliers(Loaddata(group='variation', task = 'localizations'))
+
 }
 
 fixnocursorcolnames<- function () {
@@ -50,7 +53,9 @@ downloadOSFdata <- function(update=FALSE) {
              'pause_reaches.csv'        = 'https://osf.io/q59b3/download',
              'NewNoC_pre_post_Prop.csv' = 'https://osf.io/r69v5/download',
              'NoCursor_pre_post_Prop.csv' = 'https://osf.io/tjqrw/download',
-             'Pause_pre_post_Prop.csv'  = 'https://osf.io/r3fvw/download')
+             'Pause_pre_post_Prop.csv'  = 'https://osf.io/r3fvw/download',
+             'variation_reaches.csv' = 'https://osf.io/pk5fy/download',
+             'variation_localizations.csv'  = 'https://osf.io/txgwj/download')
 
   # check if data directory exists and create if necessary:
   # (data should come from OSF, so is not on github)
