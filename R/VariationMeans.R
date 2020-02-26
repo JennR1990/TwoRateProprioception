@@ -41,7 +41,7 @@ Getreachesperrotation<- function() {
 
 
 
-variation_reaches$distortion[variation_reaches$distortion == 360]<- NA
+#variation_reaches$distortion[variation_reaches$distortion == 360]<- NA
 
 
 RegressionPLotec <- function() {
@@ -209,6 +209,8 @@ for (i in 1:36){
 
 }
 ##Finds out which places have the NAs so we can use that info for making the perturbation schedule
+
+whereNAs<- function () {
 v<- NA
 counter<- 1
 g<- c()
@@ -224,11 +226,12 @@ for (i in 1:length(sizes)){
 
 }
 v<- v[-1]
-
+}
 
 
 ##This turns the NA's into zeros for plottign the perturbation.
 plotvariation<- function (){
+  #makingschedule()
   g<- seq(from = 50, to = 480, by = 12)
   g<- c(1,g,480)
 for (i in 1:length(sizes)){
