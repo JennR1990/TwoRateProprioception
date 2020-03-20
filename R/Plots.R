@@ -24,6 +24,10 @@ loadcolors <- function() {
   ##New No-Cursor
   colorNNC       <<- rgb(0.63, 0.71, 0.81)      # blue-gray
   colorNNC_trans <<- rgb(0.63, 0.71, 0.81, 0.2)  # transparent blue-gray
+  
+  ##Variation
+  colorV       <<- rgb(0.63, 0.71, 0.81)      # blue-gray
+  colorV_trans <<- rgb(0.63, 0.71, 0.81, 0.2)  # transparent blue-gray
 }
 
 
@@ -415,12 +419,13 @@ RegressionPLotchange <- function() {
 
 
 PlotData <- function(dataset, color, trans, rotate = -1, x =  c(c(1:288), rev(c(1:288)))) {
-  colorlist <- c(colorA, colorPA, colorNL, colorNC, colorNNC)
+  colorlist <- c(colorA, colorPA, colorNL, colorNC, colorV, colorNNC)
   translist <-
     c(colorA_trans,
       colorPA_trans,
       colorNL_trans,
       colorNC_trans,
+      colorV_trans,
       colorNNC_trans)
   dataCIs <- trialCI(data = dataset)
   dataCIs <- dataCIs * rotate
@@ -473,9 +478,10 @@ PlotoutLine <- function(dataset, exp, color,title,ylabel) {
       'No-Cursor (N=48)',
       'No-Cursor Instructed (N=16)',
       'Active Localizations (N=32)',
-      'Passive Localizations (N=32)'
+      'Passive Localizations (N=32)',
+      'Variation (N=32)'
     )
-  colorlist <- list(colorA, colorPA, colorNL, colorNC, colorNNC)
+  colorlist <- list(colorA, colorPA, colorNL, colorNC, colorV, colorNNC)
   label <- labels[exp]
   colors <- colorlist[color]
   dataCIs <- trialCI(data = dataset)

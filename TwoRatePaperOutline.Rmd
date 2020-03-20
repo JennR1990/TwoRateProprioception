@@ -308,8 +308,9 @@ RegressionPLot(1)
 RegressionPLot(2)
 dev.off()
 
+svglite(file='doc/table.svg', width=12, height=2, system_fonts=list(sans = "Arial"))
 metricstable()
-
+dev.off()
 
 ```
 ## Two-Rate model

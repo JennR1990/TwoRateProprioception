@@ -10,12 +10,8 @@ Pause_metrics<- GroupModelAICs(pause_reaches, 'Pause')
 NC_metrics<- GroupModelAICs(newnocursor_reaches, 'No-Cursor', 'skewed')
 metrics<- rbind(Active_metrics, Passive_metrics, Pause_metrics, NC_metrics)
 
+pars<- getpars()
 
-ActivePars<-Reachmodel(active_reaches, 'Active', color = colorA)
-PassivePars<-Reachmodel(passive_reaches, 'Passive', color = colorPA)
-PausePars<-Reachmodel(pause_reaches[33:320,], 'Pause', color = colorNL)
-AllNoCPars<-Reachmodel(newnocursor_reaches[33:320,], 'No-Cursor', color = colorNC)
-pars<- rbind(ActivePars,PassivePars, PausePars, AllNoCPars)
 
 
 Group<- c("Active Localization", "Passive Localization", "Pause", "No-Cursor")
@@ -28,11 +24,27 @@ metrics[,2:9]<- round(metrics[,2:9], digits = 3)
 
 colnames(metrics)<- c('Group', "Rs", "Ls", "Rf", "Lf", "MSE", "twoRate<br>AIC", "oneRate<br>AIC", "oneRate<br>likelihood")
 
+# formattable(metrics, align = c('r','c','c','c','c','c','c','c','c'), list(
+#   Group = formatter("span", style = ~ style(color = "Grey", font.weight = 'bold')),
+#   `twoRate<br>AIC` = formatter("span", style =  ~ style(color = ifelse( `oneRate<br>AIC` < `twoRate<br>AIC`, 'red', 'green'))),
+#   `oneRate<br>AIC` = formatter("span", style =  ~ style(color = ifelse( `oneRate<br>AIC` > `twoRate<br>AIC`, 'red', 'green'))),
+#   `oneRate<br>likelihood` = color_tile('seagreen','palegreen')
+#   ))
+
 formattable(metrics, align = c('r','c','c','c','c','c','c','c','c'), list(
   Group = formatter("span", style = ~ style(color = "Grey", font.weight = 'bold')),
-  `twoRate<br>AIC` = formatter("span", style =  ~ style(color = ifelse( `oneRate<br>AIC` < `twoRate<br>AIC`, 'red', 'green'))),
-  `oneRate<br>AIC` = formatter("span", style =  ~ style(color = ifelse( `oneRate<br>AIC` > `twoRate<br>AIC`, 'red', 'green'))),
-  `oneRate<br>likelihood` = color_tile('seagreen','palegreen')
-  ))
+  `oneRate<br>likelihood` = formatter("span", 
+                                      style = ~ style(font.weight = ifelse( `oneRate<br>likelihood` < 0.05, "bold", NA)))))
 
+
+
+}
+
+getpars<- function (){
+ActivePars<-Reachmodel(active_reaches, 'Active', color = colorA)
+PassivePars<-Reachmodel(passive_reaches, 'Passive', color = colorPA)
+PausePars<-Reachmodel(pause_reaches[33:320,], 'Pause', color = colorNL)
+AllNoCPars<-Reachmodel(newnocursor_reaches[33:320,], 'No-Cursor', color = colorNC)
+pars<- rbind(ActivePars,PassivePars, PausePars, AllNoCPars)
+return(pars)
 }
