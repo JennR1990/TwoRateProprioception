@@ -387,6 +387,30 @@ print(t.test(data$r3[data$Experiment == exp1],data$r4[data$Experiment == exp1], 
 print(cohen.d(data$r3[data$Experiment == exp1],data$r4[data$Experiment == exp1], paired = TRUE, na.rm = TRUE))
 print(etaSquaredTtest(data$r3[data$Experiment == exp1],data$r4[data$Experiment == exp1], na.rm = TRUE))
 }
+
+
+
+
+propvsREA<- function (){
+  
+  print('reach aftereffects versus active localizations')
+  print(t.test(allttest$r1[allttest$Experiment == 'No-Cursor_No-Cursors'],allttest$r1[allttest$Experiment == 'Active' & allttest$Task == "Prop"]*-1)) # p-value = 0.04535 A vs. NC
+  print(cohen.d(allttest$r1[allttest$Experiment == 'No-Cursor_No-Cursors'],allttest$r1[allttest$Experiment == 'Active' & allttest$Task == "Prop"]*-1, na.rm = TRUE))
+  print(etaSquaredTtest(allttest$r1[allttest$Experiment == 'No-Cursor_No-Cursors'],allttest$r1[allttest$Experiment == 'Active' & allttest$Task == "Prop"]*-1, na.rm = TRUE))
+  
+  print('reach aftereffects versus active localizations')
+  print(t.test(allttest$r1[allttest$Experiment == 'No-Cursor_No-Cursors'],allttest$r1[allttest$Experiment == 'Passive' & allttest$Task == "Prop"]*-1)) # p-value = 0.04535 A vs. NC
+  print(cohen.d(allttest$r1[allttest$Experiment == 'No-Cursor_No-Cursors'],allttest$r1[allttest$Experiment == 'Passive' & allttest$Task == "Prop"]*-1, na.rm = TRUE))
+  print(etaSquaredTtest(allttest$r1[allttest$Experiment == 'No-Cursor_No-Cursors'],allttest$r1[allttest$Experiment == 'Passive' & allttest$Task == "Prop"]*-1, na.rm = TRUE))
+
+}
+
+
+
+
+
+
+
 ##Models
 
 ParticipantReachmodels2<- function(adata, pasdata, paudata, ncdata) {

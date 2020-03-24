@@ -444,11 +444,13 @@ Plotschedule <- function(dataset) {
     dataset$p1,
     ylim = c(-35, 35),
     xlab = "Trial",
-    ylab = "Reach Deviations [°]",
+    ylab = "Cursor Rotation [°]",
     axes = F,
     main = "Schedule",
     type = 'l',
-    col = 'white'
+    col = 'white', 
+    cex.lab = 1.5,
+    cex.main = 1.5
   )
   rect(65,0,68,30, col = 'grey',border = NA)
   text(67,33,'R1', adj = .5)
