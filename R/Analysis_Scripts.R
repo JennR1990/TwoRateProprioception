@@ -886,3 +886,25 @@ gridsearch<- function(localizations, schedule, nsteps=7, topn=4) {
 }
 
 
+
+##Equivalence tests
+
+Dotostytest<- function(){
+meanNC<-mean(allttest$r1[allttest$Task== 'Reach' & allttest$Experiment == 'No-Cursor_No-Cursors'], na.rm = TRUE)*-1
+SDNC<-sd(allttest$r1[allttest$Task== 'Reach' & allttest$Experiment == 'No-Cursor_No-Cursors'], na.rm = TRUE)
+meanA<-mean(allttest$r1[allttest$Task== 'Prop' & allttest$Experiment == 'Active'], na.rm = TRUE)
+SDA<-sd(allttest$r1[allttest$Task== 'Prop' & allttest$Experiment == 'Active'], na.rm = TRUE)
+SDP<-sd(allttest$r1[allttest$Task== 'Prop' & allttest$Experiment == 'Passive'], na.rm = TRUE)
+meanP<-mean(allttest$r1[allttest$Task== 'Prop' & allttest$Experiment == 'Passive'], na.rm = TRUE)
+
+x <- mean(allttest$r1[allttest$Task == "Reach" & allttest$Experiment == "No-Cursor"], na.rm = TRUE)*-1
+sd <- sd(allttest$r1[allttest$Task == "Reach" & allttest$Experiment == "No-Cursor"], na.rm = TRUE)
+n <- 48
+t<- 2.01
+se<- sd/(sqrt(n))
+CI<- c((x+t*se),(x-t*se))
+pwr.t2n.test(n1 = 48, n2 = 32, sig.level = .05, power = .33)
+
+TOSTtwo(meanNC, meanA, SDNC,SDA,48,32,-.35,.35,0.05)
+TOSTtwo(meanNC, meanP, SDNC,SDP,48,32,-.35,.35,0.05)
+}
