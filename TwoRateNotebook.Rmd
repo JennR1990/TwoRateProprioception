@@ -147,13 +147,6 @@ propvsREA()
 FullANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'Active' | ANOVAdata$Experiment == 'Passive' | ANOVAdata$Experiment == 'No-Cursor' | ANOVAdata$Experiment == 'Pause',])
 FullANOVA
 
-###comparing 1st block to second block to third block and so on to 6th block
-InitialLearning(Ttestdata, 'Active', "Reaches")
-InitialLearning(Ttestdata, 'Passive', "Reaches")
-InitialLearning(Ttestdata, 'Pause', "Reaches")
-InitialLearning(Ttestdata, 'No-Cursor', "Reaches")
-
-      
 ### Polynomial Regressions
 allpars<- ParticipantReachmodels2(active_reaches, passive_reaches, pause_reaches[33:320,], newnocursor_reaches[33:320,])
       pLogRegression(allpars)
