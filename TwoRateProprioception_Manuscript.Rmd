@@ -1,4 +1,0 @@
----
-title: "COOL TITLE"
-output: html_notebook
----
