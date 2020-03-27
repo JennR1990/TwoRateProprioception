@@ -677,50 +677,32 @@ plotRegressionWithCI <-
   }
 
 
-
-plotpropmodel<- function (reachdata, locadata){
-  
-  localizations<-rowMeans(locadata[,2:ncol(locadata)], na.rm=TRUE)
-  schedule<- reachdata$distortion
-  
-  
-  par<- fitPropModel(reachdata, locadata)
-  plot(localizations, type = 'l', ylim = c(-15,15))
-  output<- PropModel(par, schedule)
-  lines(output, col = "blue")
-  
-  
-}
-
-
-
-
 plotfitPropModel<- function(reachdata, locadata, color, title) {
-  
+
   localizations<-rowMeans(locadata[,2:ncol(locadata)], na.rm=TRUE)
   meanreaches<-rowMeans(reachdata[241:288,2:ncol(reachdata)], na.rm=TRUE)
   meanreaches<- meanreaches*-1
   reachdata$distortion[241:288]<- as.numeric(meanreaches)
   schedule<- reachdata$distortion
-  
-  
-  #this function will take the dataframe made in the last function (dogridsearch) and use the list of parameters to make a new model then compare to output and get a new mse. 
+
+
+  #this function will take the dataframe made in the last function (dogridsearch) and use the list of parameters to make a new model then compare to output and get a new mse.
   pargrid <- gridsearch(localizations, schedule, nsteps = 7, topn = 4)
   cat('optimize best fits...\n')
-  for (gridpoint in c(1:nrow(pargrid))) { #for each row 
-    par<-unlist(pargrid[gridpoint,1]) 
-    
+  for (gridpoint in c(1:nrow(pargrid))) { #for each row
+    par<-unlist(pargrid[gridpoint,1])
+
     control <- list('maxit'=10000, 'ndeps'=1e-9 )
     fit <- optim(par=par, PropModelMSE, gr=NULL, schedule, localizations, control=control, method = "Brent", lower = 0, upper = 1)
     optpar<- fit$par
-    
-    
+
+
     # stick optpar back in pargrid
     pargrid[gridpoint,1] <- optpar
-    
+
     pargrid[gridpoint,2]<- fit$value
-    
-  } 
+
+  }
   # get lowest MSE, and pars that go with that
   bestpar <- order(pargrid[,2])[1]
   plot(localizations, type = 'l',  ylim = c(-15,15), axes = FALSE, main = title, ylab = "Hand Localization Shift [°]", xlab = "Trial", col = color, cex.lab = 1.5, cex.main = 1.5)
@@ -739,7 +721,7 @@ plotfitPropModel<- function(reachdata, locadata, color, title) {
   legend(-10, -2, legend = c('Localization data', 'Model Prediction'), col = c(color, "black"), lty = c(1,1), lwd = 2, bty = 'n', cex = 1.5)
   text(144, 0, labels = proportion, lwd = 2, cex = 1.5)
   #, 'fast', 'slow', , color, color, ,3,2 , ncol =  2
-  
+
   reaches <- getreachesformodel(reachdata)
   reach_par <-
     fitTwoRateReachModel(
@@ -756,58 +738,8 @@ plotfitPropModel<- function(reachdata, locadata, color, title) {
   reach_model$fast<- reach_model$fast*Scale
   #lines(reach_model$slow * -1, col = color,lty = 2)
   #lines(reach_model$fast * -1, col = color,lty = 3)
-  
+
   # return(those pars)
   return(unlist(pargrid[bestpar]))
-  
+
 }
-PropModel <- function(par, schedule) {
-  locest<-c()
-  #loop through the perturbations in the schedule:
-  for (t in c(1:length(schedule))) {
-    # first we calculate what the model does, since the model is proportional, we just multiply the one parameters by the schedule to get what the person should do
-    
-    locest[t] <- par * schedule[t]
-  }
-  
-  # after we loop through all trials, we return the model output:
-  return(locest)
-  
-}
-
-PropModelMSE <- function(par, schedule, localizations) {
-  
-  locesti<- PropModel(par, schedule)
-  errors <- locesti - localizations
-  MSE <- mean(errors^2, na.rm=TRUE)
-  
-  
-  
-  return( MSE )
-  
-}
-
-
-gridsearch<- function(localizations, schedule, nsteps=7, topn=4) {
-  
-  
-  cat('doing grid search...\n')
-  
-  steps <- nsteps #say how many points inbetween 0-1 we want
-  pargrid <- seq(0.5*(1/steps),1-(0.5*(1/steps)),by=1/steps) #not sure what exactly this does
-  MSE<- rep(NA, length(pargrid))
-  pargrid<- cbind(pargrid, MSE)
-  
-  for (gridpoint in c(1:nrow(pargrid))) { #for each row 
-    par<-unlist(pargrid[gridpoint,1])    #take that row and take it out of df and make it par 
-    pargrid[gridpoint,2] <- PropModelMSE(par, schedule,localizations)
-  }
-  
-  bestN <- order(pargrid[,2])[1:topn]
-  
-  return(pargrid[bestN,])
-}
-
-
-
-

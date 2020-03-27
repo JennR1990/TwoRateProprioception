@@ -1,9 +1,9 @@
 ---
 title: "Two Rate Proprioception Paper"
 output:
-  word_document: default
   html_document:
     df_print: paged
+  word_document: default
   pdf_document: default
 ---
 
@@ -55,20 +55,35 @@ Individual Data
 PlotIndividualdata(pause_reaches[33:320,],3, "Individual Pause Data", "Hand Direction [°]")
 PlotIndividualdata(active_reaches,1, "Individual Active Data", "Hand Direction [°]")
 PlotIndividualdata(passive_reaches,2, "Individual Passive Data", "Hand Direction [°]")
-PlotIndividualdata(nocursor_reaches[33:320,],8, "Individual No-Cursor Data", "Hand Direction [°]")  # Need to see if this naming and color scheme still works, 4 and 5 thing)
+PlotIndividualdata(nocursor_reaches[33:320,],8, "Individual No-Cursor Data", "Hand Direction [°]")
 PlotIndividualdata(nocursorI_reaches[33:320,],7, "Individual No-Cursor_I Data", "Hand Direction [°]")
 PlotIndividualdata(newnocursor_reaches[33:320,],4, "Individual Combined No-Cursor Data", "Hand Direction [°]")
 ```
 
+#Comparing the no-cursor test trials
+```{r}
+Plotnocursors(active_reaches, nocursor_nocursors, nocursorI_nocursors) 
+ANOVAdata<- PrepdataforANOVA1(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,],nocursor_nocursors,nocursorI_reaches[33:320,],nocursorI_nocursors)
+
+FullI1LANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor' | ANOVAdata$Experiment == 'No-CursorI' ,])
+FullI1LANOVA
+
+FullNCANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor_No-Cursors' | ANOVAdata$Experiment == 'No-CursorI_No-Cursors',])
+FullNCANOVA
+```
+
+
 #Averaged reaches
 ```{r}
-PlotallreachesCI(active_reaches,passive_reaches, pause_reaches[33:320,],newnocursor_reaches[33:320,])# I have already put the two together at this point and the function only works for three data sets now. 
+PlotallreachesCI(active_reaches,passive_reaches, pause_reaches[33:320,],newnocursor_reaches[33:320,])
 ```
 
 #Localization Data
 ```{r}
 PlotallTapCI(passive_localization, active_localization) 
 ```
+
+
 #No-Cursor Data with the reach data and model output
 ```{r}
 Reachmodelnc(nocursor_reaches, nocursor_nocursors, 'No-Cursor', color = colorNC)
@@ -76,9 +91,7 @@ Reachmodelnc(nocursorI_reaches, nocursorI_nocursors, 'No-Cursor', color = colorN
 Reachmodelnc(newnocursor_reaches, newnocursor_nocursors, 'No-Cursor', color = colorNC)
 ```
 
-
 ## Analysis of data
-
 We begin with some ANOVA's and T-tests to check for significance
 
 ```{r, echo = FALSE}
@@ -122,11 +135,11 @@ IndependentT(Ttestdata, 'Pause', 'No-Cursor', 'Reach')
 PairedT(Ttestdata, 'No-Cursor', 'Reach')
 
 #Reach Aftereffect Data
-pairtrandom(Ttestdata, 'No-Cursor_No-Cursors', 'No-Cursors')
+InitialLearning(Ttestdata, 'No-Cursor_No-Cursors', 'No-Cursors')
 PairedT(Ttestdata, 'No-Cursor_No-Cursors', 'No-Cursors')
 
 ##Comparing 1st trial of no-cursors to 1st trial of prop.
-
+propvsREA()
 
 
 ### Comparing Learning Rates Across Test Trials
@@ -135,9 +148,14 @@ FullANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'Active' | ANOVAdata$
 FullANOVA
 
 ###comparing 1st block to second block to third block and so on to 6th block
+InitialLearning(Ttestdata, 'Active', "Reaches")
+InitialLearning(Ttestdata, 'Passive', "Reaches")
+InitialLearning(Ttestdata, 'Pause', "Reaches")
+InitialLearning(Ttestdata, 'No-Cursor', "Reaches")
+
       
 ### Polynomial Regressions
-allpars<- ParticipantReachmodels1(active_reaches, passive_reaches, pause_reaches[33:320,], newnocursor_reaches[33:320,])
+allpars<- ParticipantReachmodels2(active_reaches, passive_reaches, pause_reaches[33:320,], newnocursor_reaches[33:320,])
       pLogRegression(allpars)
 ```
 
@@ -175,7 +193,7 @@ activemetrics<-LocalizationModelCompare(active_localization, active_reaches, col
 Figures for the manuscript
 ```{r real figures, echo = FALSE}
 
-svglite(file='doc/Fig 1.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
+svglite(file='Fig 1.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
 layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
 Plotexp1CI(active_reaches, passive_reaches, pause_reaches[33:320,])
 PlotallTapCI(passive_localization, active_localization)
@@ -184,7 +202,7 @@ Reachmodel(passive_reaches, 'Passive Localization', condition = 'loc', loc_data 
 dev.off()
 
 
-svglite(file='doc/Fig 2.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
+svglite(file='Fig 2.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
 layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), nrow=2, byrow=TRUE), heights=c(2,2))
 RegressionPLot3P()
 RegressionPLotchange()
@@ -194,14 +212,13 @@ plotfitPropModel(passive_reaches, passive_localization, colorPA, 'Passive Locali
 dev.off()
 
 
-svglite(file='doc/Fig 3.svg', width=12, height=4, system_fonts=list(sans = "Arial"))
+svglite(file='Fig 3.svg', width=12, height=4, system_fonts=list(sans = "Arial"))
 layout(matrix(c(1,2), nrow=1, byrow=TRUE), heights=c(2))
 Plotexp2CI(pause_reaches[33:320,],newnocursor_reaches[33:320,], pause_reaches[33:320,])
 Reachmodel(newnocursor_reaches, 'No-Cursor', grid = 'skewed', condition = 'nc', ncdata = newnocursor_nocursors, color = colorNC, yaxis = 'Hand Direction [°]')
 dev.off()
 
-
-svglite(file='doc/fig 5.svg', width=12, height=4, system_fonts=list(sans = "Arial"))
+svglite(file='fig 5.svg', width=12, height=4, system_fonts=list(sans = "Arial"))
 Plotschedule(active_reaches)
 dev.off()
 
