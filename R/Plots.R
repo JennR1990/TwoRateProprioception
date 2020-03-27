@@ -30,6 +30,21 @@ loadcolors <- function() {
   colorV_trans <<- rgb(0.63, 0.71, 0.81, 0.2)  # transparent blue-gray
 }
 
+## This one plots the invidual traces of each participant over the group average. ----
+
+PlotIndividualdata <- function (data, exp, title, yaxis) {
+  
+  PlotoutLine(dataset = data,exp = exp,color = exp, title = title, ylabel = yaxis)
+  PlotData(data, exp, exp)
+  subdata <- data * -1
+  participants <- 2:ncol(data)
+  for (pn in participants) {
+    lines(subdata[, pn], col = rgb(0.0, 0.7, 0.0, 0.06))
+  }
+  PlotData(data, exp, exp)
+}
+
+
 
 Plotexp1CI <- function (acd, pad, nld) {
   PlotoutLine(acd, 1:3, 1:3, "Training Trials", 'Reach Deviations [°]')
@@ -46,17 +61,17 @@ Plotexp2CI <- function (acd, ncd, nld) {
 }
 
 PlotallTapCI <- function (pl = dataset1, al = dataset2) {
-  PlotoutLine(pl, 6:7, 1:2, "Hand Localizations", "Hand Localization Shift [°]")
-  PlotData(al, 1, 1, 1)
-  PlotData(pl, 2, 2, 1)
+  PlotoutLine(pl, 5:6, 5:6, "Hand Localizations", "Hand Localization Shift [°]")
+  PlotData(al, 5, 5, 1)
+  PlotData(pl, 6, 6, 1)
 }
 
 
 
 Plotnocursors <- function (acd,ncd_NC, ncdI) {
-  PlotoutLine(acd, 4:5, 4:5, "Reach Aftereffects", 'Reach Deviations [°]')
-  PlotData(ncd_NC, 4, 4, x =  c(c(33:288), rev(c(33:288))))
-  PlotData(ncdI, 5, 5, x =  c(c(33:288), rev(c(33:288))))
+  PlotoutLine(acd, 7:8, 7:8, "Reach Aftereffects", 'Reach Deviations [°]')
+  PlotData(ncd_NC, 8, 8, x =  c(c(33:288), rev(c(33:288))))
+  PlotData(ncdI, 7, 7, x =  c(c(33:288), rev(c(33:288))))
 }
 
 
@@ -73,101 +88,10 @@ PlotallreachesCI <-
   }
 
 
-RegressionPLot <- function(exp) {
-  if (exp == 1) {
-    PRrm <- TCombine(passive_reaches)
-    PRRm <- PRrm$EC_Late * -1
-    PPec <- TCombine(passive_localization)
-    PPec <- PPec$EC_Late
-    plot(
-      PPec ~ PRRm,
-      col = colorPA,
-      xlab = 'Reaches',
-      ylab = 'Localization',
-      main = 'Localization ~ Reaches During Error Clamp',
-      xlim = c(-12, 25),
-      ylim = c(-12, 25),
-      axes = FALSE,
-      asp=1
-    )
-    axis(2,
-         at = c(-30, -20, -10, 0, 10, 20, 30),
-         cex.axis = 0.75)
-    axis(1,
-         at = c(-30, -20 - 10, 0, 10, 20, 30),
-         cex.axis = 0.75)
-    plotRegressionWithCI(PRRm, PPec, colors = c(colorPA_trans, colorPA))
-    
-    
-    Arm <- TCombine(active_reaches)
-    ARm <- Arm$EC_Late * -1
-    APec <- TCombine(active_localization)
-    APec <- APec$EC_Late
-    points(APec ~ ARm, col = colorA)
-    plotRegressionWithCI(ARm, APec, colors = c(colorA_trans, colorA))
-    
-    PARrm <- TCombine(pause_reaches[33:320,])
-    PARrm <- PARrm[-13,]
-    PARRm <- PARrm$EC_Late * -1
-    PAPec <- colMeans(Pause[1:32, 2:32], na.rm = TRUE)
-    points(PAPec ~ PARRm, col = colorNL)
-    plotRegressionWithCI(PARRm, PAPec, colors = c(colorNL_trans, colorNL))
-    legend(
-      -14,
-      23,
-      legend = c(
-        'Passive Localization',
-        'Active Localization',
-        'Pause'
-      ),
-      col = c(colorPA, colorA, colorNL),
-      lty = c(1, 1, 1),
-      lwd = c(2, 2, 2),
-      bty = 'n'
-    )
-    
-    
-    
-  } else if (exp == 2) {
-    PRrm <- TCombine(pause_reaches[33:320,])
-    PRrm <- PRrm[-13,]
-    PRRm <- PRrm$EC_Late * -1
-    PPec <- colMeans(Pause[1:32, 2:32], na.rm = TRUE)
-    plot(
-      PPec ~ PRRm,
-      col = colorNL,
-      xlab = 'Reaches',
-      ylab = 'Localization',
-      main = 'Localization ~ Reaches During Error Clamp',
-      xlim = c(-12, 25),
-      ylim = c(-12, 25),
-      axes = FALSE
-    )
-    axis(2, at = c(-20, -10, 0, 10, 20), cex.axis = 0.75)
-    axis(1, at = c(-10, 0, 10, 20, 30), cex.axis = 0.75)
-    plotRegressionWithCI(PRRm, PPec, colors = c(colorNL_trans, colorNL))
-    NCrm <- TCombine(nocursor_reaches[33:320,])
-    NCRm <- NCrm$EC_Late * -1
-    NCPec <- colMeans(NoCursor[1:32, 2:33], na.rm = TRUE)
-    points(NCPec ~ NCRm, col = colorNC)
-    plotRegressionWithCI(NCRm, NCPec, colors = c(colorNC_trans, colorNC))
-    NCIrm <- TCombine(nocursorI_reaches[33:320,])
-    NCIRm <- NCIrm$EC_Late * -1
-    NCIPec <- colMeans(NewNoC[1:32, 2:17], na.rm = TRUE)
-    points(NCIPec ~ NCIRm, col = colorNNC)
-    plotRegressionWithCI(NCIRm, NCIPec, colors = c(colorNNC_trans, colorNNC))
-    legend(
-      -14,
-      23,
-      legend = c('New No-Cursor', 'No-Cursor', 'Pause'),
-      col = c(colorNNC, colorNC, colorNL),
-      lty = c(1, 1, 1),
-      lwd = c(2, 2, 2),
-      bty = 'n'
-    )
-    
-  }
-}
+####Regression plots ###
+  
+  
+  
 
 RegressionPLotec <- function() {
 
@@ -224,77 +148,7 @@ RegressionPLotec <- function() {
 
 }
 
-RegressionPLotR1 <- function() {
-  PRrm <- TCombine(passive_reaches)
-  PRRm <- PRrm$R1_Late * -1
-  PPec <- TCombine(passive_localization)
-  PPec <- PPec$R1_Late
-  plot(
-    PPec ~ PRRm,
-    col = colorPA,
-    xlab = 'Reaches',
-    ylab = 'Localization',
-    xlim = c(10, 40),
-    ylim = c(-5, 25),
-    axes = FALSE, asp = 1
-  )
-  axis(2,
-       at = c( -5, 0, 5, 15, 25),
-       cex.axis = 0.75)
-  axis(1,
-       at = c( 15, 20,30,40),
-       cex.axis = 0.75)
-  lm<-plotRegressionWithCI(PRRm, PPec, colors = c(colorPA_trans, colorPA))
-  slopes<-lm$coefficients[2]
-  
-  Arm <- TCombine(active_reaches)
-  Arm <- Arm[-21,]
-  ARm <- Arm$R1_Late * -1
-  APec <- TCombine(active_localization)
-  APec<- APec[-21,]
-  APec <- APec$R1_Late
-  points(APec ~ ARm, col = colorA)
-  gm<-plotRegressionWithCI(ARm, APec, colors = c(colorA_trans, colorA))
-  slopes<-c(slopes,gm$coefficients[2])
 
-  names(slopes)<- c('Passive', 'Active')
-  return(slopes)
-}
-RegressionPLotR1E <- function() {
-  PRrm <- TCombine(passive_reaches)
-  PRRm <- PRrm$R1_Early * -1
-  PPec <- TCombine(passive_localization)
-  PPec <- PPec$R1_Early
-  plot(
-    PPec ~ PRRm,
-    col = colorPA,
-    xlab = 'Reaches',
-    ylab = 'Localization',
-    xlim = c(3, 35),
-    ylim = c(-5, 20),
-    axes = FALSE, asp = 1
-  )
-  axis(2,
-       at = c(  0, 10, 20),
-       cex.axis = 0.75)
-  axis(1,
-       at = c( 5,10, 20, 30),
-       cex.axis = 0.75)
-  lm<-plotRegressionWithCI(PRRm, PPec, colors = c(colorPA_trans, colorPA))
-  slopes<-lm$coefficients[2]
-  
-  Arm <- TCombine(active_reaches)
-  #Arm <- Arm[-21,]
-  ARm <- Arm$R1_Early * -1
-  APec <- TCombine(active_localization)
-  #APec<- APec[-21,]
-  APec <- APec$R1_Early
-  points(APec ~ ARm, col = colorA)
-  gm<-plotRegressionWithCI(ARm, APec, colors = c(colorA_trans, colorA))
-  slopes<-c(slopes,gm$coefficients[2])
-  names(slopes)<- c('Passive', 'Active')
-  return(slopes)
-}
 
 RegressionPLot3P <- function() {
 
@@ -419,14 +273,16 @@ RegressionPLotchange <- function() {
 
 
 PlotData <- function(dataset, color, trans, rotate = -1, x =  c(c(1:288), rev(c(1:288)))) {
-  colorlist <- c(colorA, colorPA, colorNL, colorNC, colorV, colorNNC)
+  colorlist <- c(colorA, colorPA, colorNL, colorNC,colorA, colorPA, colorNNC, colorNC)
   translist <-
     c(colorA_trans,
       colorPA_trans,
       colorNL_trans,
       colorNC_trans,
-      colorV_trans,
-      colorNNC_trans)
+      colorA_trans,
+      colorPA_trans,
+      colorNNC_trans,
+      colorNC_trans)
   dataCIs <- trialCI(data = dataset)
   dataCIs <- dataCIs * rotate
   dataset["distortion"][is.na(dataset["distortion"])] <- 0
@@ -478,12 +334,12 @@ PlotoutLine <- function(dataset, exp, color,title,ylabel) {
       'Passive Localization (N=32)',
       'Pause (N=32)',
       'No-Cursor (N=48)',
-      'No-Cursor Instructed (N=16)',
       'Active Localizations (N=32)',
       'Passive Localizations (N=32)',
-      'Variation (N=32)'
+      'No-Cursor Instructed (N=16)',
+      'No-Cursor (N=32)'
     )
-  colorlist <- list(colorA, colorPA, colorNL, colorNC, colorV, colorNNC)
+  colorlist <- list(colorA, colorPA, colorNL, colorNC,colorA, colorPA, colorNNC,colorNC)
   label <- labels[exp]
   colors <- colorlist[color]
   dataCIs <- trialCI(data = dataset)
@@ -618,7 +474,7 @@ Reachmodelnc <- function(data, ncdata, name, color) {
   reach_model1 <-
     twoRateReachModel(par = reach_par, schedule = reaches$distortion)
   reach_model <- reach_model1[33:320, ]
-  Plotncmodel(data[33:320, ], name, color, yaxis)
+  Plotncmodel(data[33:320, ], name, color, "Hand Direction [°]")
   lines(reach_model$total * -1, col = 'black',lty = 4)
   lines(reach_model$slow * -1, col = color,lty = 2)
   lines(reach_model$fast * -1, col = color,lty = 3)
@@ -782,22 +638,6 @@ Plotlocmodel <- function(dataset, name, color, yaxis) {
 }
 
 
-plotpropmodel<- function (reachdata, locadata){
-  
-  localizations<-rowMeans(locadata[,2:ncol(locadata)], na.rm=TRUE)
-  schedule<- reachdata$distortion
-  
-  
-  par<- fitPropModel(reachdata, locadata)
-  plot(localizations, type = 'l', ylim = c(-15,15))
-  output<- PropModel(par, schedule)
-  lines(output, col = "blue")
-  
-  
-}
-
-
-
 
 ## this code runs the linear regression between the two pieces of data you give it and it also plots it for you----
 ## This is called by the above function RegressionPLot(exp) exp 1 is active passive pause and exp 2 is pause and the two no-cursors
@@ -835,6 +675,23 @@ plotRegressionWithCI <-
     )
     return(this.lm)
   }
+
+
+
+plotpropmodel<- function (reachdata, locadata){
+  
+  localizations<-rowMeans(locadata[,2:ncol(locadata)], na.rm=TRUE)
+  schedule<- reachdata$distortion
+  
+  
+  par<- fitPropModel(reachdata, locadata)
+  plot(localizations, type = 'l', ylim = c(-15,15))
+  output<- PropModel(par, schedule)
+  lines(output, col = "blue")
+  
+  
+}
+
 
 
 
@@ -951,51 +808,6 @@ gridsearch<- function(localizations, schedule, nsteps=7, topn=4) {
   return(pargrid[bestN,])
 }
 
-## This one plots the invidual traces of each participant over the group average. ----
-
-PlotIndividualdata <- function (data, exp, title, yaxis) {
-  labels <-
-    list (
-      'Active Localization (N=32)',
-      'Passive Localization (N=32)',
-      'No Localization (N=32)',
-      'No-Cursor (N=32)',
-      'Instructed No-Cursor (N=32)'
-    )
-  PlotoutLine(data, exp, exp, title, yaxis)
-  PlotData(data, exp, exp)
-  subdata <- data * -1
-  participants <- 2:ncol(data)
-  for (pn in participants) {
-    lines(subdata[, pn], col = rgb(0.0, 0.7, 0.0, 0.06))
-  }
-  PlotData(data, exp, exp)
-}
 
 
-## This plots the pre and post localization data from the pause, and two no-cursor paradigms -----
-###Compare pre- post localization
-#layout(c(1,2,3))
-averagedprepost<- function (dataset = c('Pause', 'NoCursor', 'NewNoC')) {
-  svglite(file='doc/Pre_Post_Data.svg', width=6, height=9, system_fonts=list(sans = "Arial"))
-  layout(c(1,2,3), heights = c(2,2,2))
-  
-  exp = list('Pause Task','No-Cursor Task', 'New No-Cursor Task')
-  counter<- 1
-  
-  for (data in dataset) {
-    filename<- sprintf('data/%s_pre_post_Prop.csv', data)
-    df<- read.csv(filename, sep = ',', header = TRUE)
-    pre<- mean(unlist(df[56:64, 2:ncol(df)]), na.rm = TRUE)
-    post<- mean(unlist(df[65:73, 2:ncol(df)]), na.rm = TRUE)
-    stuff<- c(pre, post)
-    print(stuff)
-    barplot(stuff, ylim = c(-1.5,1.5), names = c('Pre', 'Post'), col= c('mediumorchid3', 'red'))
-    text(.75,pre+.1, labels = pre)
-    text(2,post+.1, labels = post)
-    title( main = exp[counter] )
-    counter<- counter + 1
-  }
-  dev.off()
-}
 

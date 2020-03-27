@@ -52,11 +52,12 @@ fixnocursorcolnames()
 #Exploratory Figures
 Individual Data 
 ```{r}
-PlotIndividualdata(pause_reaches[33:320,],3, "Individual Pause Data")
-PlotIndividualdata(active_reaches,1, "Individual Active Data")
-PlotIndividualdata(passive_reaches,2, "Individual Passive Data")
-PlotIndividualdata(nocursor_reaches[33:320,],4, "Individual No-Cursor Data")  # Need to see if this naming and color scheme still works, 4 and 5 thing)
-PlotIndividualdata(nocursorI_reaches[33:320,],5, "Individual No-Cursor_I Data") 
+PlotIndividualdata(pause_reaches[33:320,],3, "Individual Pause Data", "Hand Direction [°]")
+PlotIndividualdata(active_reaches,1, "Individual Active Data", "Hand Direction [°]")
+PlotIndividualdata(passive_reaches,2, "Individual Passive Data", "Hand Direction [°]")
+PlotIndividualdata(nocursor_reaches[33:320,],8, "Individual No-Cursor Data", "Hand Direction [°]")  # Need to see if this naming and color scheme still works, 4 and 5 thing)
+PlotIndividualdata(nocursorI_reaches[33:320,],7, "Individual No-Cursor_I Data", "Hand Direction [°]")
+PlotIndividualdata(newnocursor_reaches[33:320,],4, "Individual Combined No-Cursor Data", "Hand Direction [°]")
 ```
 
 #Averaged reaches
