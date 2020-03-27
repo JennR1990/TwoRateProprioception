@@ -12,7 +12,6 @@ Loaddata<- function (group='passive', task='reaches') {
  
 loadalldata<- function () {
   pause_reaches<<- removeReachOutliers(Loaddata(group='pause'))
-  Pause<<- removeReachOutliers(Loaddata(group='pause', task = 'pre_post_Prop'))
   active_reaches<<- removeReachOutliers(Loaddata(group='active'))
   passive_reaches<<- removeReachOutliers(Loaddata())
   nocursor_reaches<<- removeReachOutliers(Loaddata(group='nocursor'))
@@ -20,14 +19,9 @@ loadalldata<- function () {
   passive_localization<<- removeReachOutliers(Loaddata(task = 'localization'))
   active_localization<<- removeReachOutliers(Loaddata(group='active', task = 'localization'))
   nocursor_nocursors<<- removeReachOutliers(Loaddata(group='nocursor', task = 'nocursors'))
-  NoCursor<<- removeReachOutliers(Loaddata(group='NoCursor', task = 'pre_post_Prop'))
   nocursorI_nocursors<<- removeReachOutliers(Loaddata(group='nocursor', task = 'NI_nocursors'))
-  NewNoC<<- removeReachOutliers(Loaddata(group='NewNoC', task = 'pre_post_Prop')) 
   newnocursor_reaches<<- cbind(nocursor_reaches, nocursorI_reaches[2:ncol(nocursorI_reaches)])
   newnocursor_nocursors<<- cbind(nocursor_nocursors, nocursorI_nocursors[2:ncol(nocursorI_nocursors)])
-  variation_reaches<<- removeReachOutliers(Loaddata(group='variation'))
-  variation_localization<<- removeReachOutliers(Loaddata(group='variation', task = 'localizations'))
-
 }
 
 fixnocursorcolnames<- function () {
@@ -50,12 +44,7 @@ downloadOSFdata <- function(update=FALSE) {
              'nocursor_NI_reaches.csv'     = 'https://osf.io/grnxh/download',
              'passive_localization.csv' = 'https://osf.io/27v54/download',
              'passive_reaches.csv'      = 'https://osf.io/mq5av/download',
-             'pause_reaches.csv'        = 'https://osf.io/q59b3/download',
-             'NewNoC_pre_post_Prop.csv' = 'https://osf.io/r69v5/download',
-             'NoCursor_pre_post_Prop.csv' = 'https://osf.io/tjqrw/download',
-             'Pause_pre_post_Prop.csv'  = 'https://osf.io/r3fvw/download',
-             'variation_reaches.csv' = 'https://osf.io/pk5fy/download',
-             'variation_localizations.csv'  = 'https://osf.io/txgwj/download')
+             'pause_reaches.csv'        = 'https://osf.io/q59b3/download')
 
   # check if data directory exists and create if necessary:
   # (data should come from OSF, so is not on github)

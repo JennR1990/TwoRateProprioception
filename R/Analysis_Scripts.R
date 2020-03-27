@@ -189,7 +189,7 @@ PrepdataforT1<- function(adata, pasdata, paudata, ncdata, ncncdata, ncIdata, ncn
 
 
 
-PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata) {
+PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata) {
   
   # 
   
@@ -209,13 +209,13 @@ PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata, ncncdata) {
   nc_RM$ID <- sprintf('NoCursor.%s',nc_RM$ID)
   nc_RM$Experiment <- rep('No-Cursor', nrow(nc_RM))
   
-  ncnc_RM<-NoCursorACombine(ncncdata)
-  ncnc_RM$ID <- sprintf('NoCursor_No-Cursors.%s',ncnc_RM$ID)
-  ncnc_RM$Experiment <- rep('No-Cursor_No-Cursors', nrow(ncnc_RM))
+  # ncnc_RM<-NoCursorACombine(ncncdata)
+  # ncnc_RM$ID <- sprintf('NoCursor_No-Cursors.%s',ncnc_RM$ID)
+  # ncnc_RM$Experiment <- rep('No-Cursor_No-Cursors', nrow(ncnc_RM))
   
 
   
-  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM)
+  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM)
   #
   return(AllDataRM)
   

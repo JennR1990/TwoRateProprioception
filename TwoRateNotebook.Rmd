@@ -1,0 +1,241 @@
+---
+title: "Two Rate Proprioception Paper"
+output:
+  word_document: default
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+
+# Overview
+
+We have previously found that proprioception recalibrates within 6 trials, whereas visuomotor adaptation takes longer to saturate [@Ruttle2016; @Ruttle2018].
+
+In this project we set out to investigate 1) exactly how quickly proprioception recalibrates, 2) to disentangle it from the updating of predicted sensory consequences, and 3) to see if it matches implicit learning that should follow the slow process [@McDougle2015] in the two-rate model [@Smith2006].
+
+## Trial types
+
+To do all this we use a trial-by-trial approach, that is: one reach-training trial is followed by one of various "measurement" trials: passive localization, active localization or no-cursor reaches (all of them explained below). As a control we also had people pause for a short bit instead. There were four groups of participants and each did one of the four "measurement" trials exclusively. With one exception, the pause and no-cursor group also did a set of localization trials before and after the regular paradigm also done by the other groups.
+
+The first of each pair of trials is always one of these, both appear for every participant:
+- reach training
+- error-clamp
+
+The second of each pair of trials is then one of these:
+- passive localization (only proprioception)
+- active localization (proprioception + prediction)
+- no-cursor reach (classic measure of motor learning)
+- pause (control)
+
+These four trial types define the four paradigms, that is, each of the participants in the four groups only get 1 of these trial types throughout. However, the no-cursor group and pause group do get some passive localization before training, and after completion of the whole paradigm.
+
+By comparing the trial-by-trial changes in the four paradigms, we can investigate the time-course of all these processes in more detail than we previously have.
+
+## Figures
+
+Preparing Data for Figures and Analysis:
+```{r}
+source('R/Analysis_Scripts.R')
+source('R/Plots.R', encoding = 'UTF-8')
+source('R/Repeated_Measures_Combine.R')
+source('R/shared.R')
+library('ez')
+library('RateRate')
+library('svglite')
+library('effsize')
+library('SMCL')
+loadcolors()
+downloadOSFdata()
+loadalldata()
+fixnocursorcolnames()
+```
+#Exploratory Figures
+Individual Data 
+```{r}
+PlotIndividualdata(pause_reaches[33:320,],3, "Individual Pause Data")
+PlotIndividualdata(active_reaches,1, "Individual Active Data")
+PlotIndividualdata(passive_reaches,2, "Individual Passive Data")
+PlotIndividualdata(nocursor_reaches[33:320,],4, "Individual No-Cursor Data")  # Need to see if this naming and color scheme still works, 4 and 5 thing)
+PlotIndividualdata(nocursorI_reaches[33:320,],5, "Individual No-Cursor_I Data") 
+```
+
+#Averaged reaches
+```{r}
+PlotallreachesCI(active_reaches,passive_reaches, pause_reaches[33:320,],newnocursor_reaches[33:320,])# I have already put the two together at this point and the function only works for three data sets now. 
+```
+
+#Localization Data
+```{r}
+PlotallTapCI(passive_localization, active_localization) 
+```
+#No-Cursor Data with the reach data and model output
+```{r}
+Reachmodelnc(nocursor_reaches, nocursor_nocursors, 'No-Cursor', color = colorNC)
+Reachmodelnc(nocursorI_reaches, nocursorI_nocursors, 'No-Cursor', color = colorNNC)
+Reachmodelnc(newnocursor_reaches, newnocursor_nocursors, 'No-Cursor', color = colorNC)
+```
+
+
+## Analysis of data
+
+We begin with some ANOVA's and T-tests to check for significance
+
+```{r, echo = FALSE}
+### Create Data to use for ANOVA's and t-tests
+
+ANOVAdata<- PrepdataforANOVA(active_reaches, passive_reaches, pause_reaches[33:320,], newnocursor_reaches[33:320,])
+ANOVAPdata<- PrepdataforPropANOVA(active_localization,passive_localization)
+TtestPdata<- PrepdataforPropT(active_localization, passive_localization)
+Ttestdata<- PrepdataforT(active_reaches, passive_reaches, pause_reaches[33:320,], newnocursor_reaches[33:320,], newnocursor_nocursors)
+
+```
+
+
+```{r}
+### Hand Localization Experiment
+#reach data
+FullHLANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'Active' | ANOVAdata$Experiment == 'Passive' | ANOVAdata$Experiment == 'Pause',])
+FullHLANOVA
+FullH1LANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'Active' | ANOVAdata$Experiment == 'Passive',])
+FullH1LANOVA
+FullH2LANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'Passive' | ANOVAdata$Experiment == 'Pause',])
+FullH2LANOVA
+FullH3LANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'Active' | ANOVAdata$Experiment == 'Pause',])
+FullH3LANOVA
+  IndependentT(Ttestdata, 'Active', 'Passive', 'Reach')
+    IndependentT(Ttestdata, 'Active', 'Pause', 'Reach')
+      IndependentT(Ttestdata, 'Pause', 'Passive', 'Reach')
+#Proprioceptive data
+FullPANOVA<-ANOVAanalysis(ANOVAPdata)
+FullPANOVA
+tpanalyzedata(TtestPdata)
+PairedT(TtestPdata, 'Active', 'localization')
+PairedT(TtestPdata, 'Passive', 'localization')
+
+
+### Implicit Learning as the Slow Process Experiment
+#Read Data
+FullILANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor'  | ANOVAdata$Experiment == 'Pause',])
+FullILANOVA
+IndependentT(Ttestdata, 'Pause', 'No-Cursor', 'Reach')
+PairedT(Ttestdata, 'No-Cursor', 'Reach')
+
+#Reach Aftereffect Data
+pairtrandom(Ttestdata, 'No-Cursor_No-Cursors', 'No-Cursors')
+PairedT(Ttestdata, 'No-Cursor_No-Cursors', 'No-Cursors')
+
+##Comparing 1st trial of no-cursors to 1st trial of prop.
+
+
+
+### Comparing Learning Rates Across Test Trials
+      
+FullANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'Active' | ANOVAdata$Experiment == 'Passive' | ANOVAdata$Experiment == 'No-Cursor' | ANOVAdata$Experiment == 'Pause',])
+FullANOVA
+
+###comparing 1st block to second block to third block and so on to 6th block
+      
+### Polynomial Regressions
+allpars<- ParticipantReachmodels1(active_reaches, passive_reaches, pause_reaches[33:320,], newnocursor_reaches[33:320,])
+      pLogRegression(allpars)
+```
+
+```{r, echo = FALSE}
+      
+      
+### Random Descriptive Stats
+ActivePropMeans<- colMeans(TtestPdata[TtestPdata$Experiment == 'Active',1:ncol(TtestPdata)-1], na.rm = TRUE)
+PassivePropMeans<- colMeans(TtestPdata[TtestPdata$Experiment == 'Passive',1:ncol(TtestPdata)-1], na.rm = TRUE)
+NoCursorMeans<- colMeans(Ttestdata[Ttestdata$Experiment == 'No-Cursor',1:ncol(Ttestdata)-1], na.rm = TRUE)
+NoCursorNCMeans<- colMeans(Ttestdata[Ttestdata$Experiment == 'No-Cursor_No-Cursors',1:ncol(Ttestdata)-1], na.rm = TRUE)
+Allmeans<- Allmeans()
+```
+##MOdel comparison
+
+Then we check to see if the data is more one-rate or two-rate on the group level
+All of the data sets, when taken as a group, appear to be more two-rate than one rate. 
+This makes sense since the size of the rebound is pretty large in at least the first 3 groups.
+```{r}
+Active_metrics<- GroupModelAICs(active_reaches, 'Active')
+Passive_metrics<- GroupModelAICs(passive_reaches, 'Passive')
+Pause_metrics<- GroupModelAICs(pause_reaches, 'Pause')
+NC_metrics<- GroupModelAICs(newnocursor_reaches, 'No-Cursor', 'skewed')
+metrics<- rbind(Active_metrics, Passive_metrics, Pause_metrics, NC_metrics)
+groups = c('active', 'passive','pause', 'nocursor')
+metrics$group<- groups
+
+
+##model comparison for localization data to total, slow and prop
+passivemetrics<-LocalizationModelCompare(passive_localization, passive_reaches, colorPA)
+activemetrics<-LocalizationModelCompare(active_localization, active_reaches, colorA)
+
+```
+
+Figures for the manuscript
+```{r real figures, echo = FALSE}
+
+svglite(file='doc/Fig 1.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
+layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
+Plotexp1CI(active_reaches, passive_reaches, pause_reaches[33:320,])
+PlotallTapCI(passive_localization, active_localization)
+Reachmodel(active_reaches, 'Active Localization', condition = 'loc', loc_data = active_localization, color=colorA)
+Reachmodel(passive_reaches, 'Passive Localization', condition = 'loc', loc_data = passive_localization, color=colorPA , yaxis = 'Hand Direction [°]')
+dev.off()
+
+
+svglite(file='doc/Fig 2.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
+layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), nrow=2, byrow=TRUE), heights=c(2,2))
+RegressionPLot3P()
+RegressionPLotchange()
+RegressionPLotec()
+plotfitPropModel(active_reaches, active_localization, colorA, 'Active Localizations')
+plotfitPropModel(passive_reaches, passive_localization, colorPA, 'Passive Localizations')
+dev.off()
+
+
+svglite(file='doc/Fig 3.svg', width=12, height=4, system_fonts=list(sans = "Arial"))
+layout(matrix(c(1,2), nrow=1, byrow=TRUE), heights=c(2))
+Plotexp2CI(pause_reaches[33:320,],newnocursor_reaches[33:320,], pause_reaches[33:320,])
+Reachmodel(newnocursor_reaches, 'No-Cursor', grid = 'skewed', condition = 'nc', ncdata = newnocursor_nocursors, color = colorNC, yaxis = 'Hand Direction [°]')
+dev.off()
+
+
+svglite(file='doc/fig 5.svg', width=12, height=4, system_fonts=list(sans = "Arial"))
+Plotschedule(active_reaches)
+dev.off()
+
+
+```
+## Two-Rate model
+
+In the two-rate model, the motor output X at trial t, $X_t$ is simply the added output of the slow and fast process at trial t:
+
+<<<<<<< HEAD:TwoRateProprioception.Rmd
+\begin{equation}
+\label{tworate-total}
+X_t = S_t + F_t
+\end{equation}
+
+The output of the slow process on the next trial (t+1) is determined by the error on the previous trial multiplied by a learning rate L, and the output on the previous trial multiplied by a retention rate R:
+
+\begin{equation}
+\label{tworate-slow}
+S_{t+1} = (L^s \cdot E_t) + (R^s \cdot S_t)
+\end{equation}
+
+Similarly, the fast process has it's own learning rate and retention rate:
+
+\begin{equation}
+\label{tworate-fast}
+F_{t+1} = (L^f \cdot E_t) + (R^f \cdot F_t)
+\end{equation}
+=======
+[1] $X_t = S_t + F_t$ \label{tworate-total}
+
+The output of the slow process on the next trial (t+1) is determined by the error on the previous trial multiplied by a learning rate L, and the output on the previous trial multiplied by a retention rate R:
+
+[2] $S_{t+1} = L^s \cdot E_t + R^s \cdot S_t$ \label{tworate-slow}
+
+Similarly, the fast process has it's own learning rate and retention rate:
+
+[3] $F_{t+1} = L^f \cdot E_t + R^f \cdot F_t$ \label{tworate-fast}
