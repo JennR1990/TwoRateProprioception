@@ -95,7 +95,22 @@ pLogRegression <- function(data, variable = Test_Trial) {
     print(summary(glm(formula = variable ~ rs + ls + rf + lf, family = binomial(link = "logit"), 
                       data = data)))
 
+   model<- glm(formula = variable ~ rs + ls + rf + lf, family = binomial(link = "logit"), 
+        data = data)
+   
+   #print(predict(model))
+  predictions<- predict(model)
   
+  predictions[predictions<.5]<-0
+  predictions[predictions>.5]<-1
+  print(predictions)
+  print(length(which(data$Test_Trial == predictions)))
+  print(correct<- length(which(data$Test_Trial == predictions)) / length(predictions) )
+  
+  return(correct)
+  
+   
+   
 }
 
 tpanalyzedata<- function(AllDataRM){
@@ -414,18 +429,20 @@ propvsREA<- function (){
 ##Models
 
 ParticipantReachmodels2<- function(adata, pasdata, paudata, ncdata) {
+  #Active = 1
+  #Passive = 0
   a_par<- getParticipantFits2(adata)
   a_par$Experiment<-'Active'
-  a_par$Test_Trial<-'Active'
+  a_par$Test_Trial<-1
   Pas_par<- getParticipantFits2(pasdata)
   Pas_par$Experiment<-'Passive'
-  Pas_par$Test_Trial<-'Passive'
+  Pas_par$Test_Trial<-0
   Pau_par<- getParticipantFits2(paudata)
   Pau_par$Experiment<-'Pause'
-  Pau_par$Test_Trial<-'Passive'
+  Pau_par$Test_Trial<-0
   nc_par<- getParticipantFits2(ncdata)
   nc_par$Experiment<-'No-Cursor'
-  nc_par$Test_Trial<-'Active'
+  nc_par$Test_Trial<-1
 
   allpars<- rbind(a_par, Pas_par, Pau_par, nc_par)
   return(allpars)
