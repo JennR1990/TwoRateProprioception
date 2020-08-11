@@ -28,6 +28,10 @@ loadcolors <- function() {
   ##Variation
   colorV       <<- rgb(0.63, 0.71, 0.81)      # blue-gray
   colorV_trans <<- rgb(0.63, 0.71, 0.81, 0.2)  # transparent blue-gray
+  
+  #Terminal
+  colorT       <<- rgb(1, 0.0, 0.0)         # Red
+  colorT_trans <<- rgb(1, 0.0, 0., 0.2)     # transparent Red
 }
 
 ## This one plots the invidual traces of each participant over the group average. ----

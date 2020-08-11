@@ -22,6 +22,8 @@ loadalldata<- function () {
   nocursorI_nocursors<<- removeReachOutliers(Loaddata(group='nocursor', task = 'NI_nocursors'))
   newnocursor_reaches<<- cbind(nocursor_reaches, nocursorI_reaches[2:ncol(nocursorI_reaches)])
   newnocursor_nocursors<<- cbind(nocursor_nocursors, nocursorI_nocursors[2:ncol(nocursorI_nocursors)])
+  terminal_reaches<<- removeReachOutliers(Loaddata(group='terminal'))
+  terminal_localization<<- removeReachOutliers(Loaddata(group='terminal', task = 'localizations'))
 }
 
 fixnocursorcolnames<- function () {
@@ -44,7 +46,9 @@ downloadOSFdata <- function(update=FALSE) {
              'nocursor_NI_reaches.csv'     = 'https://osf.io/grnxh/download',
              'passive_localization.csv' = 'https://osf.io/27v54/download',
              'passive_reaches.csv'      = 'https://osf.io/mq5av/download',
-             'pause_reaches.csv'        = 'https://osf.io/q59b3/download')
+             'pause_reaches.csv'        = 'https://osf.io/q59b3/download',
+             'terminal_reaches.csv'     = 'https://osf.io/qdk9y/download',
+             'terminal_localizations.csv'= 'https://osf.io/6r4bx/download')
 
   # check if data directory exists and create if necessary:
   # (data should come from OSF, so is not on github)

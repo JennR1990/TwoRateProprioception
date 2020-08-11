@@ -424,7 +424,7 @@ getParticipantFits2 <- function(data, grid='restricted') {
   distortions <- data$distortion
 
   participantfits <- data.frame(matrix(NA, ncol=6, nrow=length(participants)))
-  colnames(participantfits) <- c('participant', 'rs', 'ls', 'rf', 'lf', 'MSE')
+  colnames(participantfits) <- c('participant', 'Rs', 'Ls', 'Rf', 'Lf', 'MSE')
 
   for (ppno in c(1:length(participants))) {
 
@@ -437,10 +437,10 @@ getParticipantFits2 <- function(data, grid='restricted') {
     #pars <- fittworatemodel(reaches, distortions)
 
     participantfits$participant[ppno] <- participant
-    participantfits$rs[ppno] <- pars['Rs']
-    participantfits$ls[ppno] <- pars['Ls']
-    participantfits$rf[ppno] <- pars['Rf']
-    participantfits$lf[ppno] <- pars['Lf']
+    participantfits$Rs[ppno] <- pars['Rs']
+    participantfits$Ls[ppno] <- pars['Ls']
+    participantfits$Rf[ppno] <- pars['Rf']
+    participantfits$Lf[ppno] <- pars['Lf']
     participantfits$MSE[ppno] <- twoRateReachModelErrors(pars, reaches, distortions)
 
   }
@@ -743,3 +743,9 @@ means<- function (data) {
   
   return(Descriptives<- (data.frame(AlignedMean, AlignedMax, AlignedMin, InitialRotationMean, InitialRotationMax, InitialRotationMin, EndofIRotationMean, EndofIRotationMax, EndofIRotationMin, SecondRotationMean, SecondRotationMax, SecondRotationMin, ErrorClampMean, ErrorClampMax, ErrorClampMin, ErrorClampLateMean, ErrorClampLateMax, ErrorClampLateMin))*-1)
 }
+
+
+
+### Calculating and Comparing Rate of Learning in localizations, RAE and Slow Process
+#We already have the data for localizations and RAE. Need to calculate the slow process output for each participant
+
