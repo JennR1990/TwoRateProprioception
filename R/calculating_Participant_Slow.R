@@ -175,4 +175,68 @@ names(PA_Scaled)<- pnames
 # the first rotation trials of the slow model output, the actual no-cursor reaches and localizations are now scaled to the last 40 trials of the first rotation. 
 
 
-PA_Scaled$p1[1]
+PA_Scaled$p1[1] - PA_Scaled$p1[2]
+PA_Scaled$p1[2] - PA_Scaled$p1[3]
+PA_Scaled$p1[3]
+PA_Scaled$p1[4]
+
+
+PA_Scaled_Diff<- data.frame()
+AC_Scaled_Diff<- data.frame()
+NC_Scaled_Diff<- data.frame()
+PA_Slow_Scaled_Diff<- data.frame()
+AC_Slow_Scaled_Diff<- data.frame()
+NC_Slow_Scaled_Diff<- data.frame()
+
+for (j in 1:32){
+
+  for (i in 1:159){
+
+      PA_Scaled_Diff[i,j]<-PA_Scaled[i+1,j] - PA_Scaled[i,j]
+      AC_Scaled_Diff[i,j]<-AC_Scaled[i+1,j] - AC_Scaled[i,j]
+      PA_Slow_Scaled_Diff[i,j]<-PA_Slow_Scaled[i,j] - PA_Slow_Scaled[i+1,j]
+      AC_Slow_Scaled_Diff[i,j]<-AC_Slow_Scaled[i,j] - AC_Slow_Scaled[i+1,j]
+
+
+    }
+}
+
+for (j in 1:48){
+  
+  for (i in 1:159){
+    
+    NC_Scaled_Diff[i,j]<-NC_Scaled[i+1,j] - NC_Scaled[i,j]
+    NC_Slow_Scaled_Diff[i,j]<-NC_Slow_Scaled[i+1,j] - NC_Slow_Scaled[i,j]
+    
+    
+  }
+}
+names(PA_Scaled_Diff)<- pnames
+names(AC_Scaled_Diff)<- pnames
+names(NC_Scaled_Diff)<- pnames
+names(PA_Slow_Scaled_Diff)<- pnames
+names(AC_Slow_Scaled_Diff)<- pnames
+names(NC_Slow_Scaled_Diff)<- pnames
+
+##Now we have scaled the data and everything goes from zero to 100.
+# now i need to find the average amount of change.  I looked at the whole 160 trials but it might make more sense to only do the first few trials when i go to get the average
+# all i did here was subtract trial 2 from 1 and 3 from 2 so i could get the amount of change from trial to trial and then i took the mean of all those. 
+
+
+
+
+averagediff<- colMeans(PA_Scaled_Diff, na.rm = TRUE)
+averagediff1<- colMeans(PA_Slow_Scaled_Diff, na.rm = TRUE)
+averagediff<- rbind(averagediff, averagediff1)
+averagediff1<- colMeans(AC_Scaled_Diff, na.rm = TRUE)
+averagediff<- rbind(averagediff, averagediff1)
+averagediff1<- colMeans(AC_Slow_Scaled_Diff, na.rm = TRUE)
+averagediff<- rbind(averagediff, averagediff1)
+averagediff<- data.frame(averagediff)
+averagediff$experiment<- c('Passive_Loc', "Passive_Slow", "Active_Loc", "Active_Slow")
+
+averagediffnc<- colMeans(NC_Scaled_Diff, na.rm = TRUE)
+averagediffnc1<- colMeans(NC_Slow_Scaled_Diff, na.rm = TRUE)
+averagediffnc<- rbind(averagediffnc, averagediffnc1)
+averagediffnc<- data.frame(averagediffnc)
+averagediffnc$experiment<- c('No-Cursors', "No-Cursor_Slow")

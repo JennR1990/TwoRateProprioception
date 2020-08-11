@@ -58,7 +58,7 @@ ANOVAcombine<- function(data) {
     }
   }
   #b<- !is.nan(ANOVARM$Reaches)
- # ANOVARM<- ANOVARM[c(b),]
+  # ANOVARM<- ANOVARM[c(b),]
   return(ANOVARM)
 }
 
@@ -119,7 +119,7 @@ NoCursorACombine<- function(data) {
       ANOVARM<- data.frame(Reaches, Time, ID)
     }
   }
-#  b<- !is.nan(ANOVARM$Reaches)
-#  ANOVARM<- ANOVARM[c(b),]
+  #  b<- !is.nan(ANOVARM$Reaches)
+  #  ANOVARM<- ANOVARM[c(b),]
   return(ANOVARM)
 }
