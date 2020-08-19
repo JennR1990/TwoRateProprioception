@@ -1,3 +1,8 @@
+# Step 1 & 2 Create Data --------------------------------------------------
+##Calculate per participant fits to be able to get a slow process for each participant
+
+
+##No-Cursor Fits
 ncfits<- getParticipantFits2(newnocursor_reaches)
 
 NC_Slow<- c()
@@ -23,10 +28,7 @@ names(NC_Slow)<- pnames1
 
 
 
-
-
-
-
+##Active Localization Fits
 acfits<- getParticipantFits2(active_reaches)
 AC_Slow<- c()
 for (indx in 1:32){
@@ -50,9 +52,7 @@ for (i in 1:32){
 names(AC_Slow)<- pnames
 
 
-
-
-
+##PAssive Localization Fits
 pafits<- getParticipantFits2(passive_reaches)
 PA_Slow<- c()
 for (indx in 1:32){
@@ -73,15 +73,29 @@ PA_Slow<- data.frame(PA_Slow)
 names(PA_Slow)<- pnames
 
 
-
+#save the data for easy access later
 write.csv(PA_Slow, 'data/Passive_Slow_Process.csv', quote = FALSE, row.names = FALSE)
 write.csv(AC_Slow, 'data/Active_Slow_Process.csv', quote = FALSE, row.names = FALSE)
 write.csv(NC_Slow, 'data/No-Cursor_Slow_Process.csv', quote = FALSE, row.names = FALSE)
 
 
 
-## Now we need to find the asymptote of each of the slow processes and the no-cursors and localizations
 
+
+
+
+# Step 3 -Find Asymptote  ------------------------------------------------------------------
+
+####### If you have this data use these lines to read in the code with the correct name to continue on
+PA_Slow<- read.csv('data/Passive_Slow_Process.csv', header = TRUE)
+AC_Slow<- read.csv('data/Active_Slow_Process.csv', header = TRUE)
+PA_Slow<- read.csv('data/No-Cursor_Slow_Process.csv', header = TRUE)
+
+
+## Now we need to find the asymptote of each of the slow processes and the no-cursors and localizations
+##Took the mean of the last 40 trials of the first rotation
+
+#Slow process data
 PA_Slow_Asymptote<- c()
 for (i in 1:32){
   PA_Slow_Asymptote[i]<-mean(PA_Slow[184:224,i], na.rm = TRUE)
@@ -95,7 +109,7 @@ for (i in 1:48){
   NC_Slow_Asymptote[i]<-mean(NC_Slow[216:256,i], na.rm = TRUE)
 }
 
-
+#Actual Localization and no-cursor data
 PA_Asymptote<- c()
 for (i in 1:32){
   PA_Asymptote[i]<-mean(passive_localization[184:224,i+1], na.rm = TRUE)
@@ -110,9 +124,9 @@ for (i in 1:48){
 }
 
 
-Asymptotes<- cbind(PA_Slow_Asymptote, AC_Slow_Asymptote, PA_Asymptote, AC_Asymptote) 
-NCAsymptotes<- cbind(NC_Slow_Asymptote, NC_Asymptote)
 
+
+# Step 4 - Scaling --------------------------------------------------------
 
 ### NOw that i know the highest value for each of the conditions i need to scale the data to go from zero to one. 
 AC_Slow_Scaled<- c()
@@ -172,14 +186,15 @@ names(AC_Slow_Scaled)<- pnames
 names(AC_Scaled)<- pnames
 names(PA_Slow_Scaled)<- pnames
 names(PA_Scaled)<- pnames
+##Now we have scaled the data and everything goes from zero to 100.
+
+
+
+
+# Step 5 - Amount of correction between trials ----------------------------
+
 # the first rotation trials of the slow model output, the actual no-cursor reaches and localizations are now scaled to the last 40 trials of the first rotation. 
-
-
-PA_Scaled$p1[1] - PA_Scaled$p1[2]
-PA_Scaled$p1[2] - PA_Scaled$p1[3]
-PA_Scaled$p1[3]
-PA_Scaled$p1[4]
-
+#Here i take the difference between trial i+1 and triali.  This is the amount learning between each trial.
 
 PA_Scaled_Diff<- data.frame()
 AC_Scaled_Diff<- data.frame()
@@ -192,51 +207,67 @@ for (j in 1:32){
 
   for (i in 1:159){
 
-      PA_Scaled_Diff[i,j]<-PA_Scaled[i+1,j] - PA_Scaled[i,j]
-      AC_Scaled_Diff[i,j]<-AC_Scaled[i+1,j] - AC_Scaled[i,j]
-      PA_Slow_Scaled_Diff[i,j]<-PA_Slow_Scaled[i,j] - PA_Slow_Scaled[i+1,j]
-      AC_Slow_Scaled_Diff[i,j]<-AC_Slow_Scaled[i,j] - AC_Slow_Scaled[i+1,j]
+      PA_Scaled_Diff[i,j]<-PA_Scaled[i,j] - 100
+      AC_Scaled_Diff[i,j]<-AC_Scaled[i,j] - 100
+      PA_Slow_Scaled_Diff[i,j]<-PA_Slow_Scaled[i,j] -100
+      AC_Slow_Scaled_Diff[i,j]<-AC_Slow_Scaled[i,j] - 100
 
 
     }
 }
 
+
 for (j in 1:48){
   
-  for (i in 1:159){
+  for (i in 1:160){
     
-    NC_Scaled_Diff[i,j]<-NC_Scaled[i+1,j] - NC_Scaled[i,j]
-    NC_Slow_Scaled_Diff[i,j]<-NC_Slow_Scaled[i+1,j] - NC_Slow_Scaled[i,j]
+    NC_Scaled_Diff[i,j]<-NC_Scaled[i,j] - 100
+    NC_Slow_Scaled_Diff[i,j]<-NC_Slow_Scaled[i,j] - 100
     
     
   }
 }
 names(PA_Scaled_Diff)<- pnames
 names(AC_Scaled_Diff)<- pnames
-names(NC_Scaled_Diff)<- pnames
+names(NC_Scaled_Diff)<- pnames1
 names(PA_Slow_Scaled_Diff)<- pnames
 names(AC_Slow_Scaled_Diff)<- pnames
-names(NC_Slow_Scaled_Diff)<- pnames
+names(NC_Slow_Scaled_Diff)<- pnames1
 
-##Now we have scaled the data and everything goes from zero to 100.
+
+
+
+# Step 6 - Average Rate of Change -----------------------------------------
+
+
 # now i need to find the average amount of change.  I looked at the whole 160 trials but it might make more sense to only do the first few trials when i go to get the average
-# all i did here was subtract trial 2 from 1 and 3 from 2 so i could get the amount of change from trial to trial and then i took the mean of all those. 
+##then i took the mean of all those. 
 
 
 
-
-averagediff<- colMeans(PA_Scaled_Diff, na.rm = TRUE)
-averagediff1<- colMeans(PA_Slow_Scaled_Diff, na.rm = TRUE)
+#get average for first 40 trials of passive localizations and slow process
+averagediff<- colMeans(PA_Scaled_Diff[1:40,], na.rm = TRUE)
+averagediff1<- colMeans(PA_Slow_Scaled_Diff[1:40,], na.rm = TRUE)
 averagediff<- rbind(averagediff, averagediff1)
-averagediff1<- colMeans(AC_Scaled_Diff, na.rm = TRUE)
+
+#get average for first 40 trials of Active localizations
+averagediff1<- colMeans(AC_Scaled_Diff[1:40,], na.rm = TRUE)
 averagediff<- rbind(averagediff, averagediff1)
-averagediff1<- colMeans(AC_Slow_Scaled_Diff, na.rm = TRUE)
+
+#get average for first 40 trials of Active slow process
+averagediff1<- colMeans(AC_Slow_Scaled_Diff[1:40,], na.rm = TRUE)
 averagediff<- rbind(averagediff, averagediff1)
+
+#make those named numbers into a data frame and give it column headers
 averagediff<- data.frame(averagediff)
 averagediff$experiment<- c('Passive_Loc', "Passive_Slow", "Active_Loc", "Active_Slow")
 
-averagediffnc<- colMeans(NC_Scaled_Diff, na.rm = TRUE)
-averagediffnc1<- colMeans(NC_Slow_Scaled_Diff, na.rm = TRUE)
+
+#get average for first 40 trials of No-cursors and slow process
+averagediffnc<- colMeans(NC_Scaled_Diff[1:40,], na.rm = TRUE)
+averagediffnc1<- colMeans(NC_Slow_Scaled_Diff[1:40,], na.rm = TRUE)
 averagediffnc<- rbind(averagediffnc, averagediffnc1)
+
+#make those named numbers into a data frame and give it column headers
 averagediffnc<- data.frame(averagediffnc)
 averagediffnc$experiment<- c('No-Cursors', "No-Cursor_Slow")
