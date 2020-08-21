@@ -89,7 +89,7 @@ write.csv(NC_Slow, 'data/No-Cursor_Slow_Process.csv', quote = FALSE, row.names =
 ####### If you have this data use these lines to read in the code with the correct name to continue on
 PA_Slow<- read.csv('data/Passive_Slow_Process.csv', header = TRUE)
 AC_Slow<- read.csv('data/Active_Slow_Process.csv', header = TRUE)
-PA_Slow<- read.csv('data/No-Cursor_Slow_Process.csv', header = TRUE)
+NC_Slow<- read.csv('data/No-Cursor_Slow_Process.csv', header = TRUE)
 
 
 ## Now we need to find the asymptote of each of the slow processes and the no-cursors and localizations
@@ -271,3 +271,48 @@ averagediffnc<- rbind(averagediffnc, averagediffnc1)
 #make those named numbers into a data frame and give it column headers
 averagediffnc<- data.frame(averagediffnc)
 averagediffnc$experiment<- c('No-Cursors', "No-Cursor_Slow")
+
+# Modeling rate of change -------------------------------------------------
+source('E:/Jenn/Documents/TwoRateProprioception/R/AdaptedModels.R')
+
+#Make the data into a 1 X vector to go into model function
+Pas_slow<- rowMeans(PA_Slow[65:224,], na.rm = TRUE)
+Act_slow<- rowMeans(AC_Slow[65:224,], na.rm = TRUE)
+Noc_slow<- rowMeans(NC_Slow[97:256,], na.rm = TRUE)
+Pas<- rowMeans(passive_localization[65:224,2:33], na.rm = TRUE)
+Act<- rowMeans(active_localization[65:224,2:33], na.rm = TRUE)
+Noc<- rowMeans(newnocursor_nocursors[33:192,2:49], na.rm = TRUE)
+
+#create the schedule which is the asymptote
+schedulencs<- rep(mean(NC_Slow_Asymptote), times = 160)
+scheduleacs<- rep(mean(AC_Slow_Asymptote), times = 160)
+schedulepas<- rep(mean(PA_Slow_Asymptote), times = 160)
+schedulenc<- rep(mean(NC_Asymptote), times = 160)
+scheduleac<- rep(mean(AC_Asymptote), times = 160)
+schedulepa<- rep(mean(PA_Asymptote), times = 160)
+
+#Run the model on the data
+NCPars<-oneRateFit(schedule = schedulencs, reaches = unlist(Noc_slow))
+oneRateFit(schedule = scheduleacs, reaches = Act_slow)
+oneRateFit(schedule = schedulepas, reaches = Pas_slow)
+oneRateFit(schedule = schedulenc, reaches = Noc)
+oneRateFit(schedule = scheduleac, reaches = Act)
+oneRateFit(schedule = schedulepa, reaches = Pas)
+
+
+simpleRateFit(schedule = schedulenc, reaches = Noc)
+simpleRateFit(schedule = scheduleac, reaches = Act)
+simpleRateFit(schedule = schedulepa, reaches = Pas)
+
+
+#here i was checking what the output of the model looks like given the parameters
+ncmodeloutput<- oneRateModel(NCPars, schedulencs)
+
+
+
+
+
+
+
+
+
