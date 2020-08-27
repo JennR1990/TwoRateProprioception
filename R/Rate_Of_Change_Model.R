@@ -312,7 +312,75 @@ ncmodeloutput<- oneRateModel(NCPars, schedulencs)
 
 
 
+schedule<- rep(-1, times = 32)
+Act_slow1<- as.vector(c(unlist(rowMeans(AC_Slow[65:80,] , na.rm = TRUE)),rowMeans(AC_Slow[225:240,] , na.rm = TRUE)))
+acts<-asymptoticDecayFit(schedule,Act_slow1)
+asymptoticDecayModel(acts, schedule)
+
+
+PA_slow1<- as.vector(c(unlist(rowMeans(PA_Slow[65:80,] , na.rm = TRUE)),rowMeans(PA_Slow[225:240,] , na.rm = TRUE)))
+pas<-asymptoticDecayFit(schedule,PA_slow1)
+asymptoticDecayModel(pas, schedule)
+
+
+NoC_slow1<- as.vector(c(unlist(rowMeans(NC_Slow[97:112,] , na.rm = TRUE)),rowMeans(NC_Slow[257:272,] , na.rm = TRUE)))
+ncs<-asymptoticDecayFit(schedule,NoC_slow1)
+asymptoticDecayModel(ncs, schedule)
+
+Act1<- as.vector(c(unlist(rowMeans(active_localization[65:80,] , na.rm = TRUE)),rowMeans(active_localization[225:240,] , na.rm = TRUE)))
+act11<-asymptoticDecayFit(schedule,Act1)
+asymptoticDecayModel(act11, schedule)
+
+PAss<- as.vector(c(unlist(rowMeans(passive_localization[65:80,] , na.rm = TRUE)),rowMeans(passive_localization[225:240,] , na.rm = TRUE)))
+Pass1<-asymptoticDecayFit(schedule,PAss)
+asymptoticDecayModel(Pass1, schedule)
 
 
 
+
+
+schedule1<- rep(1, times = 32)
+NoC1<- as.vector(c(unlist(rowMeans(newnocursor_nocursors[33:48,] , na.rm = TRUE)),rowMeans(newnocursor_nocursors[193:208,] , na.rm = TRUE)))
+nc2<--asymptoticDecayFit(schedule1,NoC1)
+asymptoticDecayModel(nc2, schedule1)
+
+
+
+scheduleac<- rep(-1, times = 160)
+acslo<-asymptoticDecayFit(scheduleac,Act_slow)
+asymptoticDecayModel(acslo, scheduleac)
+
+paslo<-asymptoticDecayFit(scheduleac,Pas_slow)
+
+ncslo<-asymptoticDecayFit(scheduleac,Noc_slow)
+
+ac<-asymptoticDecayFit(scheduleac,Act)
+
+pa<-asymptoticDecayFit(scheduleac,Pas)
+
+schedulenc<- rep(1, times = 160)
+nc<-asymptoticDecayFit(schedulenc,Noc)
+
+
+ plot(Act_slow, type = 'l')
+ lines(asymptoticDecayModel(acslo, scheduleac), col = 'blue')
+ plot(Pas_slow, type = 'l')
+ lines(asymptoticDecayModel(paslo, scheduleac), col = 'blue')
+ plot(Noc_slow, type = 'l')
+ lines(asymptoticDecayModel(ncslo, scheduleac), col = 'blue')
+ plot(Pas, type = 'l')
+ lines(asymptoticDecayModel(pa, scheduleac), col = 'blue')
+ plot(Act, type = 'l')
+ lines(asymptoticDecayModel(ac, scheduleac), col = 'blue')
+ plot(Noc, type = 'l')
+ lines(asymptoticDecayModel(nc, schedulenc), col = 'blue')
+ 
+ 
+ plot(PAss, type = 'l')
+ lines(asymptoticDecayModel(Pass1, schedule), col = 'blue')
+ plot(Act1, type = 'l')
+ lines(asymptoticDecayModel(act11, schedule), col = 'blue')
+ plot(NoC1, type = 'l')
+ lines(asymptoticDecayModel(nc2, schedule1), col = 'blue')
+ 
 
