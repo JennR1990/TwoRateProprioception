@@ -390,7 +390,7 @@ lines(asymptoticDecayModel(nc2, schedule1), col = 'blue')
 
 # Asymptotic Decay Models --------
 
-source('R/AdaptedModels.R')
+source('R/AdaptedModels_Marius.R')
 
 fitAsymptoticDecayModels <- function() {
   
@@ -479,4 +479,9 @@ fitAsymptoticDecayModels <- function() {
 
 
 
+# Movement Time Analysis --------------------------------------------------
 
+
+movetimesrm<-NoCursorsTCombine(movetimes)
+
+t.test(movetimesrm$R1_Early, movetimesrm$R1_Late, paired = TRUE)
