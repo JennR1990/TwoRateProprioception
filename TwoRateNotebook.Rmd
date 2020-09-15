@@ -142,6 +142,24 @@ PairedT(Ttestdata, 'No-Cursor_No-Cursors', 'No-Cursors')
 propvsREA()
 
 
+#Investigating Movement Times between the two groups of No-Cursors
+
+
+plotmovetimes(dataset = uninstructed, dataset1 = Instructed)
+
+
+RMunin<- NoCursorsTCombine(uninstructed)
+RMin<- NoCursorsTCombine(Instructed)
+
+RMunin$Experiment <- "Uninstructed"
+RMin$Experiment <- "Instructed"
+RM<- rbind(RMunin, RMin)
+
+movementT(RM, "Uninstructed", "Instructed", "No-Cursors")
+PairedMovementT(RM, "Instructed", "No-Cursors")
+PairedMovementT(RM, "Uninstructed", "No-Cursors")
+
+
 ### Comparing Learning Rates Across Test Trials
       
 FullANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'Active' | ANOVAdata$Experiment == 'Passive' | ANOVAdata$Experiment == 'No-Cursor' | ANOVAdata$Experiment == 'Pause',])

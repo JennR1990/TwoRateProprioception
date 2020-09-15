@@ -73,7 +73,7 @@ PlotallTapCI <- function (pl = dataset1, al = dataset2) {
 
 
 Plotnocursors <- function (acd,ncd_NC, ncdI) {
-  PlotoutLine(acd, 7:8, 7:8, "Reach Aftereffects", 'Reach Deviations [°]')
+  PlotoutLine(acd, 7:8, 7:8, "Reach Aftereffects", 'Reach Deviations [°]'  )
   PlotData(ncd_NC, 8, 8, x =  c(c(33:288), rev(c(33:288))))
   PlotData(ncdI, 7, 7, x =  c(c(33:288), rev(c(33:288))))
 }
