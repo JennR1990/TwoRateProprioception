@@ -141,8 +141,8 @@ RegressionPLotec <- function() {
       -30,
       30,
       legend = c(
-        sprintf('Passive Y = %.2fx + %.2f, r2 = %.2f', slopes[1], intercepts[1], rsquareds[1]),
-        sprintf('Active Y = %.2fx + %.2f, r2 = %.2f', slopes[2], intercepts[2], rsquareds[2])
+        sprintf('Passive slope =  %.2f, r2 = %.2f', slopes[1],  rsquareds[1]),
+        sprintf('Active slope = %.2f, r2 = %.2f', slopes[2],  rsquareds[2])
       ),
       col = c(colorPA, colorA),
       lty = c(1, 1),
@@ -196,8 +196,8 @@ RegressionPLot3P <- function() {
     -30,
     30,
     legend = c(
-      sprintf('Passive Y = %.2fx + %.2f, r2 = %.2f', slopes[1], intercepts[1], rsquareds[1]),
-      sprintf('Active Y = %.2fx + %.2f, r2 = %.2f', slopes[2], intercepts[2], rsquareds[2])
+      sprintf('Passive slope =  %.2f, r2 = %.2f', slopes[1],  rsquareds[1]),
+      sprintf('Active slope = %.2f, r2 = %.2f', slopes[2],  rsquareds[2])
     ),
     col = c(colorPA, colorA),
     lty = c(1, 1),
@@ -257,8 +257,8 @@ RegressionPLotchange <- function() {
     0,
     32,
     legend = c(
-      sprintf('Passive Y = %.2fx + %.2f, r2 = %.2f', slopes[1], intercepts[1], rsquareds[1]),
-      sprintf('Active Y = %.2fx + %.2f, r2 = %.2f', slopes[2], intercepts[2], rsquareds[2])
+      sprintf('Passive slope =  %.2f, r2 = %.2f', slopes[1],  rsquareds[1]),
+      sprintf('Active slope = %.2f, r2 = %.2f', slopes[2],  rsquareds[2])
     ),
     col = c(colorPA, colorA),
     lty = c(1, 1),

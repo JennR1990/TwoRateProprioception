@@ -14,7 +14,7 @@ getallncparticipants<- function(experiment) {
     distortion <- as.numeric(c(temp$rotation))
     # distortion <-  c(rep(0,49),rep(-30,12), rep(-15,12), rep(0,12),rep(-15,12), rep(15,12), rep(0,12), rep(0,12), rep(15,12), rep(15,12), rep(-30,12), rep(-30,12), rep(0,12), rep(-30,12), rep(0,12), rep(30,12), rep(0,12), rep(0,12), rep(30,12), rep(-15,12), rep(-15,12), rep(30,12), rep(30,12), rep(15,12), rep(-15,12), rep(0,12), rep(-15,12), rep(-30,12), rep(30,12), rep(0,12), rep(0,12), rep(15,12), rep(30,12), rep(-30,12), rep(15,12), rep(0,12), rep(0,11))
   } else if (experiment == 4) {
-    participants<- c(1:30)
+    participants<- c(1:32)
     distortion <-  c(rep(0,32),rep(30,160), rep(-30,16), rep(NA, 48))
   } else if (experiment == 5) {
     participants<- c(1:32)
@@ -142,14 +142,14 @@ getncfilenames<- function (ppn, expn) {
   } else if (expn == 4) {
     tasknumbers <- c(2:5)
     
-    expfolder <- '../Time Model Good Data/Time Model Variant 4 Raw Data/'
+    expfolder <- '../Time Model Good Data/Time Model Variant 4 Selected Data/'
     
     ppfolder <- sprintf('time_model_nocursor_%d/',ppn)
     filenames <- c()
     
     for (taskno in tasknumbers) {
       
-      filenames <- c(filenames, sprintf('%s%s%d_%d__time_model2_NoC.txt',expfolder,ppfolder,ppn,taskno))
+      filenames <- c(filenames, sprintf('%s%s%d_%d__time_model2_NoC_selected.txt',expfolder,ppfolder,ppn,taskno))
     }
   } else if (expn == 5) {
     tasknumbers <- c(1:4)
@@ -166,14 +166,14 @@ getncfilenames<- function (ppn, expn) {
   } else if (expn == 6) {
     tasknumbers <- c(2:5)
     
-    expfolder <- '../Time Model Good Data/Time Model - No Cursor New Instructions Raw Data/'
+    expfolder <- '../Time Model Good Data/Time Model - No Cursor New Instructions Selected Data/'
     
     ppfolder <- sprintf('time_model_nocursor_%d/',ppn)
     filenames <- c()
     
     for (taskno in tasknumbers) {
       
-      filenames <- c(filenames, sprintf('%s%s%d_%d__time_model2_NoC.txt',expfolder,ppfolder,ppn,taskno))
+      filenames <- c(filenames, sprintf('%s%s%d_%d__time_model2_NoC_selected.txt',expfolder,ppfolder,ppn,taskno))
     }
   }
   return(filenames) 
@@ -186,6 +186,7 @@ getncfilenames<- function (ppn, expn) {
 
 loadncreachfile <- function(filename) {
   df<-read.table(filename, header = TRUE)
+  colnames(df)<-c('participant','block','trial','targetangle_deg','rotation_deg', 'time_ms', 'cursorx_cm','cursory_cm',	'handx_cm',	'handy_cm',	'homex_cm', 'homey_cm',	'targetx_cm','targety_cm','step','trialselected', 'sampleselected', 'sampleinterpolated', "maxvelocity")
   #colnames(df)<-c('participant','block','trial','targetangle_deg','rotation_deg', 'time_ms', 'cursorx_cm','cursory_cm',	'handx_cm',	'handy_cm',	'homex_cm', 'homey_cm',	'targetx_cm','targety_cm','step')
  # print(str(df))
   # df$cursory_cm <- df$cursory_cm +8.5
@@ -258,13 +259,13 @@ getncTrialReachAngleAt <- function(trialdf, location='endpoint') {
   # so we can at least return that:
   reachangle[1,2] <- angle
   
-  # # if the trial was rejected, return empty matrix now
-  # #####ALERTTTTT   USE THIS WHEN WE HAVE THE SELECTED DATA.
-  # if (trialdf[1,'trialselected'] == 0) {
-  # 
-  #   return(reachangle);
-  # 
-  # }
+  # if the trial was rejected, return empty matrix now
+  #####ALERTTTTT   USE THIS WHEN WE HAVE THE SELECTED DATA.
+  if (trialdf[1,'trialselected'] == 0) {
+
+    return(reachangle);
+
+  }
   # 
   # # extract the relevant reach information
   # 
