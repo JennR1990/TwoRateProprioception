@@ -32,6 +32,9 @@ loadalldata<- function () {
   Instructed<<- Loaddata(group = "Instructed_No-Cursors", task = "MovementTimes")
   uninstructed<<- Loaddata(group="Uninstructed_No-Cursors", task = "MovementTimes")
   
+  passive_prop_angles<<- Loaddata(group='Passive_Tap', task = "Angles")
+  active_prop_angles<<- Loaddata(group='Active_Tap', task = "Angles")
+  
 }
 
 fixnocursorcolnames<- function () {
@@ -62,7 +65,9 @@ downloadOSFdata <- function(update=FALSE) {
              'Pause_Angles.csv'   = 'https://osf.io/36cqd/download',
              'No-Cursor_Angles.csv'     = 'https://osf.io/jyz2n/download',
              'Instructed_No-Cursors_MovementTimes.csv'   = 'https://osf.io/8n3c6/download',
-             'Uninstructed_No-Cursors_MovementTimes.csv'     = 'https://osf.io/k4pze/download')
+             'Uninstructed_No-Cursors_MovementTimes.csv'     = 'https://osf.io/k4pze/download',
+             'Active_Tap_Angles.csv'  = 'https://osf.io/vkrs6/?action=download',
+             'Passive_Tap_Angles.csv'       = 'https://osf.io/f67m5/download')
   
 
   # check if data directory exists and create if necessary:
