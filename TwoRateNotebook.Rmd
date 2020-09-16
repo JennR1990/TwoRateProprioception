@@ -128,6 +128,9 @@ tpanalyzedata(TtestPdata)
 PairedT(TtestPdata, 'Active', 'localization')
 PairedT(TtestPdata, 'Passive', 'localization')
 
+##Looking at how target angle may play a role in learning
+plottargetanglesprop(passive_localization, passive_prop_angles, colorPA, "Passive Localizations")
+plottargetanglesprop(active_localization, active_prop_angles, colorA, "Active Localizations")
 
 ### Implicit Learning as the Slow Process Experiment
 #Read Data
