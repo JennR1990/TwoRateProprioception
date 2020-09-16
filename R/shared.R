@@ -24,6 +24,14 @@ loadalldata<- function () {
   newnocursor_nocursors<<- cbind(nocursor_nocursors, nocursorI_nocursors[2:ncol(nocursorI_nocursors)])
   terminal_reaches<<- removeReachOutliers(Loaddata(group='terminal'))
   terminal_localization<<- removeReachOutliers(Loaddata(group='terminal', task = 'localizations'))
+  pause_angles<<- Loaddata(group='Pause', task = "Angles")
+  active_angles<<- Loaddata(group='Active', task = "Angles")
+  passive_angles<<- Loaddata(group = "Pause", task = "Angles")
+  nocursor_angles<<- Loaddata(group='No-Cursor', task = "Angles")
+  
+  Instructed<<- Loaddata(group = "Instructed_No-Cursors", task = "MovementTimes")
+  uninstructed<<- Loaddata(group="Uninstructed_No-Cursors", task = "MovementTimes")
+  
 }
 
 fixnocursorcolnames<- function () {
@@ -48,7 +56,14 @@ downloadOSFdata <- function(update=FALSE) {
              'passive_reaches.csv'      = 'https://osf.io/mq5av/download',
              'pause_reaches.csv'        = 'https://osf.io/q59b3/download',
              'terminal_reaches.csv'     = 'https://osf.io/qdk9y/download',
-             'terminal_localizations.csv'= 'https://osf.io/6r4bx/download')
+             'terminal_localizations.csv'= 'https://osf.io/6r4bx/download',
+             'Active_Angles.csv'  = 'https://osf.io/ubdv8/?action=download',
+             'Passive_Angles.csv'       = 'https://osf.io/3nsqm/download',
+             'Pause_Angles.csv'   = 'https://osf.io/36cqd/download',
+             'No-Cursor_Angles.csv'     = 'https://osf.io/jyz2n/download',
+             'Instructed_No-Cursors_MovementTimes.csv'   = 'https://osf.io/8n3c6/download',
+             'Uninstructed_No-Cursors_MovementTimes.csv'     = 'https://osf.io/k4pze/download')
+  
 
   # check if data directory exists and create if necessary:
   # (data should come from OSF, so is not on github)
