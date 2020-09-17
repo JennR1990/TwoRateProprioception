@@ -89,37 +89,188 @@ color,color2    ),
   
 }
 
+##i want to do an anova on the four targets and that will be within subjects and then do a factor of experiment which is between subjects and is passive or active
 
 
-TargetANOVAcombine<- function(data) {
-  
-  
-  data$distortion[is.na(data$distortion)]<- 0
-  ParticipantARM<- data.frame()
-  participants <- names(data)[2:dim(data)[2]]
-  epochs <- list('55', '65', '75', '85', '95', '105', '115', '125')
-  Reaches<- c()
-  Time<- c()
-  ID<- c()
-  
-  for (participant in participants){
-    
-    participant_reaches <- unlist(data[data$distortion == 30,participant])
-    
-    for (epoch in names(epochs)) {
-      
-      start <- epochs[[epoch]][1]
-      finish <- start -1 + epochs[[epoch]][2]
-      Reaches <- c(Reaches, mean(participant_reaches[start:finish], na.rm=TRUE))
-      Time <- c(Time, epoch)
-      ID <- c(ID, participant)
-      ANOVARM<- data.frame(Reaches, Time, ID)
-    }
-  }
-  #b<- !is.nan(ANOVARM$Reaches)
-  # ANOVARM<- ANOVARM[c(b),]
-  return(ANOVARM)
+
+
+ANOVAanalysis<- function(AllDataANOVA){
+  AllDataANOVA$ID<- as.factor(AllDataANOVA$ID)
+  AllDataANOVA$Target<- as.factor(AllDataANOVA$Target)
+  AllDataANOVA$Experiment<- as.factor(AllDataANOVA$Experiment)
+  fullmodel <- ezANOVA(data=AllDataANOVA,
+                       dv=locs,
+                       wid=ID,
+                       within=Target,
+                       between = Experiment,
+                       type=3,
+                       return_aov=TRUE)
+  return(fullmodel)
 }
+
+PrepTargetANOVA<-function() {
+Target<- rep(c(rep(60, times = 32),rep(80, times = 32),rep(100, times = 32),rep(120, times = 32)), times = 2)
+Experiment<- c(rep("Passive", times = 128), rep("Active", times = 128))
+ID<- rep(1:32, times = 8)
+
+plocalizations<-getaveragespertarget(passive_loc, pangles)
+Alocalizations<-getaveragespertarget(active_loc, Aangles)
+locs<- c(plocalizations, Alocalizations)
+
+return(data.frame(Target, locs, ID, Experiment))
+
+}
+
+getaveragespertarget<- function (data, angles){
+
+T55<-data
+T65<-data
+T75<-data
+T85<-data
+T95<-data
+T105<-data
+T115<-data
+T125<-data
+
+T55[angles != 55]<- NA
+T65[angles != 65]<- NA
+T75[angles != 75]<- NA
+T85[angles != 85]<- NA
+T95[angles != 95]<- NA
+T105[angles != 105]<- NA
+T115[angles != 115]<- NA
+T125[angles != 125]<- NA
+
+
+T60<- rbind(T55, T65)
+T80<- rbind(T75, T85)
+T100<- rbind(T95, T105)
+T120<- rbind(T115, T125)
+
+
+T60means<-as.vector(colMeans(T60[,2:33], na.rm = TRUE))
+T80means<-as.vector(colMeans(T80[,2:33], na.rm = TRUE))
+T100means<-as.vector(colMeans(T100[,2:33], na.rm = TRUE))
+T120means<-as.vector(colMeans(T120[,2:33], na.rm = TRUE))
+
+
+
+Locs<- c(T60means, T80means, T100means, T120means)
+
+return(Locs)
+}
+
+
+
+
+getaveragesbyblockpertarget<- function (data, angles){
+  
+  T55<-data
+  T65<-data
+  T75<-data
+  T85<-data
+  T95<-data
+  T105<-data
+  T115<-data
+  T125<-data
+  
+  T55[angles != 55]<- NA
+  T65[angles != 65]<- NA
+  T75[angles != 75]<- NA
+  T85[angles != 85]<- NA
+  T95[angles != 95]<- NA
+  T105[angles != 105]<- NA
+  T115[angles != 115]<- NA
+  T125[angles != 125]<- NA
+  
+  
+  T55mean<- c()
+  
+  j <-seq(from = 1, to = 64, by =2)
+  h<- 1
+  for (p in 2:33) {
+    
+    i<- j[h]
+    
+    
+    firstblock<- 1:4
+    lastblock<- (length(unlist(na.omit(passive55[,p])))-3):length(unlist(na.omit(passive55[,p])))
+    data<- as.vector(unlist(na.omit(passive55[,p])))
+    T55mean[i]<- mean(data[firstblock], na.rm = TRUE)
+    T55mean[i+1]<- mean(data[lastblock], na.rm = TRUE)
+    h<- h+1
+    
+  }
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  T60means<-as.vector(colMeans(T60[,2:33], na.rm = TRUE))
+  T80means<-as.vector(colMeans(T80[,2:33], na.rm = TRUE))
+  T100means<-as.vector(colMeans(T100[,2:33], na.rm = TRUE))
+  T120means<-as.vector(colMeans(T120[,2:33], na.rm = TRUE))
+  
+  
+  
+  Locs<- c(T60means, T80means, T100means, T120means)
+  
+  return(Locs)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###PLotting shifts by reach target angle for active and passive
+
+
+passive55<-active_loc
+passive65<-active_loc
+passive75<-active_loc
+passive85<-active_loc
+passive95<-active_loc
+passive105<-active_loc
+passive115<-active_loc
+passive125<-active_loc
+
+
+passive55[Aangles != 55]<- NA
+passive65[Aangles != 65]<- NA
+passive75[Aangles != 75]<- NA
+passive85[Aangles != 85]<- NA
+passive95[Aangles != 95]<- NA
+passive105[Aangles != 105]<- NA
+passive115[Aangles != 115]<- NA
+passive125[Aangles != 125]<- NA
 
 
 passive55<-passive_loc
@@ -150,42 +301,6 @@ p75<-getreachesformodel(p100)
 p85<-getreachesformodel(p120)
 
 
-# p55<-getreachesformodel(passive55)
-# p65<-getreachesformodel(passive65)
-# p75<-getreachesformodel(passive75)
-# p85<-getreachesformodel(passive85)
-# p95<-getreachesformodel(passive95)
-# p105<-getreachesformodel(passive105)
-# p115<-getreachesformodel(passive115)
-# p125<-getreachesformodel(passive125)
-
-
-
-
-
-
-
-
-svglite(file='passive localizations by target.svg', width=12, height=16, system_fonts=list(sans = "Arial"))
-layout(matrix(c(1,2,3,4,5,6,7,8), nrow=4, byrow=TRUE), heights=c(2,2,2,2))
-plot(x = 1:160, y = p55$meanreaches, type = 'l', ylim = c(-10,20), xlab = "trial", ylab = "Shift in Hand Esimates", main = '55')
-plot( x = 1:160, y = p65$meanreaches, col = 'green', type = 'l', ylim = c(-10,20), xlab = "trial", ylab = "Shift in Hand Esimates", main = '65')
-plot( x = 1:160, y = p75$meanreaches, col = 'red', type = 'l', ylim = c(-10,20), xlab = "trial", ylab = "Shift in Hand Esimates", main = '75')
-plot( x = 1:160, y = p85$meanreaches, col = 'blue', type = 'l', ylim = c(-10,20), xlab = "trial", ylab = "Shift in Hand Esimates", main = '85')
-plot( x = 1:160, y = p95$meanreaches, col = 'orange', type = 'l', ylim = c(-10,20), xlab = "trial", ylab = "Shift in Hand Esimates", main = '95')
-plot( x = 1:160, y = p105$meanreaches, col = 'purple', type = 'l', ylim = c(-10,20), xlab = "trial", ylab = "Shift in Hand Esimates", main = '105')
-plot( x = 1:160, y = p115$meanreaches, col = 'cyan', type = 'l', ylim = c(-10,20), xlab = "trial", ylab = "Shift in Hand Esimates", main = '115')
-plot( x = 1:160, y = p125$meanreaches, col = 'Brown', type = 'l', ylim = c(-10,20), xlab = "trial", ylab = "Shift in Hand Esimates", main = '125')
-dev.off()
-
-svglite(file='passive localizations by reach target.svg', width=16, height=10, system_fonts=list(sans = "Arial"))
-layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
-plot(x = 1:160, y = p55$meanreaches, type = 'l', ylim = c(-10,20), xlab = "trial", ylab = "Shift in Hand Esimates", main = '60')
-plot( x = 1:160, y = p65$meanreaches, col = 'green', type = 'l', ylim = c(-10,20), xlab = "trial", ylab = "Shift in Hand Esimates", main = '80')
-plot( x = 1:160, y = p75$meanreaches, col = 'red', type = 'l', ylim = c(-10,20), xlab = "trial", ylab = "Shift in Hand Esimates", main = '100')
-plot( x = 1:160, y = p85$meanreaches, col = 'blue', type = 'l', ylim = c(-10,20), xlab = "trial", ylab = "Shift in Hand Esimates", main = '120')
-dev.off()
-
 
 
 
@@ -196,7 +311,7 @@ blocklength=4
 block = rep(c(1:(160/blocklength)), each=blocklength)
 df<- data.frame(locshift, block)
 df<-aggregate(locshift ~ block, data=df, FUN=mean, na.rm=TRUE)
-plot(x = 1:40, y = df$locshift, type = 'l', ylim = c(-5,15), xlab = "Block", ylab = "Shift in Hand Esimates [°]", main = "Localization shifts by target across time")
+plot(x = 1:40, y = df$locshift, type = 'l', ylim = c(-5,15), xlab = "Block", ylab = "Shift in Hand Esimates [°]", main = "Passive Localization shifts by target across time")
 legend(
   0,
   15,
