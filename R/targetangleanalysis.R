@@ -150,14 +150,14 @@ p75<-getreachesformodel(p100)
 p85<-getreachesformodel(p120)
 
 
-p55<-getreachesformodel(passive55)
-p65<-getreachesformodel(passive65)
-p75<-getreachesformodel(passive75)
-p85<-getreachesformodel(passive85)
-p95<-getreachesformodel(passive95)
-p105<-getreachesformodel(passive105)
-p115<-getreachesformodel(passive115)
-p125<-getreachesformodel(passive125)
+# p55<-getreachesformodel(passive55)
+# p65<-getreachesformodel(passive65)
+# p75<-getreachesformodel(passive75)
+# p85<-getreachesformodel(passive85)
+# p95<-getreachesformodel(passive95)
+# p105<-getreachesformodel(passive105)
+# p115<-getreachesformodel(passive115)
+# p125<-getreachesformodel(passive125)
 
 
 
@@ -185,3 +185,50 @@ plot( x = 1:160, y = p65$meanreaches, col = 'green', type = 'l', ylim = c(-10,20
 plot( x = 1:160, y = p75$meanreaches, col = 'red', type = 'l', ylim = c(-10,20), xlab = "trial", ylab = "Shift in Hand Esimates", main = '100')
 plot( x = 1:160, y = p85$meanreaches, col = 'blue', type = 'l', ylim = c(-10,20), xlab = "trial", ylab = "Shift in Hand Esimates", main = '120')
 dev.off()
+
+
+
+
+
+
+locshift<- p55$meanreaches
+blocklength=4
+block = rep(c(1:(160/blocklength)), each=blocklength)
+df<- data.frame(locshift, block)
+df<-aggregate(locshift ~ block, data=df, FUN=mean, na.rm=TRUE)
+plot(x = 1:40, y = df$locshift, type = 'l', ylim = c(-5,15), xlab = "Block", ylab = "Shift in Hand Esimates [°]", main = "Localization shifts by target across time")
+legend(
+  0,
+  15,
+  legend = c('60°', '80°', "100°", "120°"),
+  col = c(
+    'black', 'red', 'blue', 'green'),
+  lty = c(1),
+  lwd = c(2),
+  bty = 'n', 
+  cex = 1
+)
+
+
+
+locshift<- p65$meanreaches
+blocklength=4
+block = rep(c(1:(160/blocklength)), each=blocklength)
+df<- data.frame(locshift, block)
+df<-aggregate(locshift ~ block, data=df, FUN=mean, na.rm=TRUE)
+lines(x = 1:40, y = df$locshift, col = "red")
+
+locshift<- p75$meanreaches
+blocklength=4
+block = rep(c(1:(160/blocklength)), each=blocklength)
+df<- data.frame(locshift, block)
+df<-aggregate(locshift ~ block, data=df, FUN=mean, na.rm=TRUE)
+lines(x = 1:40, y = df$locshift, col = "Blue")
+
+locshift<- p85$meanreaches
+blocklength=4
+block = rep(c(1:(160/blocklength)), each=blocklength)
+df<- data.frame(locshift, block)
+df<-aggregate(locshift ~ block, data=df, FUN=mean, na.rm=TRUE)
+lines(x = 1:40, y = df$locshift, col = "Green")
+
