@@ -495,6 +495,7 @@ Reachmodelslownc <- function(data, ncdata, name, color) {
       schedule = reaches$distortion)
   reach_model1 <-
     twoRateNCModel(par = reach_par, schedule = reaches$distortion)
+  #reach_model <- reach_model1[33:320, ]
   Plotncmodel(data[33:320, ], name, color, "Hand Direction [°]")
   lines(x = c(33:288), y = reach_model1$total * -1, col = 'black',lty = 4)
   lines(x = c(33:288), y =reach_model1$slow * -1, col = color,lty = 2)

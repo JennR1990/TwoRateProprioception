@@ -539,7 +539,6 @@ fullmodel <- ezANOVA(data=test,
                      dv=Shift,
                      wid=ID,
                      within=c(Block, Target),
-                     between = Experiment,
                      type=3,
                      return_aov=TRUE)
 return(fullmodel)

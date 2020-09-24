@@ -113,3 +113,25 @@ twoRateNCFit <- function(schedule, reaches, gridpoints=6, gridfits=6) {
 }
 
 
+
+
+
+
+ncpars<-Reachmodelnc(newnocursor_reaches, newnocursor_nocursors, 'No-Cursor', color = colorNC)
+slowpars<-Reachmodelslownc(newnocursor_reaches, newnocursor_nocursors, 'No-Cursor', color = colorNC)
+
+reaches<-getreachesformodel(newnocursor_reaches)
+nocursors<-getreachesformodel(newnocursor_nocursors)
+model1MSE<-twoRateReachModelErrors(ncpars, reaches = reaches$meanreaches, schedule = reaches$distortion)
+model2MSE<-twoRateNCMSE(slowpars, reaches = reaches$meanreaches, schedule = reaches$distortion)
+
+
+#preparing the AIC stuff
+N <- dim(df)[2] - 1
+# the median length of a phase is 40 trials,
+# and there are 7.2 of those in 288 trials
+InOb <- seriesEffectiveSampleSize(reaches$meanreaches, method='ac_lag95%CI')
+print(InOb)
+
+twoRateAIC<-(InOb * log(model1MSE)) + (2 * 4)
+oneRateAIC<-(InOb * log(model2MSE)) + (2 * 4)
