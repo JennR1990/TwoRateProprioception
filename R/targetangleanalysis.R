@@ -91,9 +91,6 @@ color,color2    ),
 
 ##i want to do an anova on the four targets and that will be within subjects and then do a factor of experiment which is between subjects and is passive or active
 
-
-
-
 ANOVAanalysis<- function(AllDataANOVA){
   AllDataANOVA$ID<- as.factor(AllDataANOVA$ID)
   AllDataANOVA$Target<- as.factor(AllDataANOVA$Target)
@@ -160,9 +157,6 @@ Locs<- c(T60means, T80means, T100means, T120means)
 return(Locs)
 }
 
-
-
-
 getaveragesbyblockpertarget<- function (data, angles){
   
   T55<-data
@@ -223,35 +217,8 @@ getaveragesbyblockpertarget<- function (data, angles){
   return(Locs)
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ###PLotting shifts by reach target angle for active and passive
-
+targetANOVARM<- function(){
 
 passive55<-active_loc
 passive65<-active_loc
@@ -291,6 +258,210 @@ passive105[pangles != 105]<- NA
 passive115[pangles != 115]<- NA
 passive125[pangles != 125]<- NA
 
+
+
+Target<-rep(rep(c("60", "60", "80", "80","100", "100","120", "120"), times = 32), times = 2)
+Experiment<-c(rep("Passive", times = 256),rep("Active", times = 256))
+
+
+blockid<- c()
+k = seq(from=1, to =256, by =8)
+for (i in 1:32){
+  j<- k[i]
+  blockid[j]<-print(sprintf("p%0.0f", i))
+  blockid[j+1]<- print(sprintf("p%0.0f", i))
+  blockid[j+2]<-print(sprintf("p%0.0f", i))
+  blockid[j+3]<- print(sprintf("p%0.0f", i))
+  blockid[j+4]<-print(sprintf("p%0.0f", i))
+  blockid[j+5]<- print(sprintf("p%0.0f", i))
+  blockid[j+6]<-print(sprintf("p%0.0f", i))
+  blockid[j+7]<- print(sprintf("p%0.0f", i))
+  
+}
+
+ID<- rep(blockid, times = 2)
+
+
+
+Block<- rep(c(1,40), times = 256)
+
+ShiftP<- c()
+l<- seq(from= 1, to = 256, by = 8)
+
+
+for (f in 2:33){
+q<- l[f-1]
+
+
+new<-unlist(na.omit(passive55[,f]))
+new1<-unlist(na.omit(passive65[,f]))
+
+
+block1mean<-mean(new[1:4])
+block40mean<-mean(new[(length(new))-3:length(new)])
+block1mean1<-mean(new1[1:4])
+block40mean1<-mean(new1[(length(new1))-3:length(new1)])
+
+block1<-mean(c(block1mean, block1mean1))
+block40<-mean(c(block40mean, block40mean1))
+start<- q[1]
+stop<- q[1]+1
+ShiftP[start:stop]<- c(block1, block40)
+
+
+
+new<-unlist(na.omit(passive75[,f]))
+new1<-unlist(na.omit(passive85[,f]))
+block1mean<-mean(new[1:4])
+block40mean<-mean(new[(length(new))-3:length(new)])
+block1mean1<-mean(new1[1:4])
+block40mean1<-mean(new1[(length(new1))-3:length(new1)])
+
+block1<-mean(c(block1mean, block1mean1))
+block40<-mean(c(block40mean, block40mean1))
+
+start<- q[1]+2
+stop<- q[1]+3
+ShiftP[start:stop]<- c(block1, block40)
+
+
+new<-unlist(na.omit(passive95[,f]))
+new1<-unlist(na.omit(passive105[,f]))
+block1mean<-mean(new[1:4])
+block40mean<-mean(new[(length(new))-3:length(new)])
+block1mean1<-mean(new1[1:4])
+block40mean1<-mean(new1[(length(new1))-3:length(new1)])
+
+block1<-mean(c(block1mean, block1mean1))
+block40<-mean(c(block40mean, block40mean1))
+
+start<- q[1]+4
+stop<- q[1]+5
+ShiftP[start:stop]<- c(block1, block40)
+
+new<-unlist(na.omit(passive115[,f]))
+new1<-unlist(na.omit(passive125[,f]))
+
+block1mean<-mean(new[1:4])
+block40mean<-mean(new[(length(new))-3:length(new)])
+block1mean1<-mean(new1[1:4])
+block40mean1<-mean(new1[(length(new1))-3:length(new1)])
+
+block1<-mean(c(block1mean, block1mean1))
+block40<-mean(c(block40mean, block40mean1))
+
+start<- q[1]+6
+stop<- q[1]+7
+ShiftP[start:stop]<- c(block1, block40)
+
+
+
+}
+
+ShiftA<- c()
+l<- seq(from= 1, to = 256, by = 8)
+
+
+for (f in 2:33){
+  q<- l[f-1]
+  
+  
+  new<-unlist(na.omit(passive55[,f]))
+  new1<-unlist(na.omit(passive65[,f]))
+  
+  
+  block1mean<-mean(new[1:4])
+  block40mean<-mean(new[(length(new))-3:length(new)])
+  block1mean1<-mean(new1[1:4])
+  block40mean1<-mean(new1[(length(new1))-3:length(new1)])
+  
+  block1<-mean(c(block1mean, block1mean1))
+  block40<-mean(c(block40mean, block40mean1))
+  start<- q[1]
+  stop<- q[1]+1
+  ShiftA[start:stop]<- c(block1, block40)
+  
+  
+  
+  new<-unlist(na.omit(passive75[,f]))
+  new1<-unlist(na.omit(passive85[,f]))
+  block1mean<-mean(new[1:4])
+  block40mean<-mean(new[(length(new))-3:length(new)])
+  block1mean1<-mean(new1[1:4])
+  block40mean1<-mean(new1[(length(new1))-3:length(new1)])
+  
+  block1<-mean(c(block1mean, block1mean1))
+  block40<-mean(c(block40mean, block40mean1))
+  
+  start<- q[1]+2
+  stop<- q[1]+3
+  ShiftA[start:stop]<- c(block1, block40)
+  
+  
+  new<-unlist(na.omit(passive95[,f]))
+  new1<-unlist(na.omit(passive105[,f]))
+  block1mean<-mean(new[1:4])
+  block40mean<-mean(new[(length(new))-3:length(new)])
+  block1mean1<-mean(new1[1:4])
+  block40mean1<-mean(new1[(length(new1))-3:length(new1)])
+  
+  block1<-mean(c(block1mean, block1mean1))
+  block40<-mean(c(block40mean, block40mean1))
+  
+  start<- q[1]+4
+  stop<- q[1]+5
+  ShiftA[start:stop]<- c(block1, block40)
+  
+  new<-unlist(na.omit(passive115[,f]))
+  new1<-unlist(na.omit(passive125[,f]))
+  
+  block1mean<-mean(new[1:4])
+  block40mean<-mean(new[(length(new))-3:length(new)])
+  block1mean1<-mean(new1[1:4])
+  block40mean1<-mean(new1[(length(new1))-3:length(new1)])
+  
+  block1<-mean(c(block1mean, block1mean1))
+  block40<-mean(c(block40mean, block40mean1))
+  
+  start<- q[1]+6
+  stop<- q[1]+7
+  ShiftA[start:stop]<- c(block1, block40)
+  
+  
+  
+}
+
+
+Shift<- c(ShiftP, ShiftA)
+
+
+
+
+test<-data.frame(Shift,ID, Target, Experiment,Block)
+return(test)
+}
+
+plotTargetsAcrossTme<- function (locdata,angles ,exp = "Passive") {
+
+
+passive55<-locdata
+passive65<-locdata
+passive75<-locdata
+passive85<-locdata
+passive95<-locdata
+passive105<-locdata
+passive115<-locdata
+passive125<-locdata
+
+passive55[angles != 55]<- NA
+passive65[angles != 65]<- NA
+passive75[angles != 75]<- NA
+passive85[angles != 85]<- NA
+passive95[angles != 95]<- NA
+passive105[angles != 105]<- NA
+passive115[angles != 115]<- NA
+passive125[angles != 125]<- NA
+
 p60<- cbind(passive55, passive65)
 p80<- cbind(passive75, passive85)
 p100<- cbind(passive95, passive105)
@@ -301,17 +472,19 @@ p75<-getreachesformodel(p100)
 p85<-getreachesformodel(p120)
 
 
+alltargets<- data.frame(cbind(p55$meanreaches, p65$meanreaches, p75$meanreaches, p85$meanreaches))
+colnames(alltargets)<- c("60", "80", "100", "120")
 
 
 
 
-
-locshift<- p55$meanreaches
+locshift<- alltargets[,1]
 blocklength=4
 block = rep(c(1:(160/blocklength)), each=blocklength)
 df<- data.frame(locshift, block)
 df<-aggregate(locshift ~ block, data=df, FUN=mean, na.rm=TRUE)
-plot(x = 1:40, y = df$locshift, type = 'l', ylim = c(-5,15), xlab = "Block", ylab = "Shift in Hand Esimates [°]", main = "Passive Localization shifts by target across time")
+TARGETBlockRM<-df
+plot(x = 1:40, y = df$locshift, type = 'l', ylim = c(-5,15), xlab = "Block", ylab = "Shift in Hand Estimates [°]", main = sprintf("%s Localization shifts by target across time", exp))
 legend(
   0,
   15,
@@ -332,6 +505,8 @@ block = rep(c(1:(160/blocklength)), each=blocklength)
 df<- data.frame(locshift, block)
 df<-aggregate(locshift ~ block, data=df, FUN=mean, na.rm=TRUE)
 lines(x = 1:40, y = df$locshift, col = "red")
+TARGETBlockRM[,3]<- df$locshift
+
 
 locshift<- p75$meanreaches
 blocklength=4
@@ -339,6 +514,9 @@ block = rep(c(1:(160/blocklength)), each=blocklength)
 df<- data.frame(locshift, block)
 df<-aggregate(locshift ~ block, data=df, FUN=mean, na.rm=TRUE)
 lines(x = 1:40, y = df$locshift, col = "Blue")
+TARGETBlockRM[,4]<- df$locshift
+
+
 
 locshift<- p85$meanreaches
 blocklength=4
@@ -346,4 +524,25 @@ block = rep(c(1:(160/blocklength)), each=blocklength)
 df<- data.frame(locshift, block)
 df<-aggregate(locshift ~ block, data=df, FUN=mean, na.rm=TRUE)
 lines(x = 1:40, y = df$locshift, col = "Green")
+TARGETBlockRM[,5]<- df$locshift
+}
+
+TargetANOVA<- function (test){
+test$ID<- as.factor(test$ID)
+test$Target<- as.factor(test$Target)
+test$Experiment<- as.factor(test$Experiment)
+test$Block<- as.factor(test$Block)
+
+##Add more data and do these separately for each experiment
+
+fullmodel <- ezANOVA(data=test,
+                     dv=Shift,
+                     wid=ID,
+                     within=c(Block, Target),
+                     between = Experiment,
+                     type=3,
+                     return_aov=TRUE)
+return(fullmodel)
+}
+
 

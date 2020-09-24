@@ -487,6 +487,22 @@ Reachmodelnc <- function(data, ncdata, name, color) {
   return(reach_par)
 }
 
+Reachmodelslownc <- function(data, ncdata, name, color) {
+  reaches <- getreachesformodel(ncdata)
+  reach_par <-
+    twoRateNCFit(
+      reaches = reaches$meanreaches,
+      schedule = reaches$distortion)
+  reach_model1 <-
+    twoRateNCModel(par = reach_par, schedule = reaches$distortion)
+  Plotncmodel(data[33:320, ], name, color, "Hand Direction [°]")
+  lines(x = c(33:288), y = reach_model1$total * -1, col = 'black',lty = 4)
+  lines(x = c(33:288), y =reach_model1$slow * -1, col = color,lty = 2)
+  lines(x = c(33:288), y =reach_model1$fast * -1, col = color,lty = 3)
+  lines(x = 33:288, y = reaches$meanreaches * -1, col = color)
+  return(reach_par)
+}
+
 
 
 Plotmodel <- function(dataset, name, color, yaxis) {
