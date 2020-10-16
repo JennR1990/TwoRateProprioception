@@ -106,7 +106,7 @@ RegressionPLotec <- function() {
     plot(
       PPec ~ PRRm,
       col = colorPA_trans,
-      xlab = 'Reach Deviations [°]',
+      xlab = 'Visuomotor Discrepancy [°]',
       ylab = NA,
       main = 'Error Clamp',
       xlim = c(-30, 30),
@@ -163,12 +163,12 @@ RegressionPLot3P <- function() {
    plot(
     loc ~ pert1,
     col = colorPA_trans,
-    xlab = 'Size of Perturbation [°]',
+    xlab = 'Visuomotor Discrepancy [°]',
     ylab = 'Change in Hand Localization [°]',
     xlim = c(-32, 32),
     ylim = c(-32, 32),
     main = 'Perturbation Size',
-    axes = FALSE, pch = 19, cex.lab = 1.5, cex.main = 1.5, asp = 1
+    axes = FALSE, pch = 19, cex.lab = 1.5, cex.main = 1.5
   )
   axis(2,
        at = c(-30,-20, -10,0,10, 20, 30),
@@ -220,7 +220,7 @@ RegressionPLotchange <- function() {
   plot(
     loc ~ pert1,
     col = colorPA_trans,
-    xlab = 'Change in Size of Pertubation [°]',
+    xlab = 'Change in Visuomotor Discrepancy [°]',
     ylab = 'Change in Hand Localization [°]',
     xlim = c(0, 60),
     ylim = c(-10, 30),

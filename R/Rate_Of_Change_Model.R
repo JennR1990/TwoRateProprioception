@@ -73,10 +73,36 @@ PA_Slow<- data.frame(PA_Slow)
 names(PA_Slow)<- pnames
 
 
+
+##Pause Reach Fits
+pausefits<- getParticipantFits2(pause_reaches)
+PA_Slow<- c()
+for (indx in 1:32){
+  if (indx == 1){
+    PA_Slow <-twoRateReachModel(par = unlist(pausefits[indx,2:5]), schedule = passive_reaches$distortion*-1)$slow
+  } else {
+    reach_model1 <-twoRateReachModel(par = unlist(pausefits[indx,2:5]), schedule = passive_reaches$distortion*-1)$slow
+    PA_Slow<- cbind(PA_Slow, reach_model1)
+  }
+  
+}
+
+PA_Slow<- data.frame(PA_Slow)
+
+
+
+
+names(PA_Slow)<- pnames
+
+
+
+
+
 #save the data for easy access later
 write.csv(PA_Slow, 'data/Passive_Slow_Process.csv', quote = FALSE, row.names = FALSE)
 write.csv(AC_Slow, 'data/Active_Slow_Process.csv', quote = FALSE, row.names = FALSE)
 write.csv(NC_Slow, 'data/No-Cursor_Slow_Process.csv', quote = FALSE, row.names = FALSE)
+write.csv(PA_Slow, 'data/Pause_Slow_Process.csv', quote = FALSE, row.names = FALSE)
 
 
 
@@ -362,19 +388,22 @@ schedulenc<- rep(1, times = 160)
 nc<-asymptoticDecayFit(schedulenc,Noc)
 
 
- plot(Act_slow, type = 'l')
+
+svglite(file='doc/aymptotic decay.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
+layout(matrix(c(1,1,2,2,3,3,4,4,5,5,6,6), nrow=2, byrow=TRUE), heights=c(2,2))
+ plot(Act_slow, type = 'l', main = "Active Slow")
  lines(asymptoticDecayModel(acslo, scheduleac), col = 'blue')
- plot(Pas_slow, type = 'l')
+ plot(Pas_slow, type = 'l', main = "Passive Slow")
  lines(asymptoticDecayModel(paslo, scheduleac), col = 'blue')
- plot(Noc_slow, type = 'l')
+ plot(Noc_slow, type = 'l',  main = "No-Cursor Slow")
  lines(asymptoticDecayModel(ncslo, scheduleac), col = 'blue')
- plot(Pas, type = 'l')
- lines(asymptoticDecayModel(pa, scheduleac), col = 'blue')
- plot(Act, type = 'l')
+ plot(Act, type = 'l' , main = "Active Loc")
  lines(asymptoticDecayModel(ac, scheduleac), col = 'blue')
- plot(Noc, type = 'l')
+  plot(Pas, type = 'l' , main = "Passive Loc")
+ lines(asymptoticDecayModel(pa, scheduleac), col = 'blue')
+ plot(Noc, type = 'l',   main = "No-Cursors")
  lines(asymptoticDecayModel(nc, schedulenc), col = 'blue')
- 
+ dev.off()
  
  plot(PAss, type = 'l')
  lines(asymptoticDecayModel(Pass1, schedule), col = 'blue')

@@ -20,6 +20,7 @@ loadalldata<- function () {
   active_localization<<- removeReachOutliers(Loaddata(group='active', task = 'localization'))
   nocursor_nocursors<<- removeReachOutliers(Loaddata(group='nocursor', task = 'nocursors'))
   nocursorI_nocursors<<- removeReachOutliers(Loaddata(group='nocursor', task = 'NI_nocursors'))
+  nocursorI_nocursors[,9]<<-nocursorI_nocursors[,9]*-1
   newnocursor_reaches<<- cbind(nocursor_reaches, nocursorI_reaches[2:ncol(nocursorI_reaches)])
   newnocursor_nocursors<<- cbind(nocursor_nocursors, nocursorI_nocursors[2:ncol(nocursorI_nocursors)])
   terminal_reaches<<- removeReachOutliers(Loaddata(group='terminal'))

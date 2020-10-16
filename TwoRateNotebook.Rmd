@@ -91,6 +91,7 @@ PlotallTapCI(passive_localization, active_localization)
 Reachmodelnc(nocursor_reaches, nocursor_nocursors, 'No-Cursor', color = colorNC)
 Reachmodelnc(nocursorI_reaches, nocursorI_nocursors, 'No-Cursor', color = colorNNC)
 Reachmodelnc(newnocursor_reaches, newnocursor_nocursors, 'No-Cursor', color = colorNC)
+Reachmodelslownc(newnocursor_reaches, newnocursor_nocursors, 'No-Cursor', color = colorNC)
 ```
 
 ## Analysis of data
@@ -218,14 +219,14 @@ Figures for the manuscript
 # dev.off()
 # 
 # 
-# svglite(file='Fig 2.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
-# layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), nrow=2, byrow=TRUE), heights=c(2,2))
-# RegressionPLot3P()
-# RegressionPLotchange()
-# RegressionPLotec()
-# plotfitPropModel(active_reaches, active_localization, colorA, 'Active Localizations')
-# plotfitPropModel(passive_reaches, passive_localization, colorPA, 'Passive Localizations')
-# dev.off()
+svglite(file='localization fig.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
+layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), nrow=2, byrow=TRUE), heights=c(2,2))
+RegressionPLot3P()
+RegressionPLotchange()
+RegressionPLotec()
+plotfitPropModel(active_reaches, active_localization, colorA, 'Active Localizations')
+plotfitPropModel(passive_reaches, passive_localization, colorPA, 'Passive Localizations')
+dev.off()
 # 
 # 
 # svglite(file='Fig 3.svg', width=12, height=4, system_fonts=list(sans = "Arial"))
@@ -237,6 +238,18 @@ Figures for the manuscript
 # svglite(file='fig 5.svg', width=12, height=4, system_fonts=list(sans = "Arial"))
 # Plotschedule(active_reaches)
 # dev.off()
+
+svglite(file='doc/Model Paramters Table.svg', width=12, height=4, system_fonts=list(sans = "Arial"))
+formattable(RC_Metrics, align = c('r','r','c','c','c','c'), list(
+  Measure = formatter("span", style = ~ style(color = "Grey", font.weight = 'bold'))))
+
+   Dataset = formatter("span", style = ~ style(color = "Red", font.weight = 'bold'))
+  
+dev.off()
+
+svglite(file='doc/Rate of Change Table.svg', width=12, height=4, system_fonts=list(sans = "Arial"))
+Plotschedule(active_reaches)
+dev.off()
 
 
 ```
