@@ -20,7 +20,8 @@ loadalldata<- function () {
   active_localization<<- removeReachOutliers(Loaddata(group='active', task = 'localization'))
   nocursor_nocursors<<- removeReachOutliers(Loaddata(group='nocursor', task = 'nocursors'))
   nocursorI_nocursors<<- removeReachOutliers(Loaddata(group='nocursor', task = 'NI_nocursors'))
-  nocursorI_nocursors[,9]<<-nocursorI_nocursors[,9]*-1
+  nocursorI_reaches<<-nocursorI_reaches[,-9]
+  nocursorI_nocursors<<-nocursorI_nocursors[,-9]
   newnocursor_reaches<<- cbind(nocursor_reaches, nocursorI_reaches[2:ncol(nocursorI_reaches)])
   newnocursor_nocursors<<- cbind(nocursor_nocursors, nocursorI_nocursors[2:ncol(nocursorI_nocursors)])
   terminal_reaches<<- removeReachOutliers(Loaddata(group='terminal'))
@@ -41,7 +42,7 @@ loadalldata<- function () {
 fixnocursorcolnames<- function () {
   
   names<-colnames(newnocursor_reaches)
-  newnames<- c('p33','p34','p35','p36','p37','p38','p39','p40','p41','p42','p43','p44','p45','p46','p47','p48')
+  newnames<- c('p33','p34','p35','p36','p37','p38','p39','p40','p41','p42','p43','p44','p45','p46','p47')
   names<- c(names[1:33], newnames)
   colnames(newnocursor_reaches)<<- names
   colnames(newnocursor_nocursors)<<- names

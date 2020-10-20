@@ -1,0 +1,5 @@
+Group,Rs,Ls,Rf,Lf,MSE,twoRate<br>AIC,oneRate<br>AIC,oneRate<br>likelihood
+Active Localization,0.999,0.03,0.76,0.158,4.053,15.605,27.004,0.003
+Passive Localization,1,0.054,0.74,0.236,7.425,19.548,27.207,0.022
+Pause,1,0.055,0.825,0.226,8.345,19.293,25.697,0.041
+No-Cursor,0.991,0.036,0.737,0.148,3.061,13.901,19.11,0.074

@@ -122,6 +122,7 @@ RegressionPLotec <- function() {
          at = c(-30,-20,- 10, 0, 10, 20, 30),
          cex.axis = 1.5)
     lm<-plotRegressionWithCI(PRRm, PPec, colors = c(colorPA_trans, colorPA))
+    print(summary(lm))
     slopes<-lm$coefficients[2]
     intercepts<- lm$coefficients[1]
     rsquareds<-summary(lm)$adj.r.squared
@@ -133,6 +134,7 @@ RegressionPLotec <- function() {
     APec <- APec$EC_Late
     points(APec ~ ARm, col = colorA_trans, pch = 19)
     gm<-plotRegressionWithCI(ARm, APec, colors = c(colorA_trans, colorA))
+    print(summary(gm))
     slopes<-c(slopes,gm$coefficients[2])
     intercepts<- c(intercepts,gm$coefficients[1])
     rsquareds<-c(rsquareds,summary(gm)$adj.r.squared)
@@ -150,6 +152,64 @@ RegressionPLotec <- function() {
       bty = 'n', cex = 1.25
     )
 
+}
+
+RegressionPLotecflipped <- function() {
+  
+  PRrm <- TCombine(passive_reaches)
+  PRRm <- PRrm$EC_Late * -1
+  PPec <- TCombine(passive_localization)
+  PPec <- PPec$EC_Late
+  plot(
+    PRRm ~ PPec ,
+    col = colorPA_trans,
+    xlab = "Change in Hand Estimates[°]",
+    ylab = 'Visuomotor Discrepancy[°]',
+    main = 'Error Clamp',
+    xlim = c(-12, 20),
+    ylim = c(-30, 30),
+    axes = FALSE,
+    pch = 19, cex.lab = 1.5, cex.main = 1.5
+  )
+  axis(2,
+       at =c(-30,-20,- 10, 0, 10, 20, 30) ,
+       cex.axis = 1.5, las =2)
+  axis(1,
+       at = c( -10, 0, 10, 20),
+       cex.axis = 1.5)
+  lm<-plotRegressionWithCI(PPec,  PRRm, colors = c(colorPA_trans, colorPA))
+  print(summary(lm))
+  slopes<-lm$coefficients[2]
+  intercepts<- lm$coefficients[1]
+  rsquareds<-summary(lm)$adj.r.squared
+  
+  
+  Arm <- TCombine(active_reaches)
+  ARm <- Arm$EC_Late * -1
+  APec <- TCombine(active_localization)
+  APec <- APec$EC_Late
+  points(ARm ~ APec, col = colorA_trans, pch = 19)
+  gm<-plotRegressionWithCI(APec, ARm, colors = c(colorA_trans, colorA))
+  print(summary(gm))
+  slopes<-c(slopes,gm$coefficients[2])
+  intercepts<- c(intercepts,gm$coefficients[1])
+  rsquareds<-c(rsquareds,summary(gm)$adj.r.squared)
+  
+  print(slopes)
+  print(rsquareds)
+  legend(
+    -10,
+    30,
+    legend = c(
+      sprintf('Passive: slope =  %.2f, r2 = %.2f', slopes[1],  rsquareds[1]),
+      sprintf('Active: slope = %.2f, r2 = %.2f', slopes[2],  rsquareds[2])
+    ),
+    col = c(colorPA, colorA),
+    lty = c(1, 1),
+    lwd = c(2, 2),
+    bty = 'n', cex = 1.25
+  )
+  
 }
 
 
@@ -337,7 +397,7 @@ PlotoutLine <- function(dataset, exp, color,title,ylabel) {
       'Active Localization (N=32)',
       'Passive Localization (N=32)',
       'Pause (N=32)',
-      'No-Cursor (N=48)',
+      'No-Cursor (N=47)',
       'Active Localizations (N=32)',
       'Passive Localizations (N=32)',
       'No-Cursor Instructed (N=16)',

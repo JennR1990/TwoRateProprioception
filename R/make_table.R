@@ -47,7 +47,7 @@ formattable(metrics, align = c('r','c','c','c','c','c','c','c','c'), list(
                                       style = ~ style(font.weight = ifelse( `oneRate<br>likelihood` < 0.05, "bold", NA)))))
 
 
-
+return(metrics)
 }
 
 
