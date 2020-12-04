@@ -91,7 +91,7 @@ color,color2    ),
 
 ##i want to do an anova on the four targets and that will be within subjects and then do a factor of experiment which is between subjects and is passive or active
 
-ANOVAanalysis<- function(AllDataANOVA){
+ANOVATanalysis<- function(AllDataANOVA){
   AllDataANOVA$ID<- as.factor(AllDataANOVA$ID)
   AllDataANOVA$Target<- as.factor(AllDataANOVA$Target)
   AllDataANOVA$Experiment<- as.factor(AllDataANOVA$Experiment)

@@ -17,9 +17,10 @@ labels <-
     'No-Cursor Uninstructed (N=32)'
   )
 label <- labels[exp]
-allcolors <- colorlist[colors]
+
 
 colorlist <- c(colorA, colorPA, colorNL, colorNC,colorA, colorPA, colorNNC, colorNC)
+allcolors <- colorlist[colors]
 translist <-
   c(colorA_trans,
     colorPA_trans,
@@ -113,7 +114,7 @@ movementT<- function(data, exp1, exp2, task) {
 PairedMovementT<- function(data, exp1, task) {
   print(sprintf('this is the within subjects analysis of movement time for %s %s Data', exp1, task))
   print('Is there early learning?')
-  print(t.test(data$Aligned[data$Experiment == exp1,],data$R1_Early[data$Experiment == exp1,], paired = TRUE)) #not sig A vs. NC
+  print(t.test(data$Aligned[data$Experiment == exp1],data$R1_Early[data$Experiment == exp1], paired = TRUE)) #not sig A vs. NC
   print(cohen.d(data$Aligned[data$Experiment == exp1],data$R1_Early[data$Experiment == exp1], paired = TRUE, na.rm = TRUE))
   print(etaSquaredTtest(data$Aligned[data$Experiment == exp1],data$R1_Early[data$Experiment == exp1], na.rm = TRUE))
   print('Did they return to baseline? (Should not)')

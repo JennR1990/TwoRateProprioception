@@ -10,10 +10,10 @@ pLogRegression <- function(data, variable = Test_Trial) {
   
 
     
-    print(summary(glm(formula = variable ~ rs + ls + rf + lf, family = binomial(link = "logit"), 
+    print(summary(glm(formula = variable ~ Rs + Ls + Rf + Lf, family = binomial(link = "logit"), 
                       data = data)))
 
-   model<- glm(formula = variable ~ rs + ls + rf + lf, family = binomial(link = "logit"), 
+   model<- glm(formula = variable ~ Rs + Ls + Rf + Lf, family = binomial(link = "logit"), 
         data = data)
    
    #print(predict(model))

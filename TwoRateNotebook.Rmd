@@ -1,10 +1,10 @@
 ---
 title: "Two Rate Proprioception Paper"
 output:
-  html_document:
-    df_print: paged
   word_document: default
   pdf_document: default
+  html_document:
+    df_print: paged
 ---
 
 # Overview
@@ -46,6 +46,9 @@ library('effsize')
 library('SMCL')
 source('R/movement_times.R')
 source('R/asymptoticDecayModel.R')
+source('R/NoCursorAsSlowModel.R')
+source('R/targetangleanalysis.R', encoding = 'UTF-8')
+source('R/movement_times.R')
 loadcolors()
 downloadOSFdata()
 loadalldata()
@@ -67,8 +70,8 @@ PlotIndividualdata(newnocursor_reaches[33:320,],4, "Individual Combined No-Curso
 Plotnocursors(active_reaches, nocursor_nocursors, nocursorI_nocursors) 
 ANOVAdata<- PrepdataforANOVA1(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,],nocursor_nocursors,nocursorI_reaches[33:320,],nocursorI_nocursors)
 
-FullI1LANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor' | ANOVAdata$Experiment == 'No-CursorI' ,])
-FullI1LANOVA
+#FullI1LANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor' | ANOVAdata$Experiment == 'No-CursorI' ,])
+#FullI1LANOVA
 
 #FullNCANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor_No-Cursors' | ANOVAdata$Experiment == 'No-CursorI_No-Cursors',])
 #FullNCANOVA
@@ -219,37 +222,37 @@ Figures for the manuscript
 # dev.off()
 # 
 # 
-svglite(file='localization fig.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
-layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), nrow=2, byrow=TRUE), heights=c(2,2))
-RegressionPLot3P()
-RegressionPLotchange()
-RegressionPLotec()
-plotfitPropModel(active_reaches, active_localization, colorA, 'Active Localizations')
-plotfitPropModel(passive_reaches, passive_localization, colorPA, 'Passive Localizations')
-dev.off()
+# svglite(file='localization fig.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
+# layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), nrow=2, byrow=TRUE), heights=c(2,2))
+# RegressionPLot3P()
+# RegressionPLotchange()
+# RegressionPLotec()
+# plotfitPropModel(active_reaches, active_localization, colorA, 'Active Localizations')
+# plotfitPropModel(passive_reaches, passive_localization, colorPA, 'Passive Localizations')
+# dev.off()
+# # 
 # 
-# 
-svglite(file='Fig 3_no-Cursors.svg', width=12, height=4, system_fonts=list(sans = "Arial"))
-layout(matrix(c(1,2), nrow=1, byrow=TRUE), heights=c(2))
-Plotexp2CI(pause_reaches[33:320,],newnocursor_reaches[33:320,], pause_reaches[33:320,])
-Reachmodel(newnocursor_reaches, 'No-Cursor', grid = 'skewed', condition = 'nc', ncdata = newnocursor_nocursors, color = colorNC, yaxis = 'Hand Direction [°]')
-dev.off()
+# svglite(file='Fig 3_no-Cursors.svg', width=12, height=4, system_fonts=list(sans = "Arial"))
+# layout(matrix(c(1,2), nrow=1, byrow=TRUE), heights=c(2))
+# Plotexp2CI(pause_reaches[33:320,],newnocursor_reaches[33:320,], pause_reaches[33:320,])
+# Reachmodel(newnocursor_reaches, 'No-Cursor', grid = 'skewed', condition = 'nc', ncdata = newnocursor_nocursors, color = colorNC, yaxis = 'Hand Direction [°]')
+# dev.off()
 # 
 # svglite(file='fig 5.svg', width=12, height=4, system_fonts=list(sans = "Arial"))
 # Plotschedule(active_reaches)
 # dev.off()
 
-svglite(file='doc/Model Paramters Table.svg', width=12, height=4, system_fonts=list(sans = "Arial"))
-formattable(RC_Metrics, align = c('r','r','c','c','c','c'), list(
-  Measure = formatter("span", style = ~ style(color = "Grey", font.weight = 'bold'))))
-
-   Dataset = formatter("span", style = ~ style(color = "Red", font.weight = 'bold'))
-  
-dev.off()
-
-svglite(file='doc/Rate of Change Table.svg', width=12, height=4, system_fonts=list(sans = "Arial"))
-Plotschedule(active_reaches)
-dev.off()
+# svglite(file='doc/Model Paramters Table.svg', width=12, height=4, system_fonts=list(sans = "Arial"))
+# formattable(RC_Metrics, align = c('r','r','c','c','c','c'), list(
+#   Measure = formatter("span", style = ~ style(color = "Grey", font.weight = 'bold'))))
+# 
+#    Dataset = formatter("span", style = ~ style(color = "Red", font.weight = 'bold'))
+#   
+# dev.off()
+# 
+# svglite(file='doc/Rate of Change Table.svg', width=12, height=4, system_fonts=list(sans = "Arial"))
+# Plotschedule(active_reaches)
+# dev.off()
 
 
 ```

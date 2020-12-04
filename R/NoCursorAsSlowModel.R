@@ -1,4 +1,4 @@
-
+library('RateRate')
 twoRateNCModel <- function(par, schedule) {
   
   # thse values should be zero at the start of the loop:
@@ -114,7 +114,7 @@ twoRateNCFit <- function(schedule, reaches, gridpoints=6, gridfits=6) {
 
 
 
-
+nocursormodelcomparisons<- function(){
 
 
 ncpars<-Reachmodelnc(newnocursor_reaches, newnocursor_nocursors, 'No-Cursor', color = colorNC)
@@ -135,3 +135,5 @@ print(InOb)
 
 twoRateAIC<-(InOb * log(model1MSE)) + (2 * 4)
 oneRateAIC<-(InOb * log(model2MSE)) + (2 * 4)
+likelihood<-exp((min(c(twoRateAIC, oneRateAIC))-c(twoRateAIC, oneRateAIC))/2)
+}
