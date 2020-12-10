@@ -34,7 +34,7 @@ getallncparticipants<- function(experiment) {
     baselinedangles <- baselinebyNCaligned(df = partiangles, experiment = experiment, dist = distortion)
     expangles[,sprintf('p%d',participant)] <- baselinedangles$reaches
   }
-  outputfilename<- sprintf('time_model%d_No-Cursors.csv', experiment)
+  outputfilename<- sprintf('time_model%d_no-cursor_instructed.csv', experiment)
   
   write.csv(expangles, file = outputfilename,  row.names = F, quote = F)
 }

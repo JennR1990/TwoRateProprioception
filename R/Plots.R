@@ -122,7 +122,7 @@ RegressionPLotec <- function() {
          at = c(-30,-20,- 10, 0, 10, 20, 30),
          cex.axis = 1.5)
     lm<-plotRegressionWithCI(PRRm, PPec, colors = c(colorPA_trans, colorPA))
-    print(summary(lm))
+    #print(summary(lm))
     slopes<-lm$coefficients[2]
     intercepts<- lm$coefficients[1]
     rsquareds<-summary(lm)$adj.r.squared
@@ -134,7 +134,7 @@ RegressionPLotec <- function() {
     APec <- APec$EC_Late
     points(APec ~ ARm, col = colorA_trans, pch = 19)
     gm<-plotRegressionWithCI(ARm, APec, colors = c(colorA_trans, colorA))
-    print(summary(gm))
+    #print(summary(gm))
     slopes<-c(slopes,gm$coefficients[2])
     intercepts<- c(intercepts,gm$coefficients[1])
     rsquareds<-c(rsquareds,summary(gm)$adj.r.squared)
@@ -178,7 +178,7 @@ RegressionPLotecflipped <- function() {
        at = c( -10, 0, 10, 20),
        cex.axis = 1.5)
   lm<-plotRegressionWithCI(PPec,  PRRm, colors = c(colorPA_trans, colorPA))
-  print(summary(lm))
+  #print(summary(lm))
   slopes<-lm$coefficients[2]
   intercepts<- lm$coefficients[1]
   rsquareds<-summary(lm)$adj.r.squared
@@ -190,13 +190,13 @@ RegressionPLotecflipped <- function() {
   APec <- APec$EC_Late
   points(ARm ~ APec, col = colorA_trans, pch = 19)
   gm<-plotRegressionWithCI(APec, ARm, colors = c(colorA_trans, colorA))
-  print(summary(gm))
+  #print(summary(gm))
   slopes<-c(slopes,gm$coefficients[2])
   intercepts<- c(intercepts,gm$coefficients[1])
   rsquareds<-c(rsquareds,summary(gm)$adj.r.squared)
   
-  print(slopes)
-  print(rsquareds)
+ # print(slopes)
+  #print(rsquareds)
   legend(
     -10,
     30,

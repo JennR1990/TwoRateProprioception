@@ -57,6 +57,7 @@ fixnocursorcolnames()
 #Exploratory Figures
 Individual Data 
 ```{r}
+layout(matrix(c(1,2,3,4,5,6), nrow=3, byrow=TRUE), heights=c(1))
 PlotIndividualdata(pause_reaches[33:320,],3, "Individual Pause Data", "Hand Direction [°]")
 PlotIndividualdata(active_reaches,1, "Individual Active Data", "Hand Direction [°]")
 PlotIndividualdata(passive_reaches,2, "Individual Passive Data", "Hand Direction [°]")
@@ -68,7 +69,7 @@ PlotIndividualdata(newnocursor_reaches[33:320,],4, "Individual Combined No-Curso
 #Comparing the no-cursor test trials
 ```{r}
 Plotnocursors(active_reaches, nocursor_nocursors, nocursorI_nocursors) 
-ANOVAdata<- PrepdataforANOVA1(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,],nocursor_nocursors,nocursorI_reaches[33:320,],nocursorI_nocursors)
+ANOVAdata<- PrepdataforANOVA1(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,],nocursor_nocursors,nocursorI_reaches[33:320,],nocursorI_nocursors, no_cursorm, no_cursormI)
 
 #FullI1LANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor' | ANOVAdata$Experiment == 'No-CursorI' ,])
 #FullI1LANOVA
@@ -254,6 +255,13 @@ Figures for the manuscript
 # Plotschedule(active_reaches)
 # dev.off()
 
+svglite(file='End Point vs. Max Vel.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
+layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
+Plotnocursors(active_reaches, nocursor_nocursors, nocursorI_nocursors)
+Plotnocursors(active_reaches, no_cursorm, no_cursormI)
+Plotnocursors(active_reaches, no_cursorm, nocursor_nocursors)
+Plotnocursors(active_reaches, no_cursormI, nocursorI_nocursors)
+dev.off()
 
 ```
 ## Two-Rate model

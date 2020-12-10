@@ -1,0 +1,213 @@
+---
+title: "Implicit Learning Is Fast"
+author:
+- Jennifer E. Ruttle
+- Bernard Marius 't Hart
+- Denise Henriques
+subtitle: Figures and Statistics
+output:
+  html_document:
+    df_print: paged
+---
+
+``` {r setup, echo = FALSE}
+
+knitr::opts_chunk$set(warning = FALSE)
+```
+
+# Overview
+
+This document collects statistics and figures to be used in the manuscript on the exposure consequences project. It downloads files from the accompanying Open Science Framework project: [https://osf.io/9db8v/](https://osf.io/9db8v/)
+
+
+## Source scripts
+
+The scripts doing the statistics and creating figures are in a few separate R files. We have also included a few scripts to analyze the data in ways that were not included in the manuscript.
+
+We load those other scripts:
+
+```{r loadsources}
+
+source('R/Analysis_Scripts.R') #scripts for running ANOVA's and T-tests
+source('R/make_table.R') #scripts for making the table that compares the model fits
+source('R/Plots.R', encoding = 'UTF-8') # Code for making plots
+source('R/Repeated_Measures_Combine.R') # code for combining data to do analysis
+source('R/shared.R')# special codes required to download and load data
+source('R/movement_times.R') #code for investigating movement times for no-cursor trials
+source('R/asymptoticDecayModel.R') #code for asymptotic decay model to find rate of learning
+source('R/NoCursorAsSlowModel.R') #code to fit two-rate model to no-cursor trials not reach trials
+source('R/targetangleanalysis.R', encoding = 'UTF-8') #code for investigating learning at each target angle
+```
+
+## Packages
+
+Here we will load the required packages to make the figures and do the analysis.
+
+```{r loadpackages}
+library('formattable')
+library('ez')
+library('RateRate')
+library('svglite')
+library('effsize')
+library('SMCL')
+```
+
+## Load required variables
+
+Here we will download the data from OSF and load it, while loading the colors required to make the figures below.
+
+```{r loadvariables}
+loadcolors()
+downloadOSFdata()
+loadalldata()
+fixnocursorcolnames()
+```
+
+## Topics
+
+In the manuscript we'll first show that training with a rotated cursor causes robust shifts in felt hand position and larger reach aftereffects, as quickly as after 1 trial. We will also show that the current field favourite model, the two-rate model, does not have predict the shifts found in either of these implicit measures of motor learning. It does appear as though the shifts in felt hand position are best described by a step function. We also investigate the data in other ways which will be outlined as they executed. 
+
+
+1. Analyses (some general remarks about analyses)
+2. Localization
+3. Reach aftereffects
+
+
+## Analyses
+
+### ANOVAs and t-tests
+
+We will use a combination of mixed ANOVA's and post hoc t-tests to answer questions about the speed and extent of shifts in felt hand position and reach aftereffects. 
+
+### Models
+
+We will use two different models to estimate the learning and retention rates of the reach training trials as well as the no-cursor and localization trials. 
+
+## Inidivdual Performance
+Below is a plot of all the the participants for each group, with the group average overlayed. 
+
+```{r IndividualPerformance}
+layout(matrix(c(1,2,3,4,5,6), nrow=3, byrow=TRUE), heights=c(4,4,4), widths = c(1,1,1))
+PlotIndividualdata(pause_reaches[33:320,],3, "Individual Pause Data", "Hand Direction [°]")
+PlotIndividualdata(active_reaches,1, "Individual Active Data", "Hand Direction [°]")
+PlotIndividualdata(passive_reaches,2, "Individual Passive Data", "Hand Direction [°]")
+PlotIndividualdata(nocursor_reaches[33:320,],8, "Individual No-Cursor Data", "Hand Direction [°]")
+PlotIndividualdata(nocursorI_reaches[33:320,],7, "Individual No-Cursor_I Data", "Hand Direction [°]")
+PlotIndividualdata(newnocursor_reaches[33:320,],4, "Individual Combined No-Cursor Data", "Hand Direction [°]")
+```
+
+People were all moving in the correct direction and learning the rotations, allowing us to move forward with the rest of our analysis. 
+
+## Comparing the no-cursor test trials
+
+We had two groups of people do the no-cursor version of the experiment, where 1 group received no instructions and another group received instructions to reach straight to the target when the cursor was not present and to not include and strategy they may be using when the cursor was there.   We see no difference between the two groups in the plot below and the ANOVA's come back non-significant as well. 
+
+# Reach training trial comparison
+```{r nocursor comparison, echo=FALSE}
+Plotnocursors(active_reaches, nocursor_nocursors, nocursorI_nocursors) 
+ANOVAdata<- PrepdataforANOVA1(active_reaches, passive_reaches, pause_reaches[33:320,], nocursor_reaches[33:320,],nocursor_nocursors,nocursorI_reaches[33:320,],nocursorI_nocursors, no_cursorm, no_cursormI)
+ANOVAdata$Time <- as.factor(ANOVAdata$Time)
+
+FullI1LANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor' | ANOVAdata$Experiment == 'No-CursorI' ,])
+FullI1LANOVA$ANOVA
+```
+# No-cursor trial comparison 
+```{r nocursor comparison cont, echo=FALSE}
+FullNCANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'No-Cursor_No-Cursors' | ANOVAdata$Experiment == 'No-CursorI_No-Cursors',])
+FullNCANOVA$ANOVA
+```
+Seeing as they are so similar we continued on with our analysis by collapsing the two data sets.  
+
+# Comparing learning curves
+
+Here we look at each of our training conditions and compare their overall learning curves, which look very similar, except there does seem to be two kind of groupings. 
+
+
+```{r comparing learning curves, echo=FALSE}
+PlotallreachesCI(active_reaches,passive_reaches, pause_reaches[33:320,],newnocursor_reaches[33:320,])
+```
+
+Since there appears to be something going on between the groups that had an active intervening trial compared to those with a passive trial, we did a mixed ANOVA that showed there indeed was something happening. We found that using a polynominal regression we were actually able to predict whether the intervening trial was active or passive with strong certainty.
+
+```{r learning curve analysis, echo=FALSE}
+### Comparing Learning Rates Across Test Trials
+      
+FullANOVA<-ANOVAanalysis(ANOVAdata[ANOVAdata$Experiment == 'Active' | ANOVAdata$Experiment == 'Passive' | ANOVAdata$Experiment == 'No-Cursor' | ANOVAdata$Experiment == 'Pause',])
+FullANOVA$ANOVA
+
+### Polynomial Regressions
+allpars<- ParticipantReachmodels2(active_reaches, passive_reaches, pause_reaches[33:320,], newnocursor_reaches[33:320,])
+      pLogRegression(allpars)
+```
+
+# Investigating Hand Estimates
+Two of our groups completed a estimate of hand location after every training trial, but the way they arrived at the location they had to localize was different.  One group was passively dragged to the target location, while the other group chose where they moved to.
+```{r comparing localizations, echo=FALSE}
+PlotallTapCI(passive_localization, active_localization) 
+```
+
+```{r, echo = FALSE}
+### Create Data to use for ANOVA's and t-tests
+
+ANOVAdata<- PrepdataforANOVA(active_reaches, passive_reaches, pause_reaches[33:320,], newnocursor_reaches[33:320,])
+ANOVAPdata<- PrepdataforPropANOVA(active_localization,passive_localization)
+TtestPdata<- PrepdataforPropT(active_localization, passive_localization)
+Ttestdata<- PrepdataforT(active_reaches, passive_reaches, pause_reaches[33:320,], newnocursor_reaches[33:320,], newnocursor_nocursors)
+
+```
+
+When using a Mixed ANOVA to compare the two localization groups to each other we see a significant difference.
+```{r localization ANOVA, echo=FALSE}
+FullPANOVA<-ANOVAanalysis(ANOVAPdata)
+FullPANOVA$ANOVA
+```
+
+
+We also fit a simple proportional model to the localization data when we saw how step like the learning 'curve' appeared to be.  you can see from the figures below that hand estimates shift about 20-30% of the rotation, with the compensation amount being slightly larger for active localizations. 
+
+```{r localization regression, echo = FALSE }
+layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), nrow=2, byrow=TRUE), heights=c(2,2))
+RegressionPLot3P()
+RegressionPLotchange()
+RegressionPLotec()
+plotfitPropModel(active_reaches, active_localization, colorA, 'Active Localizations')
+plotfitPropModel(passive_reaches, passive_localization, colorPA, 'Passive Localizations')
+```
+
+## Model comparison
+
+We then compared the reach training data to the model fit when we allow the model to have the full two parameters of a more constrained one set of parameters. 
+```{r model comparison table, echo = FALSE}
+metricstable()
+```
+
+## Additional Analysis
+We did a few other pieces of analysis to look at learning across the target angles as well as looking at movements times.
+
+
+```{r targetangles across time, echo = FALSE}
+plottargetanglesprop(passive_localization, passive_prop_angles, colorPA, "Passive Localizations")
+plottargetanglesprop(active_localization, active_prop_angles, colorA, "Active Localizations")
+```
+
+The plots above show that learning is flat indicating a similar amount of shift in felt hand position across all target angles. We ignored target angle in our main analysis and wanted to confirm that learning was similar across the target angles.
+
+
+```{r movementtime plots, echo=FALSE}
+plotmovetimes(dataset = uninstructed, dataset1 = Instructed)
+```
+
+
+The above plots show that movement times are very similar across the two no-cursor groups indicating no difference in movement planning between the two groups and thus potentially the contribution of the explicit component would be comparable between the two groups. 
+
+### max velocity vs. endpoint error   
+To be able to compare our localization data to our reach aftereffects data, we used the end point angle for both measures to make them comparable.  We can also look at the angle at max velocity which would make reach aftereffects more comparable to reach training trials, which was never the main interest of our paper, but to be thorough, we included a figure here of the difference between the two values we can extract from our no-cursor trials. 
+
+```{r endpoint vs max vel, echo = FALSE}
+layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
+Plotnocursors(active_reaches, nocursor_nocursors, nocursorI_nocursors)
+Plotnocursors(active_reaches, no_cursorm, no_cursormI)
+Plotnocursors(active_reaches, no_cursorm, nocursor_nocursors)
+Plotnocursors(active_reaches, no_cursormI, nocursorI_nocursors)
+```
+

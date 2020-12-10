@@ -37,6 +37,10 @@ loadalldata<- function () {
   passive_prop_angles<<- Loaddata(group='Passive_Tap', task = "Angles")
   active_prop_angles<<- Loaddata(group='Active_Tap', task = "Angles")
   
+  no_cursorm<<-  removeReachOutliers(Loaddata(group = "no-cursor_maxvel", task = "uninstructed"))
+  no_cursormI<<- removeReachOutliers(Loaddata(group="no-cursor_maxvel", task = "instructed"))
+  no_cursormI<- no_cursormI[,-9]
+  
 }
 
 fixnocursorcolnames<- function () {
@@ -69,7 +73,9 @@ downloadOSFdata <- function(update=FALSE) {
              'Instructed_No-Cursors_MovementTimes.csv'   = 'https://osf.io/8n3c6/download',
              'Uninstructed_No-Cursors_MovementTimes.csv'     = 'https://osf.io/k4pze/download',
              'Active_Tap_Angles.csv'  = 'https://osf.io/vkrs6/?action=download',
-             'Passive_Tap_Angles.csv'       = 'https://osf.io/f67m5/download')
+             'Passive_Tap_Angles.csv'       = 'https://osf.io/f67m5/download',
+             'no-cursor_maxvel_instructed.csv'   = 'https://osf.io/62jbk/download',
+             'no-cursor_maxvel_uninstructed.csv'     = 'https://osf.io/zmcpf/download')
   
 
   # check if data directory exists and create if necessary:
@@ -259,10 +265,13 @@ removeReachOutliers <- function(data) {
   
   for (trialn in c(1:ntrials)) {
     
-    data[trialn,2:ncol(data)] <- removeSDoutliers(as.numeric(data[trialn,2:ncol(data)]))
+    data[trialn,2:ncol(data)] <- removeSDoutliers(as.numeric(unlist(data[trialn,2:ncol(data)])))
     
   }
   
   return(data)
   
 }
+
+
+

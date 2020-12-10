@@ -21,8 +21,8 @@ pLogRegression <- function(data, variable = Test_Trial) {
   
   predictions[predictions<.5]<-0
   predictions[predictions>.5]<-1
-  print(predictions)
-  print(length(which(data$Test_Trial == predictions)))
+  predictions
+length(which(data$Test_Trial == predictions))
   print(correct<- length(which(data$Test_Trial == predictions)) / length(predictions) )
   
   return(correct)
@@ -102,7 +102,7 @@ PrepdataforANOVA <- function(adata, pasdata, paudata, ncdata) {
   
 }
 
-PrepdataforANOVA1 <- function(adata, pasdata, paudata, ncdata, ncncdata, ncIdata, ncncIdata) {
+PrepdataforANOVA1 <- function(adata, pasdata, paudata, ncdata, ncncdata, ncIdata, ncncIdata, ncmIdata, ncncmIdata ) {
   
   # 
   
@@ -134,7 +134,16 @@ PrepdataforANOVA1 <- function(adata, pasdata, paudata, ncdata, ncncdata, ncIdata
   ncncI_RM$ID <- sprintf('NoCursorI_No-Cursors.%s',ncncI_RM$ID)
   ncncI_RM$Experiment <- rep('No-CursorI_No-Cursors', nrow(ncncI_RM))
   
-  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM, ncI_RM, ncncI_RM)
+  ncmI_RM<-NoCursorACombine(ncmIdata)
+  ncmI_RM$ID <- sprintf('NoCursor_M.%s',ncmI_RM$ID)
+  ncmI_RM$Experiment <- rep('No-CursorI_MAX', nrow(ncmI_RM))
+  
+  ncncmI_RM<-NoCursorACombine(ncncmIdata)
+  ncncmI_RM$ID <- sprintf('NoCursorI_No-Cursors_M.%s',ncncmI_RM$ID)
+  ncncmI_RM$Experiment <- rep('No-CursorI_No-Cursors_MAX', nrow(ncncmI_RM))
+  
+  
+  AllDataRM<- rbind(A_RM, Pas_RM, Pau_RM, nc_RM, ncnc_RM, ncI_RM, ncncI_RM, ncmI_RM, ncncmI_RM)
   #
   return(AllDataRM)
   
@@ -429,7 +438,7 @@ getParticipantFits2 <- function(data, grid='restricted') {
   for (ppno in c(1:length(participants))) {
 
     participant <- participants[ppno]
-    print(participant)
+    participant
     reaches <- data[,participant]
 
     #pars<- fitTwoRateReachModel(reaches = reaches, schedule = distortions)
@@ -459,7 +468,7 @@ getParticipantFits1 <- function(data, grid='restricted') {
   for (ppno in c(1:length(participants))) {
 
     participant <- participants[ppno]
-    print(participant)
+    participant
     reaches <- data[,participant]
 
     #pars <- fitOneRateReachModel(reaches, distortions)
