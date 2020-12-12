@@ -86,7 +86,7 @@ We will use two different models to estimate the learning and retention rates of
 ## Inidivdual Performance
 Below is a plot of all the the participants for each group, with the group average overlayed. 
 
-```{r IndividualPerformance}
+```{r IndividualPerformance, fig.height= 8}
 layout(matrix(c(1,2,3,4,5,6), nrow=3, byrow=TRUE), heights=c(4,4,4), widths = c(1,1,1))
 PlotIndividualdata(pause_reaches[33:320,],3, "Individual Pause Data", "Hand Direction [°]")
 PlotIndividualdata(active_reaches,1, "Individual Active Data", "Hand Direction [°]")
@@ -165,7 +165,7 @@ FullPANOVA$ANOVA
 
 We also fit a simple proportional model to the localization data when we saw how step like the learning 'curve' appeared to be.  you can see from the figures below that hand estimates shift about 20-30% of the rotation, with the compensation amount being slightly larger for active localizations. 
 
-```{r localization regression, echo = FALSE }
+```{r localization regression, echo = FALSE, fig.height= 12, fig.width= 8 }
 layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), nrow=2, byrow=TRUE), heights=c(2,2))
 RegressionPLot3P()
 RegressionPLotchange()
@@ -180,6 +180,12 @@ We then compared the reach training data to the model fit when we allow the mode
 ```{r model comparison table, echo = FALSE}
 metricstable()
 ```
+## Asymptotic Decay Model
+We were also interested to see how our measures of implicit learning might compare to the slow process proposed in the two-rate model we discussed above. We used an exponential decay model to estimate the rate of change in all three of our implicit measures and the slow process predicted by the model for each of the three implicit measures reach training trials. I have included the code for model below, but the most important thing is the table which is more digestible and is also below.  Importantly, the confidence intervals for our implicit measures do not include their models slow process, indicating a significant difference in the rates of change for our measures of implicit learning and what the model suggests the slow process is doing. 
+
+![Exponential Decay Model Table](data/decay model table.png)
+
+
 
 ## Additional Analysis
 We did a few other pieces of analysis to look at learning across the target angles as well as looking at movements times.
@@ -193,7 +199,7 @@ plottargetanglesprop(active_localization, active_prop_angles, colorA, "Active Lo
 The plots above show that learning is flat indicating a similar amount of shift in felt hand position across all target angles. We ignored target angle in our main analysis and wanted to confirm that learning was similar across the target angles.
 
 
-```{r movementtime plots, echo=FALSE}
+```{r movementtime plots, echo=FALSE, fig.height= 5, fig.width= 8 }
 plotmovetimes(dataset = uninstructed, dataset1 = Instructed)
 ```
 
@@ -203,7 +209,7 @@ The above plots show that movement times are very similar across the two no-curs
 ### max velocity vs. endpoint error   
 To be able to compare our localization data to our reach aftereffects data, we used the end point angle for both measures to make them comparable.  We can also look at the angle at max velocity which would make reach aftereffects more comparable to reach training trials, which was never the main interest of our paper, but to be thorough, we included a figure here of the difference between the two values we can extract from our no-cursor trials. 
 
-```{r endpoint vs max vel, echo = FALSE}
+```{r endpoint vs max vel, echo = FALSE, fig.height= 8, fig.width= 12 }
 layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
 Plotnocursors(active_reaches, nocursor_nocursors, nocursorI_nocursors)
 Plotnocursors(active_reaches, no_cursorm, no_cursormI)
