@@ -38,13 +38,17 @@ asymptoticDecayMSE <- function(par, schedule, signal, N0=FALSE) {
     par['N0'] = N0
   }
   
-  MSE <- mean((asymptoticDecayModel(par, schedule)$output - signal)^2, na.rm=TRUE)
+  adm <- asymptoticDecayModel(par, schedule)
+  
+  #print(c(length(adm$output), length(signal)))
+  
+  MSE <- mean((adm$output - signal)^2, na.rm=TRUE)
   
   return( MSE )
   
 }
 
-asymptoticDecayFit <- function(schedule, signal, gridpoints=11, gridfits=10, setAsymptote=FALSE) {
+asymptoticDecayFit <- function(schedule, signal, gridpoints=11, gridfits=10, setAsymptote=FALSE, useOptimx=FALSE) {
   
   # set the search grid:
   parvals <- seq(1/gridpoints/2,1-(1/gridpoints/2),1/gridpoints)
@@ -73,9 +77,9 @@ asymptoticDecayFit <- function(schedule, signal, gridpoints=11, gridfits=10, set
   }
   
   # testing if optimx is installed and making it available it so:
-  optimxInstalled <- require("optimx")
+  #optimxInstalled <- require("optimx")
   
-  if (optimxInstalled) {
+  if (useOptimx) {
     
     # run optimx on the best starting positions:
     allfits <- do.call("rbind",
@@ -220,48 +224,124 @@ asymptoticDecayFit <- function(schedule, signal, gridpoints=11, gridfits=10, set
 #   
 # }
 
-bootstrapSemiAsymptoticDecayModels <- function(bootstraps=1000) {
+asymptoticDecaySettings <- function() {
   
-  groupsignals <- list('active'=c('localization','slowprocess'),
-                       'passive'=c('localization','slowprocess'),
-                       'nocursor'=c('nocursors','slowprocess'))
+  # this list determines which signals get done for each group
+  groupsignals <- list(
+    'active'        = c('localization', 'slowprocess', 'reaches'),
+    'passive'       = c('localization', 'slowprocess', 'reaches'),
+#    'nocursor'      = c('nocursors',    'slowprocess', 'reaches'),
+    'nocursor-47'   = c('nocursors',    'slowprocess', 'reaches', 'nocursors-mv'),
+    'nocursor-ni32' = c('nocursors',    'slowprocess', 'reaches', 'nocursors-mv'),
+#    'nocursor-in16' = c('nocursors',    'slowprocess', 'reaches'),
+    'nocursor-in15' = c('nocursors',    'slowprocess', 'reaches', 'nocursors-mv'),
+    'pause'         = c('reaches',      'slowprocess' )
+  )
+  # this list determines which signals get done for each group
+
   
-  # reversel == 16 trials
+
+  
+  # we used to run it on the reversal phase too, but it takes so much time...
   trialsets <- list('main'=c(1:160), 'reversal'=c(161:176))
-  
+
   baselines <- list(
-    'nocursor' = list( 'nocursors'   =32, 'slowprocess'=96 ), 
-    'active'   = list( 'localization'=64, 'slowprocess'=64 ),
-    'passive'  = list( 'localization'=64, 'slowprocess'=64 )
+#    'nocursor'      = list( 'nocursors'   =32, 'slowprocess'=96, 'reaches'=96 ), 
+    'nocursor-47'   = list( 'nocursors'   =32, 'slowprocess'=96, 'reaches'=96, 'nocursors-mv'=32 ), 
+    'nocursor-ni32' = list( 'nocursors'   =32, 'slowprocess'=96, 'reaches'=96, 'nocursors-mv'=32 ), 
+#    'nocursor-in16' = list( 'nocursors'   =32, 'slowprocess'=96, 'reaches'=96 ), 
+    'nocursor-in15' = list( 'nocursors'   =32, 'slowprocess'=96, 'reaches'=96, 'nocursors-mv'=32 ), 
+    'active'        = list( 'localization'=64, 'slowprocess'=64, 'reaches'=64 ),
+    'passive'       = list( 'localization'=64, 'slowprocess'=64, 'reaches'=64 ),
+    'pause'         = list(                    'slowprocess'=64, 'reaches'=96 )
   )
   
   schedules <- list( 
-    'nocursor' = list( 'nocursors'   = -1, 'slowprocess'=  1 ), 
-    'active'   = list( 'localization'=  1, 'slowprocess'=  1 ),
-    'passive'  = list( 'localization'=  1, 'slowprocess'=  1 ) 
+#    'nocursor'      = list( 'nocursors'   = -1, 'slowprocess'=  1, 'reaches'= -1 ), 
+    'nocursor-47'   = list( 'nocursors'   = -1, 'slowprocess'=  1, 'reaches'= -1, 'nocursors-mv'= -1 ), 
+    'nocursor-ni32' = list( 'nocursors'   = -1, 'slowprocess'=  1, 'reaches'= -1, 'nocursors-mv'= -1 ), 
+#    'nocursor-in16' = list( 'nocursors'   = -1, 'slowprocess'=  1, 'reaches'= -1 ), 
+    'nocursor-in15' = list( 'nocursors'   = -1, 'slowprocess'=  1, 'reaches'= -1, 'nocursors-mv'= -1 ), 
+    'active'        = list( 'localization'=  1, 'slowprocess'=  1, 'reaches'= -1 ),
+    'passive'       = list( 'localization'=  1, 'slowprocess'=  1, 'reaches'= -1 ),
+    'pause'         = list(                     'slowprocess'=  1, 'reaches'= -1 )
   )
   
-  participants <- sprintf('p%d',c(1:32))
+  optimxInstalled <- require("optimx")
+  if (optimxInstalled) {
+    useOptimx <- TRUE
+  } else {
+    useOptimx <- FALSE
+  }
+
+  settings <- list()
+  settings[['groupsignals']] <- groupsignals
+  settings[['trialsets']]    <- trialsets
+  settings[['baselines']]    <- baselines
+  settings[['schedules']]    <- schedules
+  settings[['FUN']]          <- mean
+  settings[['useOptimx']]    <- useOptimx
+
+  return(settings)
+  
+}
+
+bootstrapSemiAsymptoticDecayModels <- function(bootstraps=1000) {
+  
+  settings <- asymptoticDecaySettings()
+  
+  groupsignals <- settings[['groupsignals']]
+  trialsets    <- settings[['trialsets']]
+  baselines    <- settings[['baselines']]
+  schedules    <- settings[['schedules']]
+  FUN          <- settings[['FUN']]
+  useOptimx    <- settings[['useOptimx']]
   
   # loop through groups:
   for (group in names(groupsignals)) {
     
+    participants <- sprintf('p%d',c(1:32))
+    if (group == 'nocursor') {
+      participants <- sprintf('p%d',c(1:48))
+    }
+    if (group == 'nocursor-in16') {
+      participants <- sprintf('p%d',c(1:16))
+    }
+    if (group == 'nocursor-47') {
+      participants <- sprintf('p%d',c(1:39,41:48))
+    }
+    if (group == 'nocursor-in15') {
+      participants <- sprintf('p%d',c(1:7,9:16))
+    }
+    
     # do each signal for each group
     for (signalname in groupsignals[[group]]) {
       
+      # if (signalname != 'reaches') {
+      #   next()
+      # }
+      
+      leadingzero <- FALSE
+      if (signalname %in% c('localization', 'nocursors')) {
+        leadingzero <- TRUE
+      }
+      
+      #print(leadingzero)
+      
       # read in the full data set:
       df <- read.csv(sprintf('data/%s_%s.csv',group,signalname))
+      df <- df[,participants]
       
       # determine length of baseline period and schedule-direction:
       BL <- baselines[[group]][[signalname]]
       schedulesign <- schedules[[group]][[signalname]]
       
       # loop through parts of the signal we want to fit:
-      for (trialset in c('main','reversal')) {
+      for (trialset in names(trialsets)) {
         
         # get the part of the data we want to fit:
         indices <- trialsets[[trialset]] + BL
-        print(indices)
+        #print(indices)
         setdf <- df[indices,]
         
         # here we store all the bootstrapped parameters:
@@ -285,22 +365,29 @@ bootstrapSemiAsymptoticDecayModels <- function(bootstraps=1000) {
         # baselining done
         
         # schedule is a vector of values -1 and length the same as the signal:
-        schedule <- rep(-1, dim(setdf)[1])
+        schedulelength <- dim(setdf)[1]
+        if (leadingzero) {schedulelength <- schedulelength + 1}
+        schedule <- rep(-1, schedulelength)
+        #print(schedulelength)
         
         # if in reversal phase, we want to use the asymptote from the main rotation
         # which we get from the whole data
         if (trialset == 'reversal') {
           # get the part of the data we want to fit:
           Aindices <- trialsets[['main']] + BL
-          print(Aindices)
+          #print(Aindices)
           Asetdf <- df[Aindices,]
           for (pp in participants) {
             Asetdf[,pp] <- Asetdf[,pp] * schedulesign
           }
-          Aschedule <- rep(-1, dim(Asetdf)[1])
-          par <- asymptoticDecayFit(schedule=Aschedule, signal=apply(Asetdf, MARGIN=1, FUN=mean, na.rm=TRUE))
+          Aschedulelength <- dim(Asetdf)[1]
+          if (leadingzero) {Aschedulelength <- Aschedulelength + 1}
+          Aschedule <- rep(-1, Aschedulelength)
+          Asignal <- apply(Asetdf, MARGIN=1, FUN=FUN, na.rm=TRUE)
+          if (leadingzero) {Asignal <- c(0, Asignal)}
+          par <- asymptoticDecayFit(schedule=Aschedule, signal=Asignal, useOptimx=useOptimx)
           
-          print(par)
+          #print(par)
           
           # twice as large! (will reduce the fitted lambda, but that makes sense...)
           setAsymptote <- par['N0'] * 2
@@ -315,9 +402,12 @@ bootstrapSemiAsymptoticDecayModels <- function(bootstraps=1000) {
           
           cat(sprintf('group: %s, signal: %s, set: %s, bootstrap: %d/%d\n', group, signalname, trialset, bs, bootstraps))
           
-          signal <- apply(setdf[sample(participants, replace=TRUE)], MARGIN=1, FUN=mean, na.rm=TRUE)
+          signal <- apply(setdf[sample(participants, replace=TRUE)], MARGIN=1, FUN=FUN, na.rm=TRUE)
+          if (leadingzero) {signal <- c(0, signal)}
           
-          par <- asymptoticDecayFit(schedule=schedule, signal=signal, setAsymptote=setAsymptote)
+          #print(c(length(signal), length(schedule)))
+          
+          par <- asymptoticDecayFit(schedule=schedule, signal=signal, setAsymptote=setAsymptote, useOptimx=useOptimx)
           
           #plot(signal, type='l', main=par)
           #print(par)
@@ -343,9 +433,15 @@ bootstrapSemiAsymptoticDecayModels <- function(bootstraps=1000) {
 
 getAsymptoticDecayParameterCIs <- function(semi=TRUE) {
   
-  groupsignals <- list('active'=c('localization','slowprocess'),
-                       'passive'=c('localization','slowprocess'),
-                       'nocursor'=c('nocursors','slowprocess'))
+  settings <- asymptoticDecaySettings()
+  
+  groupsignals <- settings[['groupsignals']]
+  trialsets    <- settings[['trialsets']]
+  baselines    <- settings[['baselines']]
+  schedules    <- settings[['schedules']]
+  FUN          <- settings[['FUN']]
+  useOptimx    <- settings[['useOptimx']]
+  
   
   group <- c()
   signal <- c()
@@ -362,31 +458,36 @@ getAsymptoticDecayParameterCIs <- function(semi=TRUE) {
   N0_975 <- c()
   
   
-  # reversal == 16 trials
-  trialsets <- list('main'=c(1:160), 'reversal'=c(161:176))
-  
-  baselines <- list(
-    'nocursor' = list( 'nocursors'   =32, 'slowprocess'=96 ), 
-    'active'   = list( 'localization'=64, 'slowprocess'=64 ),
-    'passive'  = list( 'localization'=64, 'slowprocess'=64 )
-  )
-  
-  schedules <- list( 
-    'nocursor' = list( 'nocursors'   = -1, 'slowprocess'=  1 ), 
-    'active'   = list( 'localization'=  1, 'slowprocess'=  1 ),
-    'passive'  = list( 'localization'=  1, 'slowprocess'=  1 ) 
-  )
-  
-  participants <- sprintf('p%d',c(1:32))
-  
   # loop through groups:
   for (groupname in names(groupsignals)) {
+    
+    participants <- sprintf('p%d',c(1:32))
+    if (groupname == 'nocursor') {
+      participants <- sprintf('p%d',c(1:48))
+    }
+    if (groupname == 'nocursor-in16') {
+      participants <- sprintf('p%d',c(1:16))
+    }
+    if (groupname == 'nocursor-47') {
+      participants <- sprintf('p%d',c(1:39,41:48))
+    }
+    if (groupname == 'nocursor-in15') {
+      participants <- sprintf('p%d',c(1:7,9:16))
+    }
     
     # do each signal for each group
     for (signalname in groupsignals[[groupname]]) {
       
+      cat(sprintf('%s %s\n', groupname, signalname))
+      
+      leadingzero <- FALSE
+      if (signalname %in% c('localization', 'nocursors')) {
+        leadingzero <- TRUE
+      }
+      
       # read in the full data set:
       rawdf <- read.csv(sprintf('data/%s_%s.csv',groupname,signalname))
+      rawdf <- rawdf[,participants]
       
       # determine length of baseline period and schedule-direction:
       BL <- baselines[[groupname]][[signalname]]
@@ -394,7 +495,7 @@ getAsymptoticDecayParameterCIs <- function(semi=TRUE) {
       
       
       # loop through parts of the signal we want to fit:
-      for (trialset in c('main','reversal')) {
+      for (trialset in names(trialsets)) {
         
         # get the part of the data we want to fit:
         indices <- trialsets[[trialset]] + BL
@@ -423,8 +524,13 @@ getAsymptoticDecayParameterCIs <- function(semi=TRUE) {
           for (pp in participants) {
             Asetdf[,pp] <- Asetdf[,pp] * schedulesign
           }
-          Aschedule <- rep(-1, dim(Asetdf)[1])
-          par <- asymptoticDecayFit(schedule=Aschedule, signal=apply(Asetdf, MARGIN=1, FUN=mean, na.rm=TRUE))
+          Aschedulelength <- dim(Asetdf)[1]
+          if (leadingzero) {Aschedulelength <- Aschedulelength + 1}
+          Aschedule <- rep(-1, Aschedulelength)
+          #Aschedule <- rep(-1, dim(Asetdf)[1]+1)
+          Asignal <- apply(Asetdf, MARGIN=1, FUN=FUN, na.rm=TRUE)
+          if (leadingzero) {Asignal <- c(0, Asignal)}
+          par <- asymptoticDecayFit(schedule=Aschedule, signal=Asignal, useOptimx=useOptimx)
           
           # twice as large! (will reduce the fitted lambda, but that makes sense...)
           setAsymptote <- par['N0'] * 2
@@ -436,9 +542,17 @@ getAsymptoticDecayParameterCIs <- function(semi=TRUE) {
         
         # schedule is a vector of values -1 and length the same as the signal:
         schedule <- rep(-1, dim(setdf)[1])
+        if (leadingzero) {schedule <- c(0, schedule)}
         
         # this gets the overal parameters on the group median data:
-        par <- asymptoticDecayFit(schedule=schedule, signal=apply(setdf, MARGIN=1, FUN=mean, na.rm=TRUE), setAsymptote=setAsymptote)
+        datasignal <- apply(setdf, MARGIN=1, FUN=FUN, na.rm=TRUE)
+        if (leadingzero) {datasignal <- c(0, datasignal)}
+        par <- asymptoticDecayFit(schedule=schedule, signal=datasignal, setAsymptote=setAsymptote, useOptimx=useOptimx)
+        
+        
+        #print(length(apply(setdf, MARGIN=1, FUN=mean, na.rm=TRUE)))
+        #plot(apply(setdf, MARGIN=1, FUN=mean, na.rm=TRUE), type='l', main=par)
+        
         
         # read in the bootstrapped parameter values:
         #sstr <- '_semi' if (semi) else ''
@@ -480,4 +594,371 @@ getAsymptoticDecayParameterCIs <- function(semi=TRUE) {
             file='data/asymptoticDecayParameterCIs.csv',
             quote = F, row.names = F)
      
+}
+
+getSaturationTrials <- function(criterion='CI') {
+  
+  df <- read.csv('data/asymptoticDecayParameterCIs.csv', stringsAsFactors = F)
+  df <- df[which(df$phase == 'main'),]
+  
+  settings <- asymptoticDecaySettings()
+  
+  groupsignals <- settings[['groupsignals']]
+  trialsets    <- settings[['trialsets']]
+  baselines    <- settings[['baselines']]
+  schedules    <- settings[['schedules']]
+  FUN          <- settings[['FUN']]
+  useOptimx    <- settings[['useOptimx']]
+  
+  group <- c()
+  signal <- c()
+  avg <- c()
+  lwr <- c()
+  upr <- c()
+  
+  # loop through groups:
+  for (groupname in names(groupsignals)) {
+    
+    # DON'T NEED PARTICIPANTS HERE:    
+    # participants <- sprintf('p%d',c(1:32))
+    # if (groupname == 'nocursor') {
+    #   participants <- sprintf('p%d',c(1:48))
+    # }
+    
+    # do each signal for each group
+    for (signalname in groupsignals[[groupname]]) {
+      
+      # read in the full data set:
+      #rawdf <- read.csv(sprintf('data/%s_%s.csv',groupname,signalname))
+      
+      leadingzero <- FALSE
+      if (signalname %in% c('localization', 'nocursors')) {
+        leadingzero <- TRUE
+      }
+      
+      
+      # determine length of baseline period and schedule-direction:
+      BL <- baselines[[groupname]][[signalname]]
+      schedulesign <- schedules[[groupname]][[signalname]]
+      
+      
+      # loop through parts of the signal we want to fit:
+      #for (trialset in c('main','reversal')) {
+      for (trialset in c('main')) {
+        
+        # get the part of the data we want to fit:
+        indices <- trialsets[[trialset]] + BL
+        #setdf <- rawdf[indices,]
+        
+        # schedule is a vector of values -1 and length the same as the signal:
+        #schedulelength <- dim(setdf)[1]
+        schedulelength <- length(indices)
+        if (leadingzero) {schedulelength <- schedulelength + 1}
+        schedule <- rep(-1, schedulelength)
+        
+        # this gets the overal parameters on the group median data:
+        #par <- asymptoticDecayFit(schedule=schedule, signal=apply(setdf, MARGIN=1, FUN=mean, na.rm=TRUE), setAsymptote=setAsymptote)
+        
+        trialnos <- list()
+        
+        for (roc in c('lambda','lambda_975','lambda_025')) {
+          
+          par <- c('lambda'=df[which(df$group == groupname & df$signal == signalname),roc], 'N0'=df[which(df$group == groupname & df$signal == signalname),'N0'])
+          
+          fitdf <- asymptoticDecayModel(par=par, schedule=schedule)
+          
+          if (is.numeric( criterion )) {
+            crit <- (par['N0'] * criterion)
+          }
+          if ( criterion == 'CI' ) {
+            crit <- df$N0_025[which(df$group == groupname & df$signal == signalname)]
+          }
+          
+          trialno <- which(fitdf$output > crit)[1]
+          
+          # subtract 1 from trial no, as first trial depends on feedback from previous phase
+          trialno <- trialno
+          
+          trialnos[[roc]] <- trialno
+          
+        }
+        #print(trialnos[['lambda']])
+        
+        group <- c(group, groupname)
+        signal <- c(signal, signalname)
+        avg <- c(avg, trialnos[['lambda']])
+        lwr <- c(lwr, trialnos[['lambda_975']])
+        upr <- c(upr, trialnos[['lambda_025']])
+        
+        cat(sprintf('%s, %s: trial %d (%d - %d)\n', groupname, signalname, trialnos[['lambda']], trialnos[['lambda_975']], trialnos[['lambda_025']]))
+
+      }
+      
+    }
+    
+  }
+  
+  df <- data.frame(group, signal, avg, lwr, upr)
+  
+  write.csv(df, 'data/saturation_trials.csv', row.names = FALSE, quote = FALSE)
+  
+}
+
+getStyles <- function() {
+  
+  styles <- list()
+  
+  ## Active
+  
+  styles[['active']] <- list(
+    'solid'=rgb(1.0, 0.4, 0.0),         # orange
+    'trans'=rgb(1.0, 0.4, 0.0, 0.1),    # transparent orange
+    'label'='active localization'
+  )
+  
+  ## Passive
+  
+  styles[['passive']] <- list(
+    'solid'=rgb(0.7, 0.0, 0.7),          # purple
+    'trans'=rgb(0.7, 0.0, 0.7, 0.1),     # transparent purple
+    'label'='passive localization'
+  )
+
+  ## Pause
+  
+  styles[['pause']] <- list(
+    'solid'=rgb(0.1, 0.3, 0.5),         # Blue
+    'trans'=rgb(0.1, 0.3, 0.5, 0.1),     # transparent Blue
+    'label'='pause'
+  )
+
+  ## No-Cursor
+  
+  styles[['nocursor-47']] <- list(
+    'solid'=rgb(0.0, 0.7, 0.0),         # green
+    'trans'=rgb(0.0, 0.7, 0.0, 0.2),     # transparent green
+    'label'='no-cursor'
+  )
+  
+  ## Reaches
+  
+  styles[['reaches']] <- list(
+    'solid'=rgb(0,0,0),                 # black
+    'trans'=rgb(0,0,0,0.1),             # gray
+    'label'='reaches'
+  )
+  
+  
+  ## Slow Process
+  
+  styles[['slowprocess']] <- list(
+    'solid'=rgb(0.63, 0.71, 0.81),      # blue-gray
+    'trans'=rgb(0.63, 0.71, 0.81, 0.2),  # transparent blue-gray
+    'label'='slow process'
+    
+  )
+  
+  
+  return(styles)
+
+}
+
+
+plotSaturation <- function(xscale='normal', target='tiff') {
+  
+  
+  fonts <- list(sans = "Helvetica", mono = "Courier")
+  if (target == 'svg') {
+    library('svglite')
+    svglite::svglite(file='docs/Fig4.svg', width=8, height=6, bg='white', system_fonts=fonts)
+    
+  }
+  if (target == 'pdf') {
+    pdf(file='docs/Fig4.pdf', width=8, height=6, bg='white')
+    
+  }
+  if (target == 'eps') {
+    postscript(file='docs/Fig4.eps', bg='white', width=8, height=6, paper='special', horizontal=FALSE)
+    
+  }
+  
+  if (target == 'tiff') {
+    tiff(filename='Figure 4.tiff', res=600, width=6, height=4, units='in', compression='lzw')
+    
+  } 
+  
+  
+  df <- read.csv('data/asymptoticDecayParameterCIs.csv', stringsAsFactors = F)
+  df <- df[which(df$phase == 'main'),]
+  
+  settings <- asymptoticDecaySettings()
+  
+  groupsignals <- list(
+    'active'        = c('localization'),
+    'passive'       = c('localization', 'slowprocess'),
+    'nocursor-47'   = c('nocursors'    ),
+    'pause'         = c('reaches'     )
+  )
+  
+  trialsets    <- settings[['trialsets']]
+  baselines    <- settings[['baselines']]
+  schedules    <- settings[['schedules']]
+  FUN          <- settings[['FUN']]
+  useOptimx    <- settings[['useOptimx']]
+  
+  
+  styles <- getStyles()
+  
+  
+  if (xscale == 'logarithmic') {
+    
+    plot(-1000,-1000,xlab='trial',ylab='percentage of asymptote',xlim=c(1,81),ylim=c(0,1.1),bty='n',ax=F,log='x')
+    TIME <- c(seq(0,10,0.05),seq(11,160))
+    xcoords <- TIME + 1
+    
+  }
+  
+  if (xscale == 'normal') {
+  
+    plot(-1000,-1000,xlab='trial',ylab='percentage of saturation',xlim=c(0,20),ylim=c(0,1.1),bty='n',ax=F)
+    TIME <- seq(0,160,.1)  
+    xcoords <- TIME
+    
+  }
+  
+  groupcolors <- c(styles$active$solid,
+                   styles$passive$solid,
+                   styles[['nocursor-47']]$solid,
+                   styles$pause$solid,
+                   styles$slowprocess$solid)
+  
+  # loop through groups:
+  for (groupname in names(groupsignals)) {
+    
+    # DON'T NEED PARTICIPANTS HERE:    
+    # participants <- sprintf('p%d',c(1:32))
+    # if (groupname == 'nocursor') {
+    #   participants <- sprintf('p%d',c(1:48))
+    # }
+    
+    # do each signal for each group
+    for (signalname in groupsignals[[groupname]]) {
+      
+      leadingzero <- FALSE
+      if (signalname %in% c('localization', 'nocursors')) {
+        leadingzero <- TRUE
+      }
+      
+      # determine length of baseline period and schedule-direction:
+      BL <- baselines[[groupname]][[signalname]]
+      schedulesign <- schedules[[groupname]][[signalname]]
+      
+      # loop through parts of the signal we want to fit:
+      for (trialset in c('main')) {
+        
+        # get the part of the data we want to fit:
+        indices <- trialsets[[trialset]] + BL
+        #setdf <- rawdf[indices,]
+        
+        # schedule is a vector of values -1 and length the same as the signal:
+        schedulelength <- length(indices)
+        if (leadingzero) {schedulelength <- schedulelength + 1}
+        schedule <- rep(-1, schedulelength)
+        # this gets the overal parameters on the group median data:
+        
+        processes <- list()
+        
+        #print(c(groupname,signalname))
+        
+        for (roc in c('lambda','lambda_975','lambda_025')) {
+          
+          par <- c('lambda'=df[which(df$group == groupname & df$signal == signalname),roc], 'N0'=df[which(df$group == groupname & df$signal == signalname),'N0'])
+          par['scale'] <- df$N0_025[which(df$group == groupname & df$signal == signalname)]
+          #print(par)
+          
+          dfit <- asymptoticDecayModel(par,schedule)$output
+          smspl <- smooth.spline(x=c(0:(length(schedule)-1)), y=dfit, spar=NULL)
+          process <- predict(smspl,TIME)$y
+          process <- (process) / (par['scale'])
+          processes[[roc]] <- process
+
+        }
+        
+        upr <- processes[['lambda_975']]
+        lwr <- processes[['lambda_025']]
+        up_idx <- which(upr >= 1)[1]
+        lo_idx <- which(lwr >= 1)[1]
+        
+        #print(c(up_idx,lo_idx))
+        
+        X <- c(xcoords[1:up_idx],rev(xcoords[1:lo_idx]))
+        Y <- c(upr[1:up_idx],rev(lwr[1:lo_idx]))
+        
+        # groupsignals <- list(
+        #   'active'        = c('localization'),
+        #   'passive'       = c('localization', 'slowprocess'),
+        #   'nocursor-47'   = c('nocursors'    ),
+        #   'pause'         = c('reaches'     )
+        # )
+        
+        solid <- NA
+        trans <- NA
+        
+        if (signalname %in% names(styles)) {
+          solid <- styles[[signalname]]$solid
+          trans <- styles[[signalname]]$trans
+        } else {
+          if (groupname %in% names(styles)) {
+            solid <- styles[[groupname]]$solid
+            trans <- styles[[groupname]]$trans
+          }
+        }
+        
+        #print(c(solid,trans))
+        
+        polygon(X,Y,col=trans,border=NA)
+        
+        avg <- processes[['lambda']]
+        av_idx <- which(avg >= 1)[1]
+        lines(xcoords[1:av_idx],avg[1:av_idx],col=solid)
+        
+      }
+      
+    }
+    
+  }
+  
+  
+  if (xscale == 'logarithmic') {
+    
+    polygon(c(1,81,81,1),c(1,1,2,2),col='white',border=NA)
+    
+    lines(c(1,80),c(1,1),col='black',lty=1,lw=2)
+    text(60,1.05,'asymptote lower bound')
+    
+    legend(22,.4,legend=c('active localization', 'passive localization', 'reach aftereffects', 'reach training', 'slow process'),col=groupcolors,lty=c(1,1,1,1,1),bty='n')
+    
+    axis(side=1, at=c(1,2,3,4,5,6,11,21,41,81), labels=sprintf('%d',c(0,1,2,3,4,5,10,20,40,80)))
+    axis(side=2, at=seq(0,1,0.2), labels=sprintf('%d',round(seq(0,1,0.2)*100)))
+    
+  }
+  
+  if (xscale == 'normal') {
+    
+    polygon(c(0,20,20,0),c(1,1,2,2),col='white',border=NA)
+    
+    lines(c(0,20),c(1,1),col='black',lty=1,lw=2)
+    text(20,1.05,'asymptote lower bound',adj=c(1,0.5))
+    
+    legend(11,.95,legend=c('active localization', 'passive localization', 'reach aftereffects', 'reach training', 'slow process'),col=groupcolors,lty=c(1,1,1,1,1),bty='n')
+    
+    axis(side=1, at=c(1,5,10,15,20))
+    axis(side=2, at=seq(0,1,0.2), labels=sprintf('%d',round(seq(0,1,0.2)*100)))
+    
+  }
+  
+  if (target %in% c('svg','pdf','eps','tiff')) {
+    dev.off()
+  }
+  
 }
