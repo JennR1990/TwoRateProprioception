@@ -281,7 +281,7 @@ RegressionPLotchange <- function() {
     loc ~ pert1,
     col = colorPA_trans,
     xlab = 'Change in Visuomotor Discrepancy [°]',
-    ylab = 'Change in Hand Localization [°]',
+    ylab = NA,
     xlim = c(0, 60),
     ylim = c(-10, 30),
     main = 'Change in Perturbation Vs. Localizations',
@@ -372,13 +372,13 @@ Plotschedule <- function(dataset) {
     cex.lab = 1.5,
     cex.main = 1.5
   )
-  rect(65,0,68,30, col = 'grey',border = NA)
-  text(67,33,'R1', adj = .5)
+  rect(64,0,68,30, col = 'grey',border = NA)
+  text(67,34,'R1', adj = .5)
   rect(221,0,224,30, col = 'grey',border = NA)
-  text(223,33,'R1_late', adj = .5)
+  text(223,34,'R1_late', adj = .5)
   rect(237,-30,240,0, col = 'grey',border = NA)
-  text(239,-33,'R2', adj = .5)
-  rect(273,-15,288,15, col = 'grey',border = NA)
+  text(239,-34,'R2', adj = .5)
+  rect(273,-16,288,15, col = 'grey',border = NA)
   text(280,18,'EC', adj = .5)
   lines(c(1, 64, 64, 224, 224, 240, 240),
         c(0, 0, 30, 30, -30, -30, 0),

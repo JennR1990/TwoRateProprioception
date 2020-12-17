@@ -231,14 +231,15 @@ asymptoticDecaySettings <- function() {
     'active'        = c('localization', 'slowprocess', 'reaches'),
     'passive'       = c('localization', 'slowprocess', 'reaches'),
 #    'nocursor'      = c('nocursors',    'slowprocess', 'reaches'),
-    'nocursor-47'   = c('nocursors',    'slowprocess', 'reaches'),
-    'nocursor-ni32' = c('nocursors',    'slowprocess', 'reaches'),
+    'nocursor-47'   = c('nocursors',    'slowprocess', 'reaches', 'nocursors-mv'),
+    'nocursor-ni32' = c('nocursors',    'slowprocess', 'reaches', 'nocursors-mv'),
 #    'nocursor-in16' = c('nocursors',    'slowprocess', 'reaches'),
-    'nocursor-in15' = c('nocursors',    'slowprocess', 'reaches'),
+    'nocursor-in15' = c('nocursors',    'slowprocess', 'reaches', 'nocursors-mv'),
     'pause'         = c('reaches',      'slowprocess' )
   )
   # this list determines which signals get done for each group
 
+  
 
   
   # we used to run it on the reversal phase too, but it takes so much time...
@@ -246,10 +247,10 @@ asymptoticDecaySettings <- function() {
 
   baselines <- list(
 #    'nocursor'      = list( 'nocursors'   =32, 'slowprocess'=96, 'reaches'=96 ), 
-    'nocursor-47'   = list( 'nocursors'   =32, 'slowprocess'=96, 'reaches'=96 ), 
-    'nocursor-ni32' = list( 'nocursors'   =32, 'slowprocess'=96, 'reaches'=96 ), 
+    'nocursor-47'   = list( 'nocursors'   =32, 'slowprocess'=96, 'reaches'=96, 'nocursors-mv'=32 ), 
+    'nocursor-ni32' = list( 'nocursors'   =32, 'slowprocess'=96, 'reaches'=96, 'nocursors-mv'=32 ), 
 #    'nocursor-in16' = list( 'nocursors'   =32, 'slowprocess'=96, 'reaches'=96 ), 
-    'nocursor-in15' = list( 'nocursors'   =32, 'slowprocess'=96, 'reaches'=96 ), 
+    'nocursor-in15' = list( 'nocursors'   =32, 'slowprocess'=96, 'reaches'=96, 'nocursors-mv'=32 ), 
     'active'        = list( 'localization'=64, 'slowprocess'=64, 'reaches'=64 ),
     'passive'       = list( 'localization'=64, 'slowprocess'=64, 'reaches'=64 ),
     'pause'         = list(                    'slowprocess'=64, 'reaches'=96 )
@@ -257,10 +258,10 @@ asymptoticDecaySettings <- function() {
   
   schedules <- list( 
 #    'nocursor'      = list( 'nocursors'   = -1, 'slowprocess'=  1, 'reaches'= -1 ), 
-    'nocursor-47'   = list( 'nocursors'   = -1, 'slowprocess'=  1, 'reaches'= -1 ), 
-    'nocursor-ni32' = list( 'nocursors'   = -1, 'slowprocess'=  1, 'reaches'= -1 ), 
+    'nocursor-47'   = list( 'nocursors'   = -1, 'slowprocess'=  1, 'reaches'= -1, 'nocursors-mv'= -1 ), 
+    'nocursor-ni32' = list( 'nocursors'   = -1, 'slowprocess'=  1, 'reaches'= -1, 'nocursors-mv'= -1 ), 
 #    'nocursor-in16' = list( 'nocursors'   = -1, 'slowprocess'=  1, 'reaches'= -1 ), 
-    'nocursor-in15' = list( 'nocursors'   = -1, 'slowprocess'=  1, 'reaches'= -1 ), 
+    'nocursor-in15' = list( 'nocursors'   = -1, 'slowprocess'=  1, 'reaches'= -1, 'nocursors-mv'= -1 ), 
     'active'        = list( 'localization'=  1, 'slowprocess'=  1, 'reaches'= -1 ),
     'passive'       = list( 'localization'=  1, 'slowprocess'=  1, 'reaches'= -1 ),
     'pause'         = list(                     'slowprocess'=  1, 'reaches'= -1 )
@@ -703,7 +704,6 @@ getSaturationTrials <- function(criterion='CI') {
   
 }
 
-
 getStyles <- function() {
   
   styles <- list()
@@ -723,7 +723,7 @@ getStyles <- function() {
     'trans'=rgb(0.7, 0.0, 0.7, 0.1),     # transparent purple
     'label'='passive localization'
   )
-  
+
   ## Pause
   
   styles[['pause']] <- list(
@@ -731,7 +731,7 @@ getStyles <- function() {
     'trans'=rgb(0.1, 0.3, 0.5, 0.1),     # transparent Blue
     'label'='pause'
   )
-  
+
   ## No-Cursor
   
   styles[['nocursor-47']] <- list(
@@ -760,7 +760,7 @@ getStyles <- function() {
   
   
   return(styles)
-  
+
 }
 
 
@@ -819,7 +819,7 @@ plotSaturation <- function(xscale='normal', target='tiff') {
   }
   
   if (xscale == 'normal') {
-    
+  
     plot(-1000,-1000,xlab='trial',ylab='percentage of saturation',xlim=c(0,20),ylim=c(0,1.1),bty='n',ax=F)
     TIME <- seq(0,160,.1)  
     xcoords <- TIME
@@ -876,14 +876,14 @@ plotSaturation <- function(xscale='normal', target='tiff') {
           
           par['scale'] <- df$N0_025[which(df$group == groupname & df$signal == signalname)]
           
-          #print(par)
+          print(par)
           
           process <- 1-(exp(-par['lambda']*TIME))
-          #print(par['scale']/par['N0'])
+          print(par['scale']/par['N0'])
           process <- (process) / (par['scale']/par['N0'])
           #lines(TIME+1,process*100)
           processes[[roc]] <- process
-          
+
         }
         
         upr <- processes[['lambda_975']]

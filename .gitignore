@@ -1,3 +1,4 @@
+*.tiff
 *.pdf
 *.html
 *.svg
@@ -37,3 +38,4 @@ rsconnect/
 .Rproj.user
 All_reach_models.svg
 reach_models_passive_pause.svg
+Figure 1.tiff

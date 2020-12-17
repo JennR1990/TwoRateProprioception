@@ -224,6 +224,7 @@ Figures for the manuscript
 # 
 # 
 # svglite(file='localization fig.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
+# tiff(filename='Figure 3.tiff', res=300, width=8, height=6, units='in', compression='lzw')
 # layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), nrow=2, byrow=TRUE), heights=c(2,2))
 # RegressionPLot3P()
 # RegressionPLotchange()
@@ -255,13 +256,13 @@ Figures for the manuscript
 # Plotschedule(active_reaches)
 # dev.off()
 
-svglite(file='End Point vs. Max Vel.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
-layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
-Plotnocursors(active_reaches, nocursor_nocursors, nocursorI_nocursors)
-Plotnocursors(active_reaches, no_cursorm, no_cursormI)
-Plotnocursors(active_reaches, no_cursorm, nocursor_nocursors)
-Plotnocursors(active_reaches, no_cursormI, nocursorI_nocursors)
-dev.off()
+# svglite(file='End Point vs. Max Vel.svg', width=12, height=8, system_fonts=list(sans = "Arial"))
+# layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
+# Plotnocursors(active_reaches, nocursor_nocursors, nocursorI_nocursors)
+# Plotnocursors(active_reaches, no_cursorm, no_cursormI)
+# Plotnocursors(active_reaches, no_cursorm, nocursor_nocursors)
+# Plotnocursors(active_reaches, no_cursormI, nocursorI_nocursors)
+# dev.off()
 
 ```
 ## Two-Rate model
