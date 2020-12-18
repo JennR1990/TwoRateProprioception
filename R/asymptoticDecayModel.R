@@ -812,7 +812,11 @@ plotSaturation <- function(xscale='normal', target='tiff') {
   
   if (xscale == 'logarithmic') {
     
-    plot(-1000,-1000,xlab='trial',ylab='percentage of asymptote',xlim=c(1,81),ylim=c(0,1.1),bty='n',ax=F,log='x')
+    plot(-1000,-1000,
+         xlab='trials completed in rotated phase',ylab='percentage of asymptote',
+         main='modeled process speeds',
+         xlim=c(1,81),ylim=c(0,1.1),
+         bty='n',ax=F,log='x')
     TIME <- c(seq(1,11,0.05),seq(12,161))
     xcoords <- TIME + 1
     
@@ -820,8 +824,12 @@ plotSaturation <- function(xscale='normal', target='tiff') {
   
   if (xscale == 'normal') {
   
-    plot(-1000,-1000,xlab='trial',ylab='percentage of saturation',xlim=c(0,20),ylim=c(0,1.1),bty='n',ax=F)
-    TIME <- seq(1,161,.1)  
+    plot(-1000,-1000,
+         xlab='trials completed in rotated phase',ylab='percentage of saturation',
+         main='modeled process speeds',
+         xlim=c(0,20),ylim=c(0,1.1),
+         bty='n',ax=F)
+    TIME <- seq(0,160,.1)  
     xcoords <- TIME
     
   }
@@ -829,7 +837,7 @@ plotSaturation <- function(xscale='normal', target='tiff') {
   groupcolors <- c(styles$active$solid,
                    styles$passive$solid,
                    styles[['nocursor-47']]$solid,
-                   styles$pause$solid,
+                   'black',
                    styles$slowprocess$solid)
   
   # loop through groups:
@@ -877,7 +885,7 @@ plotSaturation <- function(xscale='normal', target='tiff') {
           #print(par)
           
           dfit <- asymptoticDecayModel(par,schedule)$output
-          smspl <- smooth.spline(x=c(1:(length(schedule))), y=dfit, spar=NULL)
+          smspl <- smooth.spline(x=c(0:(length(schedule)-1)), y=dfit, spar=NULL)
           process <- predict(smspl,TIME)$y
           process <- (process) / (par['scale'])
           processes[[roc]] <- process
@@ -952,7 +960,7 @@ plotSaturation <- function(xscale='normal', target='tiff') {
     
     legend(11,.95,legend=c('active localization', 'passive localization', 'reach aftereffects', 'reach training', 'slow process'),col=groupcolors,lty=c(1,1,1,1,1),bty='n')
     
-    axis(side=1, at=c(1,5,10,15,20))
+    axis(side=1, at=c(0,5,10,15,20), labels=c('baseline',sprintf('%d',c(5,10,15,20))))
     axis(side=2, at=seq(0,1,0.2), labels=sprintf('%d',round(seq(0,1,0.2)*100)))
     
   }
