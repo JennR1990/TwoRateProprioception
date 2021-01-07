@@ -1,5 +1,5 @@
 ##Figure 1
-tiff(filename='Figure 1.tiff', res=300, width=12, height=4, units='in', compression='lzw')
+tiff(filename='Figure 1_test.tiff', res=600, width=12, height=4, units='in', compression='lzw', type = 'cairo')
 layout(matrix(c(1,2), nrow=1, byrow=TRUE), heights=c(2))
 Plotexp2CI(pause_reaches[33:320,],newnocursor_reaches[33:320,], pause_reaches[33:320,])
 mtext('a', outer=FALSE, side=3, las=1, line=1, adj=0, padj=1,cex = 2.5)
@@ -10,7 +10,7 @@ dev.off()
 
 
 ##Figure 2
-tiff(filename='Figure 2.tiff', res=300, width=12, height=8, units='in', compression='lzw')
+tiff(filename='Figure 2.tiff', res=600, width=12, height=8, units='in', compression='lzw', type = 'cairo')
 layout(matrix(c(1,2,3,4), nrow=2, byrow=TRUE), heights=c(2,2))
 Plotexp1CI(active_reaches, passive_reaches, pause_reaches[33:320,])
 mtext('a', outer=FALSE, side=3, las=1, line=1, adj=0, padj=1,cex = 2.5)
@@ -23,7 +23,7 @@ mtext('d', outer=FALSE, side=3, las=1, line=1, adj=0, padj=1,cex = 2.5)
 dev.off()
 
 ##Figure 3
-tiff(filename='Figure 3.tiff', res=300, width=12, height=8, units='in', compression='lzw')
+tiff(filename='Figure 3.tiff', res=600, width=12, height=8, units='in', compression='lzw', type = 'cairo')
 layout(matrix(c(1,1,2,2,3,3,4,4,4,5,5,5), nrow=2, byrow=TRUE), heights=c(2,2))
 RegressionPLot3P()
 mtext('a', outer=FALSE, side=3, las=1, line=1, adj=0, padj=1,cex = 2.5)
@@ -41,7 +41,7 @@ dev.off()
 plotSaturation()
 
 ##Figure 6
-tiff(filename='Figure 6.tiff', res=300, width=12, height=4, units='in', compression='lzw')
+tiff(filename='Figure 6.tiff', res=600, width=12, height=4, units='in', compression='lzw', type = 'cairo')
 Plotschedule(active_reaches)
 dev.off()
  

@@ -767,7 +767,7 @@ getStyles <- function() {
 plotSaturation <- function(xscale='normal', target='tiff') {
   
   
-  fonts <- list(sans = "Helvetica", mono = "Courier")
+  fonts <- list(sans = "Arial", mono = "Arial")
   if (target == 'svg') {
     library('svglite')
     svglite::svglite(file='docs/Fig4.svg', width=8, height=6, bg='white', system_fonts=fonts)
@@ -783,7 +783,7 @@ plotSaturation <- function(xscale='normal', target='tiff') {
   }
   
   if (target == 'tiff') {
-    tiff(filename='Figure 4.tiff', res=300, width=6, height=4, units='in', compression='lzw')
+    tiff(filename='Figure 4.tiff', res=600, width=6, height=4.5, units='in', compression='lzw')
     
   } 
   
@@ -958,7 +958,7 @@ plotSaturation <- function(xscale='normal', target='tiff') {
     lines(c(0,20),c(1,1),col='black',lty=1,lw=2)
     text(20,1.05,'asymptote lower bound',adj=c(1,0.5))
     
-    legend(6,1,legend=c('active localization', 'passive localization', 'reach aftereffects', 'reach training', 'slow process'),col=groupcolors,lty=c(1,1,1,1,1),bty='n', cex = .9)
+    legend(11,1.03,legend=c('active localization', 'passive localization', 'reach aftereffects', 'reach training', 'slow process'),col=groupcolors,lty=c(1,1,1,1,1),bty='n', cex = .85)
     
     axis(side=1, at=c(0,5,10,15,20), labels=c('baseline',sprintf('%d',c(5,10,15,20))))
     axis(side=2, at=seq(0,1,0.2), labels=sprintf('%d',round(seq(0,1,0.2)*100)),las = 2)
