@@ -73,6 +73,26 @@ PA_Slow<- data.frame(PA_Slow)
 names(PA_Slow)<- pnames
 
 
+##Terminal Fits
+pafits<- getParticipantFits2(terminal_reaches)
+T_Slow<- c()
+for (indx in 1:32){
+  if (indx == 1){
+    T_Slow <-twoRateReachModel(par = unlist(pafits[indx,2:5]), schedule = passive_reaches$distortion*-1)$slow
+  } else {
+    reach_model1 <-twoRateReachModel(par = unlist(pafits[indx,2:5]), schedule = passive_reaches$distortion*-1)$slow
+    T_Slow<- cbind(T_Slow, reach_model1)
+  }
+  
+}
+
+T_Slow<- data.frame(T_Slow)
+
+
+
+
+names(T_Slow)<- pnames
+
 
 ##Pause Reach Fits
 pausefits<- getParticipantFits2(pause_reaches)
@@ -103,7 +123,7 @@ write.csv(PA_Slow, 'data/Passive_Slow_Process.csv', quote = FALSE, row.names = F
 write.csv(AC_Slow, 'data/Active_Slow_Process.csv', quote = FALSE, row.names = FALSE)
 write.csv(NC_Slow, 'data/No-Cursor_Slow_Process.csv', quote = FALSE, row.names = FALSE)
 write.csv(PA_Slow, 'data/Pause_Slow_Process.csv', quote = FALSE, row.names = FALSE)
-
+write.csv(T_Slow, 'data/terminal_slowprocess.csv', quote = FALSE, row.names = FALSE)
 
 
 

@@ -235,7 +235,9 @@ asymptoticDecaySettings <- function() {
     'nocursor-ni32' = c('nocursors',    'slowprocess', 'reaches', 'nocursors-mv'),
 #    'nocursor-in16' = c('nocursors',    'slowprocess', 'reaches'),
     'nocursor-in15' = c('nocursors',    'slowprocess', 'reaches', 'nocursors-mv'),
-    'pause'         = c('reaches',      'slowprocess' )
+    'pause'         = c('reaches',      'slowprocess' ),
+    'terminal'        = c('localization', 'slowprocess', 'reaches'),
+    'exposure'        = c('localization')
   )
   # this list determines which signals get done for each group
 
@@ -253,7 +255,9 @@ asymptoticDecaySettings <- function() {
     'nocursor-in15' = list( 'nocursors'   =32, 'slowprocess'=96, 'reaches'=96, 'nocursors-mv'=32 ), 
     'active'        = list( 'localization'=64, 'slowprocess'=64, 'reaches'=64 ),
     'passive'       = list( 'localization'=64, 'slowprocess'=64, 'reaches'=64 ),
-    'pause'         = list(                    'slowprocess'=64, 'reaches'=96 )
+    'pause'         = list(                    'slowprocess'=64, 'reaches'=96 ),
+    'terminal'        = c('localization'=64,      'slowprocess'=64,    'reaches'=96),
+    'exposure'        = c('localization'=64)
   )
   
   schedules <- list( 
@@ -264,7 +268,9 @@ asymptoticDecaySettings <- function() {
     'nocursor-in15' = list( 'nocursors'   = -1, 'slowprocess'=  1, 'reaches'= -1, 'nocursors-mv'= -1 ), 
     'active'        = list( 'localization'=  1, 'slowprocess'=  1, 'reaches'= -1 ),
     'passive'       = list( 'localization'=  1, 'slowprocess'=  1, 'reaches'= -1 ),
-    'pause'         = list(                     'slowprocess'=  1, 'reaches'= -1 )
+    'pause'         = list(                     'slowprocess'=  1, 'reaches'= -1 ),
+    'terminal'        = c('localization'=1,      'slowprocess'=1,    'reaches'=-1),
+    'exposure'        = c('localization'=1)
   )
   
   optimxInstalled <- require("optimx")
@@ -286,7 +292,7 @@ asymptoticDecaySettings <- function() {
   
 }
 
-bootstrapSemiAsymptoticDecayModels <- function(bootstraps=1000) {
+bootstrapSemiAsymptoticDecayModels <- function(bootstraps=5) {
   
   settings <- asymptoticDecaySettings()
   
@@ -329,6 +335,8 @@ bootstrapSemiAsymptoticDecayModels <- function(bootstraps=1000) {
       #print(leadingzero)
       
       # read in the full data set:
+      print(group)
+      print(signalname)
       df <- read.csv(sprintf('data/%s_%s.csv',group,signalname))
       df <- df[,participants]
       
