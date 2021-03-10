@@ -25,7 +25,7 @@ loadalldata<- function () {
   newnocursor_reaches<<- cbind(nocursor_reaches, nocursorI_reaches[2:ncol(nocursorI_reaches)])
   newnocursor_nocursors<<- cbind(nocursor_nocursors, nocursorI_nocursors[2:ncol(nocursorI_nocursors)])
   terminal_reaches<<- removeReachOutliers(Loaddata(group='terminal'))
-  terminal_localization<<- removeReachOutliers(Loaddata(group='terminal', task = 'localizations'))
+  terminal_localization<<- removeReachOutliers(Loaddata(group='terminal', task = 'localization'))
   pause_angles<<- Loaddata(group='Pause', task = "Angles")
   active_angles<<- Loaddata(group='Active', task = "Angles")
   passive_angles<<- Loaddata(group = "Pause", task = "Angles")
@@ -65,7 +65,7 @@ downloadOSFdata <- function(update=FALSE) {
              'passive_reaches.csv'      = 'https://osf.io/mq5av/download',
              'pause_reaches.csv'        = 'https://osf.io/q59b3/download',
              'terminal_reaches.csv'     = 'https://osf.io/qdk9y/download',
-             'terminal_localizations.csv'= 'https://osf.io/6r4bx/download',
+             'terminal_localization.csv'= 'https://osf.io/6r4bx/download',
              'Active_Angles.csv'  = 'https://osf.io/ubdv8/?action=download',
              'Passive_Angles.csv'       = 'https://osf.io/3nsqm/download',
              'Pause_Angles.csv'   = 'https://osf.io/36cqd/download',

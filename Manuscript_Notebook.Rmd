@@ -158,6 +158,7 @@ Ttestdata<- PrepdataforT(active_reaches, passive_reaches, pause_reaches[33:320,]
 
 When using a Mixed ANOVA to compare the two localization groups to each other we see a significant difference.
 ```{r localization ANOVA, echo=FALSE}
+pwr.t.test(n = 32, d = .6, type = "paired")
 FullPANOVA<-ANOVAanalysis(ANOVAPdata)
 FullPANOVA$ANOVA
 ```

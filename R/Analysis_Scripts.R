@@ -51,6 +51,18 @@ ANOVAanalysis<- function(AllDataANOVA){
   return(fullmodel)
 }
 
+GroupANOVAanalysis<- function(AllDataANOVA){
+  AllDataANOVA$ID<- as.factor(AllDataANOVA$ID)
+  AllDataANOVA$Experiment<- as.factor(AllDataANOVA$Experiment)
+  fullmodel <- ezANOVA(data=AllDataANOVA,
+                       dv=Reaches,
+                       wid=ID,
+                       between = Experiment,
+                       type=3,
+                       return_aov=TRUE)
+  return(fullmodel)
+}
+
 
 PrepdataforT<- function(adata, pasdata, paudata, ncdata, ncncdata){
   #
