@@ -231,10 +231,10 @@ asymptoticDecaySettings <- function() {
     'active'        = c('localization', 'slowprocess', 'reaches'),
     'passive'       = c('localization', 'slowprocess', 'reaches'),
 #    'nocursor'      = c('nocursors',    'slowprocess', 'reaches'),
-    'nocursor-47'   = c('nocursors',    'slowprocess', 'reaches', 'nocursors-mv'),
-    'nocursor-ni32' = c('nocursors',    'slowprocess', 'reaches', 'nocursors-mv'),
+    'nocursor-47'   = c('nocursors',    'slowprocess', 'reaches'),
+    'nocursor-ni32' = c('nocursors',    'slowprocess', 'reaches'),
 #    'nocursor-in16' = c('nocursors',    'slowprocess', 'reaches'),
-    'nocursor-in15' = c('nocursors',    'slowprocess', 'reaches', 'nocursors-mv'),
+    'nocursor-in15' = c('nocursors',    'slowprocess', 'reaches'),
     'pause'         = c('reaches',      'slowprocess' ),
     'terminal'        = c('localization', 'slowprocess', 'reaches'),
     'exposure'        = c('localization')
@@ -249,10 +249,10 @@ asymptoticDecaySettings <- function() {
 
   baselines <- list(
 #    'nocursor'      = list( 'nocursors'   =32, 'slowprocess'=96, 'reaches'=96 ), 
-    'nocursor-47'   = list( 'nocursors'   =32, 'slowprocess'=96, 'reaches'=96, 'nocursors-mv'=32 ), 
-    'nocursor-ni32' = list( 'nocursors'   =32, 'slowprocess'=96, 'reaches'=96, 'nocursors-mv'=32 ), 
+    'nocursor-47'   = list( 'nocursors'   =32, 'slowprocess'=96, 'reaches'=96 ), 
+    'nocursor-ni32' = list( 'nocursors'   =32, 'slowprocess'=96, 'reaches'=96 ), 
 #    'nocursor-in16' = list( 'nocursors'   =32, 'slowprocess'=96, 'reaches'=96 ), 
-    'nocursor-in15' = list( 'nocursors'   =32, 'slowprocess'=96, 'reaches'=96, 'nocursors-mv'=32 ), 
+    'nocursor-in15' = list( 'nocursors'   =32, 'slowprocess'=96, 'reaches'=96 ), 
     'active'        = list( 'localization'=64, 'slowprocess'=64, 'reaches'=64 ),
     'passive'       = list( 'localization'=64, 'slowprocess'=64, 'reaches'=64 ),
     'pause'         = list(                    'slowprocess'=64, 'reaches'=96 ),
@@ -262,10 +262,10 @@ asymptoticDecaySettings <- function() {
   
   schedules <- list( 
 #    'nocursor'      = list( 'nocursors'   = -1, 'slowprocess'=  1, 'reaches'= -1 ), 
-    'nocursor-47'   = list( 'nocursors'   = -1, 'slowprocess'=  1, 'reaches'= -1, 'nocursors-mv'= -1 ), 
-    'nocursor-ni32' = list( 'nocursors'   = -1, 'slowprocess'=  1, 'reaches'= -1, 'nocursors-mv'= -1 ), 
+    'nocursor-47'   = list( 'nocursors'   = -1, 'slowprocess'=  1, 'reaches'= -1 ), 
+    'nocursor-ni32' = list( 'nocursors'   = -1, 'slowprocess'=  1, 'reaches'= -1 ), 
 #    'nocursor-in16' = list( 'nocursors'   = -1, 'slowprocess'=  1, 'reaches'= -1 ), 
-    'nocursor-in15' = list( 'nocursors'   = -1, 'slowprocess'=  1, 'reaches'= -1, 'nocursors-mv'= -1 ), 
+    'nocursor-in15' = list( 'nocursors'   = -1, 'slowprocess'=  1, 'reaches'= -1 ), 
     'active'        = list( 'localization'=  1, 'slowprocess'=  1, 'reaches'= -1 ),
     'passive'       = list( 'localization'=  1, 'slowprocess'=  1, 'reaches'= -1 ),
     'pause'         = list(                     'slowprocess'=  1, 'reaches'= -1 ),
@@ -742,7 +742,7 @@ getStyles <- function() {
 
   ## No-Cursor
   
-  styles[['nocursor-47']] <- list(
+  styles[['nocursor-ni32']] <- list(
     'solid'=rgb(0.0, 0.7, 0.0),         # green
     'trans'=rgb(0.0, 0.7, 0.0, 0.2),     # transparent green
     'label'='no-cursor'
@@ -772,26 +772,26 @@ getStyles <- function() {
 }
 
 
-plotSaturation <- function(xscale='normal', target='tiff') {
+plotSaturation <- function(xscale='normal', target='svg') {
   
   
   fonts <- list(sans = "Arial", mono = "Arial")
   if (target == 'svg') {
     library('svglite')
-    svglite::svglite(file='docs/Fig4.svg', width=8, height=6, bg='white', system_fonts=fonts)
+    svglite::svglite(file='doc/saturation plot.svg', width=8, height=6, bg='white', system_fonts=fonts)
     
   }
   if (target == 'pdf') {
-    pdf(file='docs/Fig4.pdf', width=8, height=6, bg='white')
+    pdf(file='doc/saturation plot.pdf', width=8, height=6, bg='white')
     
   }
   if (target == 'eps') {
-    postscript(file='docs/Fig4.eps', bg='white', width=8, height=6, paper='special', horizontal=FALSE)
+    postscript(file='doc/saturation plot.eps', bg='white', width=8, height=6, paper='special', horizontal=FALSE)
     
   }
   
   if (target == 'tiff') {
-    tiff(filename='Figure 4.tiff', res=600, width=6, height=4.5, units='in', compression='lzw')
+    tiff(filename='saturation plot.tiff', res=600, width=6, height=4.5, units='in', compression='lzw')
     
   } 
   
@@ -804,7 +804,7 @@ plotSaturation <- function(xscale='normal', target='tiff') {
   groupsignals <- list(
     'active'        = c('localization'),
     'passive'       = c('localization', 'slowprocess'),
-    'nocursor-47'   = c('nocursors'    ),
+    'nocursor-ni32' = c('nocursors'    ),
     'pause'         = c('reaches'     )
   )
   
@@ -879,6 +879,9 @@ plotSaturation <- function(xscale='normal', target='tiff') {
         # schedule is a vector of values -1 and length the same as the signal:
         schedulelength <- length(indices)
         if (leadingzero) {schedulelength <- schedulelength + 1}
+        
+        
+        
         schedule <- rep(-1, schedulelength)
         # this gets the overal parameters on the group median data:
         
@@ -932,10 +935,24 @@ plotSaturation <- function(xscale='normal', target='tiff') {
         
         #print(c(solid,trans))
         
-        polygon(X,Y,col=trans,border=NA)
-        
         avg <- processes[['lambda']]
         av_idx <- which(avg >= 1)[1]
+        
+        
+        if (groupname == "active"){
+          
+          k<- avg[1:av_idx]
+          Y[1:10]<- avg[1:av_idx]
+          Y[11:16]<- k[10]
+          
+        } else {
+          print("good")
+        }
+        
+        polygon(X,Y,col=trans,border=NA)
+        
+        #avg <- processes[['lambda']]
+        #av_idx <- which(avg >= 1)[1]
         lines(xcoords[1:av_idx],avg[1:av_idx],col=solid)
         
       }

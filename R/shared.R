@@ -65,7 +65,7 @@ downloadOSFdata <- function(update=FALSE) {
              'passive_reaches.csv'      = 'https://osf.io/mq5av/download',
              'pause_reaches.csv'        = 'https://osf.io/q59b3/download',
              'terminal_reaches.csv'     = 'https://osf.io/qdk9y/download',
-             'terminal_localization.csv'= 'https://osf.io/6r4bx/download',
+             'terminal_localization.csv'= 'https://osf.io/a9sx5/download',
              'Active_Angles.csv'  = 'https://osf.io/ubdv8/?action=download',
              'Passive_Angles.csv'       = 'https://osf.io/3nsqm/download',
              'Pause_Angles.csv'   = 'https://osf.io/36cqd/download',
