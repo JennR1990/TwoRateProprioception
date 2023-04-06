@@ -126,7 +126,7 @@ RegressionPLotec <- function() {
     slopes<-lm$coefficients[2]
     intercepts<- lm$coefficients[1]
     rsquareds<-summary(lm)$adj.r.squared
-    
+    print(summary(lm))
     
     Arm <- TCombine(active_reaches)
     ARm <- Arm$EC_Late * -1
@@ -138,7 +138,10 @@ RegressionPLotec <- function() {
     slopes<-c(slopes,gm$coefficients[2])
     intercepts<- c(intercepts,gm$coefficients[1])
     rsquareds<-c(rsquareds,summary(gm)$adj.r.squared)
-
+    print(summary(gm))
+    
+    
+    
     legend(
       -30,
       30,
@@ -190,7 +193,7 @@ RegressionPLotecflipped <- function() {
   APec <- APec$EC_Late
   points(ARm ~ APec, col = colorA_trans, pch = 19)
   gm<-plotRegressionWithCI(APec, ARm, colors = c(colorA_trans, colorA))
-  #print(summary(gm))
+  print(summary(gm))
   slopes<-c(slopes,gm$coefficients[2])
   intercepts<- c(intercepts,gm$coefficients[1])
   rsquareds<-c(rsquareds,summary(gm)$adj.r.squared)
@@ -240,7 +243,7 @@ RegressionPLot3P <- function() {
   slopes<-lm$coefficients[2]
   intercepts<- lm$coefficients[1]
   rsquareds<-summary(lm)$adj.r.squared
-  
+  print(summary(lm))
 
   APec <- TCombine(active_localization)
   loca <- c(APec$R2,APec$Aligned,APec$R1_Late)
@@ -252,6 +255,9 @@ RegressionPLot3P <- function() {
   slopes<-c(slopes,gm$coefficients[2])
   intercepts<- c(intercepts,gm$coefficients[1])
   rsquareds<-c(rsquareds,summary(gm)$adj.r.squared)
+  print(summary(gm))
+  
+  
   legend(
     -30,
     30,
@@ -298,7 +304,7 @@ RegressionPLotchange <- function() {
   slopes<-lm$coefficients[2]
   intercepts<- lm$coefficients[1]
   rsquareds<-summary(lm)$adj.r.squared
-  
+  print(summary(lm))
   
   
   APec <- TCombine(active_localization)
@@ -311,7 +317,7 @@ RegressionPLotchange <- function() {
   slopes<-c(slopes,gm$coefficients[2])
   intercepts<- c(intercepts,gm$coefficients[1])
   rsquareds<-c(rsquareds,summary(gm)$adj.r.squared)
-  
+  print(summary(gm))
 
   legend(
     0,
